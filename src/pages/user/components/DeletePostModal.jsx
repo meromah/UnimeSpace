@@ -15,19 +15,18 @@ const DeletePostModal = ({
   const [deleteTest, { isLoading: isTestDeleting }] = useDeleteTestMutation();
   const isDeleting = isPostDeleting || isTestDeleting
   const handleConfirm = async () => {
-    if (communityType !== "board" || communityType !== "desc") {
-      throw new Error("Community name is not valid");
-    }
     if (communityType === "board") {
       await deletePost({
         board: communityName,
         post: itemId,
       }).unwrap();
-    } else if (communityName === "desc") {
+    } else if (communityType === "desc") {
       await deleteTest({
         desc: communityName,
         test: itemId,
       }).unwrap();
+    } else{
+      throw new Error("Community type is not valid");
     }
   };
 
