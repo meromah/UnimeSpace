@@ -28,7 +28,7 @@ const DeleteModal = ({
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && isOpen && !isDeleting) {
-        onClose(e);
+        handleClose(e)
       }
     };
     window.addEventListener("keydown", handleKeyDown);
