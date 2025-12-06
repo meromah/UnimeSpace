@@ -1,9 +1,8 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/main/LandingPage";
 import UserPage from "./pages/user/UserPage";
 import AdminPage from "./pages/admin/AdminPage";
-import HomePage from "./pages/main/HomePage";
 import AboutUs from "./pages/main/AboutUs";
 import Explore from "./pages/main/Explore";
 import Libraries from "./pages/main/Libraries";
@@ -28,7 +27,6 @@ const App = () => {
   return (
     <Routes>
       <Route element={<LandingPage />}>
-        <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/explore" element={<Explore />} />
         {/* I can think about this routes later */}
@@ -43,7 +41,8 @@ const App = () => {
         <Route path="profile" element={<Profile isMyProfile={true} />} />
         <Route path="profile/edit" element={<EditProfile />} />
         <Route path="user/:username" element={<Profile isMyProfile={false} />} />
-        <Route path="home" element={<Feeds />} />
+        <Route path="/" element={<Feeds />} />
+        <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="b/:board/post/:postId" element={<Post postType={"post"}/>} />
         <Route path="create/:action" element={<CreateAction />} />
         <Route path="b/all" element={<ExploreBoards />} />
