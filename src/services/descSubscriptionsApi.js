@@ -16,6 +16,7 @@ const PrivateDescSubscriptionsApi = baseApi.injectEndpoints({
       invalidatesTags: (result, error, { desc }) => [
         { type: "Desc", id: "desc-subscriptions" },
         { type: "Desc", id: "all-descs" },
+        {type: "Desc", id: `desc-${desc}`}
       ],
     }),
 
@@ -28,6 +29,7 @@ const PrivateDescSubscriptionsApi = baseApi.injectEndpoints({
       invalidatesTags: (result, error, { desc }) => [
         { type: "Desc", id: "desc-subscriptions" },
         { type: "Desc", id: "all-descs" },
+        {type: "Desc", id: `desc-${desc}`}
       ],
     }),
 

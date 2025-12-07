@@ -49,6 +49,7 @@ const PrivateQuestionsApi = baseApi.injectEndpoints({
 
 export const {
   useGetQuestionsForTestQuery,
+  useLazyGetQuestionsForTestQuery,
   useGetQuestionFromTestByIdQuery,
   useCreateQuestionMutation,
   useUpdateQuestionMutation,

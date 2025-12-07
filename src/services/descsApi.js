@@ -51,6 +51,7 @@ const DescsApi = baseApi.injectEndpoints({
     // GET /descs/{desc}
     getDesc: builder.query({
       query: (desc) => `/descs/${desc}`,
+      providesTags: (result, error, desc)=> [{type: "Desc", id: `desc-${desc}`}]
     }),
     searchDescs: builder.query({
       query: (queryParams) => `/descs/search${toQueryString(queryParams)}`,

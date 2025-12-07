@@ -12,17 +12,20 @@ const PrivateTestsApi = baseApi.injectEndpoints({
     getTestsForDesc: builder.query({
       query: ({ desc, queryParams }) =>
         `/descs/${desc}/tests${toQueryString(queryParams)}`,
+      providesTags: (result, error, { desc }) => [
+        { type: "Desc", id: `tests-for-${desc}` },
+      ],
     }),
     // GET /tests/my
     getAllMyTests: builder.query({
-      query: ( queryParams ) => ({
+      query: (queryParams) => ({
         url: `/tests/my${toQueryString(queryParams)}`,
       }),
     }),
     getTestsByFilter: builder.query({
       query: ({ queryParams }) => `/tests${toQueryString(queryParams)}`,
       // providesTags: [{ type: "Post", id: "GlobalPostSearch" }]
-      transformResponse: (response)=>({...response, type: "test"})
+      transformResponse: (response) => ({ ...response, type: "test" }),
     }),
     // GET /descs/{desc}/tests/{test}
     getTestFromDescById: builder.query({
@@ -30,7 +33,10 @@ const PrivateTestsApi = baseApi.injectEndpoints({
     }),
 
     getTestDrafts: builder.query({
-      query: ({desc})=> `/descs/${desc}`,
+      query: ({ desc }) => `/descs/${desc}/tests/drafts`,
+      providesTags: (result, error, { desc }) => [
+        { type: "Desc", id: `draft-tests-${desc}` },
+      ],
     }),
     // POST /descs/{desc}/tests
     createTest: builder.mutation({
@@ -39,6 +45,9 @@ const PrivateTestsApi = baseApi.injectEndpoints({
         method: "POST",
         body: bodyData,
       }),
+      invalidatesTags: (result, error, { desc }) => [
+        { type: "Desc", id: `draft-tests-${desc}` },
+      ],
     }),
 
     // PUT /descs/{desc}/tests/{test}
@@ -48,6 +57,9 @@ const PrivateTestsApi = baseApi.injectEndpoints({
         method: "PUT",
         body: bodyData,
       }),
+      invalidatesTags: (result, error, { desc }) => [
+        { type: "Desc", id: `tests-for-${desc}` },
+      ],
     }),
 
     // DELETE /descs/{desc}/tests/{test}
@@ -56,6 +68,9 @@ const PrivateTestsApi = baseApi.injectEndpoints({
         url: `/descs/${desc}/tests/${test}`,
         method: "DELETE",
       }),
+      invalidatesTags: (result, error, { desc }) => [
+        { type: "Desc", id: `draft-tests-${desc}` },
+      ],
     }),
 
     // POST /descs/{desc}/tests/{test}/likes (toggle like)
@@ -84,6 +99,7 @@ export const {
   useGetTestsForDescQuery,
   useGetAllMyTestsQuery,
   useGetTestFromDescByIdQuery,
+  useLazyGetTestFromDescByIdQuery,
   useGetTestDraftsQuery,
   useGetTestsByFilterQuery,
   useCreateTestMutation,
@@ -92,6 +108,4 @@ export const {
   useToggleTestLikeMutation,
 } = PrivateTestsApi;
 
-export const {
-  useGetTestLikesQuery,
-} = PublicTestsApi;
+export const { useGetTestLikesQuery } = PublicTestsApi;
