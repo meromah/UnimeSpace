@@ -35,10 +35,6 @@ const DescPage = () => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // Get current user from Redux
-  const { profileData } = useSelector((state) => state.myProfile);
-  const username = useMemo(() => profileData?.username || null, [profileData]);
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   // Create Test State
@@ -108,7 +104,7 @@ const DescPage = () => {
   if (!descData || !testData) return null;
 
   // Transform test data to match PostCard expected structure
-  const transformedTests = testData?.data?.data?.map((test) => ({
+  const transformedTests = testData?.data?.map((test) => ({
     ...test,
     body: test.description,
     desc: {
@@ -128,9 +124,9 @@ const DescPage = () => {
           <h2 className="text-2xl font-semibold text-neutral-900">Tests</h2>
           <div className="flex items-center gap-3">
             <SortByComponent />
-            {!showCreateTest && (
+            {!showCreateTest && isAuthenticated &&  (
               <button
-                onClick={() => setShowCreateTest(true)}
+                onClick={onShowCreateTest}
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-blue hover:bg-primary-blue/10 hover:text-primary-blue rounded-lg transition-colors shadow-sm"
                 aria-label="Create test"
               >
