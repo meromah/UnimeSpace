@@ -1,170 +1,133 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import PostCard from "./components/PostCard";
-import { FaInbox, FaClock, FaFire } from "react-icons/fa";
-import { FiSearch } from "react-icons/fi";
-import { useGlobalPostSearchQuery } from "../../services/postsApi.js";
+import { FaInbox } from "react-icons/fa";
 import Loading from "../../components/Loading.jsx";
 import ErrorDisplay from "../../components/ErrorDisplay.jsx";
-const filters = [
-  { value: "latest", icon: FaClock, label: "Latest" },
-  { value: "popular", icon: FaFire, label: "Popular" },
-  // { value: "following", icon: FaLayerGroup, label: "Following" }, //Later when the api that query the user followed boards, descs provided, i will work on that
-];
+import { useSelector } from "react-redux";
+import useSortBy from "../../hooks/useSortBy.jsx";
+import HomeHeader from "./components/home/HomeHeader.jsx";
+import HomeSortBy from "./components/home/HomeSortBy.jsx";
+import { SORT_BY, SORT_BY_TYPE } from "../../utils/constants.js";
+import useGetHomeData from "../../hooks/useGetHomeData.jsx";
+import { TabFilters } from "../../utils/tabFilters.js";
+import Toast from "../../components/Toast.jsx";
+
 const Feeds = () => {
-  const [posts, setPosts] = useState([]);
-  const [error, setError] = useState({
-    hasError: false,
-    status: undefined,
-    message: undefined,
+  const [tab, setTab] = useState(() => {
+    const tabs = new TabFilters();
+    return tabs.firstValue();
   });
-  const [filter, setFilter] = useState("latest");
-  const [searchQuery, setSearchQuery] = useState("");
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [toast, setToast] = useState(null);
+  const { profileData } = useSelector((state) => state.myProfile);
+  const username = useMemo(() => profileData?.username || null, [profileData]);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
+  // Custom hook for sorting
   const {
-    data: latestPosts,
-    isLoading: isLatestPostsLoading,
-    error: latestPostsError,
-    isError: isLatestPostsError,
-  } = useGlobalPostSearchQuery(
-    { queryParams: "latest=1" },
-    { skip: filter !== "latest" }
-  );
+    sortBy: sortByType,
+    label: labelByType,
+    SortByComponent: SortByTypeComponent,
+    emptyStateMessages: emptyStateMessagesByType,
+    resetSortBy: resetSortByType,
+  } = useSortBy({ isAuthenticated, sortOptionsConfig: SORT_BY_TYPE });
   const {
-    data: popularPosts,
-    isLoading: isPopularPostsLoading,
-    error: popularPostsError,
-    isError: isPopularPostsError,
-  } = useGlobalPostSearchQuery(
-    { queryParams: "popular=1" },
-    { skip: filter !== "popular" }
-  );
-
-  // const {data: followingPosts}= (undefined, {skip: filter !== "following"}) //Later when the api that query the user followed boards, descs provided, i will work on that
-  const isLoading =
-    filter === "latest" ? isLatestPostsLoading : isPopularPostsLoading;
-  useEffect(() => {
-    // Determine active data source
-    const activeData = filter === "latest" ? latestPosts : popularPosts;
-    const activeError =
-      filter === "latest" ? latestPostsError : popularPostsError;
-    const activeIsError =
-      filter === "latest" ? isLatestPostsError : isPopularPostsError;
-
-    // Update posts
-    if (activeData?.data) {
-      setPosts(activeData.data);
-    }
-
-    // Update error state
-    if (activeIsError && activeError) {
-      setError({
-        hasError: true,
-        status: activeError.status,
-        message: activeError.data?.message,
-      });
-    } else if (activeIsError === false) {
-      setError({ hasError: false, status: undefined, message: undefined });
-    }
-  }, [
-    filter,
-    latestPosts,
-    popularPosts,
-    latestPostsError,
-    popularPostsError,
-    isLatestPostsError,
-    isPopularPostsError,
-  ]);
-  const handleFilterChange = (newFilter) => {
+    sortBy,
+    label: labelByTime,
+    SortByComponent: SortByTimeComponent,
+    emptyStateMessages: emptyStateMessagesByTime,
+    resetSortBy,
+  } = useSortBy({ isAuthenticated, sortOptionsConfig: SORT_BY });
+  //API call hook
+  const { data, isLoading, error } = useGetHomeData({
+    sortBy,
+    sortByType,
+    tab,
+    username,
+  });
+  const handleTabChange = (newTab) => {
     setIsTransitioning(true);
-    setFilter(newFilter);
+    setTab(newTab);
     setTimeout(() => setIsTransitioning(false), 150);
   };
+  useEffect(() => {
+    resetSortBy();
+    resetSortByType();
+  }, [tab]);
+
   return (
-    <div className="p-4 md:p-6">
-      {/* Search bar */}
-      <div className="flex items-center  gap-3 bg-white border border-neutral-200 rounded-lg mb-3 p-3">
-        <FiSearch className="text-neutral-400 text-lg hover:text-neutral-500 cursor-pointer" />
-        <input
-          type="text"
-          placeholder="Search posts, boards, or people..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full text-sm text-neutral-900 placeholder-neutral-500 focus:outline-none"
-          aria-label="Search posts"
-        />
-      </div>
-
-      {/* Filter bar */}
-      <div className="bg-white border border-neutral-200 rounded-lg mb-4 p-2 flex items-center gap-1">
-        {filters.map(({ value, icon: Icon, label }) => (
-          <button
-            key={value}
-            onClick={() => handleFilterChange(value)}
-            className={`
-              flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150
-              ${
-                filter === value
-                  ? "bg-neutral-100 text-neutral-900"
-                  : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
-              }
-              focus:outline-none cursor-pointer
-            `}
-            aria-label={`Filter by ${label}`}
-            aria-pressed={filter === value}
-          >
-            <Icon className="text-xs" />
-            <span>{label}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Content */}
-      {isLoading ? (
-        <Loading />
-      ) : error.hasError ? (
-        <ErrorDisplay error={error.status} title={error.message} />
-      ) : (
-        <div
-          className={`transition-opacity duration-150 ${
-            isTransitioning ? "opacity-40" : "opacity-100"
-          }`}
-          role="region"
-          aria-live="polite"
-          aria-label="Feed posts"
-        >
-          {posts.length > 0 ? (
-            <div className="">
-              {posts.map((post, index) => (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                  isFirst={index === 0}
-                  isLast={index === posts.length - 1}
-                  postType={post.files.length > 0 ? "library" : "post"}
-                />
-              ))}
-            </div>
+    <>
+      <div className="grid gap-4">
+        {/* Filter bar */}
+        <HomeHeader tab={tab} onTabChange={handleTabChange} />
+        <div className="px-4 md:px-6">
+          <HomeSortBy
+            SortByTimeComponent={SortByTimeComponent}
+            SortByTypeComponent={SortByTypeComponent}
+            labelByTime={labelByTime}
+            labelByType={labelByType}
+          />
+          {/* Content */}
+          {isLoading ? (
+            <Loading />
+          ) : error.hasError ? (
+            <ErrorDisplay error={error.status} title={error.message} />
           ) : (
-            <div className="flex flex-col items-center justify-center py-16 px-4">
-              <div className="bg-neutral-100 rounded-full p-6 mb-4">
-                <FaInbox className="text-4xl text-neutral-400" />
-              </div>
-              <h3 className="text-lg font-medium text-neutral-900 mb-2">
-                No posts yet. Be a first one to post
-              </h3>
-              <p className="text-neutral-600 text-sm text-center max-w-sm">
-                {searchQuery.trim()
-                  ? `No results found for "${searchQuery}"`
-                  : filter === "following"
-                  ? "No posts from your boards. Check other filters."
-                  : "Be the first to post something!"}
-              </p>
+            <div
+              className={`transition-opacity duration-150 ${
+                isTransitioning ? "opacity-40" : "opacity-100"
+              }`}
+              role="region"
+              aria-live="polite"
+              aria-label="Feed posts"
+            >
+              {data !== null && data.length > 0 ? (
+                <div className="">
+                  {data.map((item, index) => (
+                    <PostCard
+                      key={item.id}
+                      item={item}
+                      isFirst={index === 0}
+                      isLast={index === data.length - 1}
+                      itemType={item["board_id"] ? "post" : "test"}
+                      communityType={item["board_id"] ? "board" : "desc"}
+                      onError={(message = "Something happened!") => {
+                        setToast({
+                          message,
+                          type: "error",
+                        });
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 px-4">
+                  <div className="bg-neutral-100 rounded-full p-6 mb-4">
+                    <FaInbox className="text-4xl text-neutral-400" />
+                  </div>
+                  <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                    No posts yet. Be a first one to post
+                  </h3>
+                  <p className="text-neutral-600 text-sm text-center max-w-sm">
+                    {tab === "following"
+                      ? "No posts from your boards. Check other filters."
+                      : "Be the first to post something!"}
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
+      </div>
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
       )}
-    </div>
+    </>
   );
 };
 
