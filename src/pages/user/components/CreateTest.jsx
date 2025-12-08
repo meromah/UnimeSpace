@@ -7,42 +7,31 @@ import EditCodeQuestion from "./testCodeType/EditCodeQuestion";
 import CreateTestHeader from "./CreateTestHeader";
 import { useSelector } from "react-redux";
 import NotFound from "../../../components/NotFound";
+import {
+  useGetTestDraftsQuery,
+  useUpdateTestMutation,
+} from "../../../services/testsApi";
+import EditMcqQuestion from "./testMcqType/EditMcqQuestion";
+import DraftTestSection from "./DraftTestSection";
 
 const CreateTest = ({ descId, onCancel = undefined }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const [draftTest, setDraftTest] = useState(() => {
-    const raw = localStorage.getItem("unfinished-test");
-    let draftFromLocalStorage = null;
-
-    try {
-      draftFromLocalStorage = raw ? JSON.parse(raw) : null;
-    } catch {
-      draftFromLocalStorage = null;
-    }
-
-    if (!draftFromLocalStorage) return null;
-    if (descId && draftFromLocalStorage.desc !== descId) return null;
-    const target = new Date(draftFromLocalStorage.date).getTime();
-    const now = Date.now();
-    const diffMs = now - target;
-    if (diffMs > 0 && diffMs <= 3600000) {
-      return draftFromLocalStorage;
-    }
-    localStorage.removeItem("unfinished-test");
-    return null;
-  });
+  const [draftTest, setDraftTest] = useState(null);
 
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showQuestionTypeSelector, setShowQuestionTypeSelector] =
     useState(false);
+  const [isDraftsOpen, setIsDraftsOpen] = useState(false);
   const { data: questionTypes } = useGetQuestionTypesQuery();
+  const [updateTest] = useUpdateTestMutation();
+
   const initialQuestionData = useMemo(
     () => ({
       code: {
         type: "code",
-        type_id: questionTypes ? questionTypes["code"]?.id : null,
+        question_type_id: questionTypes ? questionTypes["code"]?.id : null,
         body: "",
         signature: { value: "", numberOfArguments: 1 },
         test_cases: [
@@ -54,7 +43,7 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
       },
       mcq: {
         type: "mcq",
-        type_id: questionTypes ? questionTypes["mcq"]?.id : null,
+        question_type_id: questionTypes ? questionTypes["mcq"]?.id : null,
         body: "",
         options: [
           { body: "", is_correct: false },
@@ -68,15 +57,18 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
     () => (draftTest === null ? null : draftTest.id),
     [draftTest]
   );
- useEffect(() => {
-  if (!descId) return;
-  if(draftTest === null) return;
-  if(draftTest.desc !== descId){
-  localStorage.removeItem("unfinished-test")
-  setDraftTest(null)
-  }
-  
-}, [draftTest]);
+  const { data: draftTests } = useGetTestDraftsQuery(
+    { desc: descId },
+    { skip: !descId }
+  );
+  useEffect(() => {
+    if (!descId) return;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
   const handleSelectQuestionType = (type) => {
     const template = initialQuestionData[type];
     if (template) {
@@ -95,8 +87,10 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
     if (!question) return;
     setShowQuestionTypeSelector(false);
     setIsEditMode(true);
-
-    if (question.type === "code") {
+    if (
+      question?.type === "code" ||
+      question?.question_type_id == questionTypes.code.id
+    ) {
       const normalizedTestCases =
         question.test_cases?.map((testCase) => ({
           id: testCase.id,
@@ -148,7 +142,7 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
       setCurrentQuestion({
         id: question.id,
         type: "code",
-        type_id: question.type_id,
+        question_type_id: question.question_type_id,
         body: question.body || "",
         signature: {
           id: signatureData.id,
@@ -165,30 +159,33 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
           .filter(Boolean),
       });
       return;
+    } else if (
+      question?.type === "mcq" ||
+      question?.question_type_id == questionTypes.mcq.id
+    ) {
+      const normalizedOptions =
+        question.options?.map((option) => ({
+          id: option.id,
+          body: option.body || "",
+          is_correct: Boolean(option.is_correct),
+        })) || [];
+
+      setCurrentQuestion({
+        id: question.id,
+        type: "mcq",
+        body: question.body || "",
+        options:
+          normalizedOptions.length > 0
+            ? normalizedOptions
+            : [
+                { body: "", is_correct: false },
+                { body: "", is_correct: false },
+              ],
+        originalOptionIds: normalizedOptions
+          .map((option) => option.id)
+          .filter(Boolean),
+      });
     }
-
-    const normalizedOptions =
-      question.options?.map((option) => ({
-        id: option.id,
-        body: option.body || "",
-        is_correct: Boolean(option.is_correct),
-      })) || [];
-
-    setCurrentQuestion({
-      id: question.id,
-      type: "mcq",
-      body: question.body || "",
-      options:
-        normalizedOptions.length > 0
-          ? normalizedOptions
-          : [
-              { body: "", is_correct: false },
-              { body: "", is_correct: false },
-            ],
-      originalOptionIds: normalizedOptions
-        .map((option) => option.id)
-        .filter(Boolean),
-    });
   };
 
   const handleQuestionModalCancel = () => {
@@ -198,7 +195,17 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
 
   const handleTestSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Gather test data, questions, files, and submit
+    try {
+      await updateTest({
+        desc: Boolean(descId) ? descId : draftTest.desc,
+        test: testId,
+        bodyData: {
+          status: "published",
+        },
+      }).unwrap();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const onResetTestForm = () => {
@@ -211,26 +218,9 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
     }
   };
   const onCreateSuccess = (finalQuestion) => {
-    setQuestions((prev) => [...prev, finalQuestion]);
-
-    let draftFromLocalStorage = null;
-    try {
-      const rawDraft = localStorage.getItem("unfinished-test");
-      draftFromLocalStorage = rawDraft ? JSON.parse(rawDraft) : null;
-    } catch {
-      draftFromLocalStorage = null;
-    }
-
-    if (draftFromLocalStorage) {
-      draftFromLocalStorage.questions = draftFromLocalStorage.questions || [];
-      draftFromLocalStorage.questions.push(finalQuestion);
-      draftFromLocalStorage.date = new Date().toISOString();
-      localStorage.setItem(
-        "unfinished-test",
-        JSON.stringify(draftFromLocalStorage)
-      );
-      setDraftTest(draftFromLocalStorage);
-    }
+    const newQuestions = [...questions, finalQuestion];
+    setQuestions(newQuestions);
+    setDraftTest((prev) => ({ ...prev, questions: [...newQuestions] }));
 
     setCurrentQuestion(null);
     setIsEditMode(false);
@@ -258,200 +248,261 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
           question.id === updatedQuestion.id ? updatedQuestion : question
       );
       draftFromLocalStorage.date = new Date().toISOString();
-      localStorage.setItem(
-        "unfinished-test",
-        JSON.stringify(draftFromLocalStorage)
-      );
       setDraftTest(draftFromLocalStorage);
     }
 
     setCurrentQuestion(null);
     setIsEditMode(false);
   };
+  const onShowDrafts = (e) => {
+    e.preventDefault();
+    setIsDraftsOpen((prev) => !prev);
+  };
   if (!isAuthenticated) return <NotFound />;
   return (
     <form
       onSubmit={handleTestSubmit}
       className={
-        !!descId &&
-        "flex flex-col items-center gap-4 fixed inset-0 z-50 p-4 bg-white/50 md:bg-black/30 backdrop-blur-lg"
+        !!descId
+          ? "flex flex-col items-center gap-4 fixed inset-0 z-50 p-4 bg-white/50 md:bg-black/30 backdrop-blur-lg"
+          : ""
       }
     >
       <div
-        className={`flex flex-col justify-start bg-white h-full rounded-lg md:m-6 border border-neutral-200 gap-4 p-6 ${
-          !!descId && " w-full md:max-w-3/4 p-6 overflow-y-scroll"
+        className={`flex flex-col justify-between bg-white h-full rounded-lg md:m-6 border border-neutral-200 gap-4 p-6 ${
+          !!descId ? "w-full md:max-w-3/4 overflow-y-auto" : ""
         }`}
       >
-        <CreateTestHeader
-          descId={descId}
-          draftTest={draftTest}
-          setDraftTest={setDraftTest}
-          setQuestions={setQuestions}
-          onCancel={onResetTestForm}
-        />
-        {testId !== null && (
+        {isDraftsOpen && !!descId && (
+          <DraftTestSection
+            setDraftTest={setDraftTest}
+            draftTests={draftTests}
+            onShowDrafts={onShowDrafts}
+            questionTypes={questionTypes}
+          />
+        )}
+        {!isDraftsOpen && (
           <>
-            {/* Questions Collector */}
-            <div className="flex flex-col gap-4">
-              <label className="text-sm font-medium text-neutral-800">
-                Questions
-              </label>
-              {/* Display Existing Questions */}
-              {questions.length > 0 && (
-                <div className="flex flex-col gap-3">
-                  {questions.map((question, index) => (
-                    <QuestionPreviewItem
-                      questionTypes={questionTypes}
-                      key={question.id}
-                      question={question}
-                      index={index}
-                      onRemove={() => handleRemoveQuestion(question.id)}
-                      onEdit={handleEditQuestion}
-                    />
-                  ))}
-                </div>
-              )}
-              {currentQuestion !== null && testId !== null && isEditMode && (
+            {!!descId && (
+              <div className="flex items-center justify-between mb-2 select-none">
+                <p className="font-medium opacity-50">d/{descId}</p>
+                <button
+                  type="button"
+                  disabled={!draftTests?.data?.length}
+                  onClick={onShowDrafts}
+                  className="font-medium text-primary-blue rounded hover:underline focus:outline-none disabled:text-neutral-400 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                >
+                  Drafts
+                </button>
+              </div>
+            )}
+
+            <div
+              className={
+                testId === null ? "flex flex-col justify-between h-full" : "h-full overflow-y-auto"
+              }
+            >
+              <CreateTestHeader
+                descId={descId}
+                draftTest={draftTest}
+                setDraftTest={setDraftTest}
+                setQuestions={setQuestions}
+                onCancel={onResetTestForm}
+              />
+
+              {testId !== null && (
                 <>
-                  {currentQuestion.type === "code" ? (
-                    <EditCodeQuestion
-                      currentQuestion={currentQuestion}
-                      setCurrentQuestion={setCurrentQuestion}
-                      onUpdateSuccess={handleUpdateSuccess}
-                      onCancel={handleQuestionModalCancel}
-                      testId={testId}
-                      questionTypeId={questionTypes["code"].id}
-                      setIsEditMode={setIsEditMode}
-                    />
-                  ) : currentQuestion.type === "mcq" ? null : null}
-                </>
-              )}
-              {currentQuestion !== null && testId !== null && !isEditMode && (
-                <>
-                  {currentQuestion.type === "code" ? (
-                    <CreateCodeQuestion
-                      currentQuestion={currentQuestion}
-                      setCurrentQuestion={setCurrentQuestion}
-                      onCreateSuccess={onCreateSuccess}
-                      onUpdateSuccess={handleUpdateSuccess}
-                      onCancel={handleQuestionModalCancel}
-                      testId={testId}
-                      questionTypeId={questionTypes["code"].id}
-                      setIsEditMode={setIsEditMode}
-                    />
-                  ) : currentQuestion.type === "mcq" ? (
-                    <CreateTestMcqType
-                      currentQuestion={currentQuestion}
-                      setCurrentQuestion={setCurrentQuestion}
-                      onCreateSuccess={onCreateSuccess}
-                      onUpdateSuccess={handleUpdateSuccess}
-                      onCancel={handleQuestionModalCancel}
-                      testId={testId}
-                      questionTypeId={questionTypes["mcq"].id}
-                      setIsEditMode={setIsEditMode}
-                    />
-                  ) : (
-                    <div className="p-4 border border-neutral-200 rounded-lg bg-neutral-50">
+                  {/* Questions Collector */}
+                  <div className="flex flex-col gap-4 mt-6">
+                    <label className="text-sm font-medium text-neutral-800">
+                      Questions
+                    </label>
+
+                    {/* Display Existing Questions */}
+                    {questions.length > 0 && (
                       <div className="flex flex-col gap-3">
-                        <span className="text-sm font-medium text-neutral-700">
-                          New Question - Multiple Choice
-                        </span>
-                        {/* Question Body Input */}
-                        <p className="flex flex-col gap-2">Question Body</p>
-                        <div className="flex justify-between gap-2">
+                        {questions.map((question, index) => (
+                          <QuestionPreviewItem
+                            questionTypes={questionTypes}
+                            key={question.id}
+                            question={question}
+                            index={index}
+                            onRemove={() => handleRemoveQuestion(question.id)}
+                            onEdit={handleEditQuestion}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Edit Mode */}
+                    {currentQuestion !== null &&
+                      testId !== null &&
+                      isEditMode && (
+                        <>
+                          {currentQuestion.type === "code" ||
+                          currentQuestion?.question_type_id ===
+                            questionTypes.code.id ? (
+                            <EditCodeQuestion
+                              currentQuestion={currentQuestion}
+                              setCurrentQuestion={setCurrentQuestion}
+                              onUpdateSuccess={handleUpdateSuccess}
+                              onCancel={handleQuestionModalCancel}
+                              testId={testId}
+                              questionTypeId={questionTypes["code"].id}
+                              setIsEditMode={setIsEditMode}
+                            />
+                          ) : currentQuestion.type === "mcq" ||
+                            currentQuestion?.question_type_id ===
+                              questionTypes.mcq.id ? (
+                            <EditMcqQuestion
+                              currentQuestion={currentQuestion}
+                              setCurrentQuestion={setCurrentQuestion}
+                              onUpdateSuccess={handleUpdateSuccess}
+                              onCancel={handleQuestionModalCancel}
+                              testId={testId}
+                              questionTypeId={questionTypes["mcq"].id}
+                              setIsEditMode={setIsEditMode}
+                            />
+                          ) : null}
+                        </>
+                      )}
+
+                    {/* Create Mode */}
+                    {currentQuestion !== null &&
+                      testId !== null &&
+                      !isEditMode && (
+                        <>
+                          {currentQuestion.type === "code" ? (
+                            <CreateCodeQuestion
+                              currentQuestion={currentQuestion}
+                              setCurrentQuestion={setCurrentQuestion}
+                              onCreateSuccess={onCreateSuccess}
+                              onUpdateSuccess={handleUpdateSuccess}
+                              onCancel={handleQuestionModalCancel}
+                              testId={testId}
+                              questionTypeId={questionTypes["code"].id}
+                              setIsEditMode={setIsEditMode}
+                            />
+                          ) : currentQuestion.type === "mcq" ? (
+                            <CreateTestMcqType
+                              currentQuestion={currentQuestion}
+                              setCurrentQuestion={setCurrentQuestion}
+                              onCreateSuccess={onCreateSuccess}
+                              onUpdateSuccess={handleUpdateSuccess}
+                              onCancel={handleQuestionModalCancel}
+                              testId={testId}
+                              questionTypeId={questionTypes["mcq"].id}
+                              setIsEditMode={setIsEditMode}
+                            />
+                          ) : (
+                            <div className="p-4 border border-neutral-200 rounded-lg bg-neutral-50">
+                              <div className="flex flex-col gap-3">
+                                <span className="text-sm font-medium text-neutral-700">
+                                  New Question - Multiple Choice
+                                </span>
+                                <p className="text-sm text-neutral-600">
+                                  Question Body
+                                </p>
+                                <div className="flex justify-end gap-2 mt-2">
+                                  <button
+                                    type="button"
+                                    className="px-4 py-2 rounded text-neutral-700 border border-neutral-300 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-neutral-200 transition-colors"
+                                    onClick={() => setCurrentQuestion(null)}
+                                  >
+                                    Cancel
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="px-4 py-2 rounded text-white bg-primary-blue hover:bg-primary-blue/90 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 transition-colors"
+                                    onClick={() => {
+                                      setQuestions((prev) => [
+                                        ...prev,
+                                        currentQuestion,
+                                      ]);
+                                      setCurrentQuestion(null);
+                                    }}
+                                  >
+                                    Add
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
+
+                    {/* Question Type Selector */}
+                    {showQuestionTypeSelector && (
+                      <div className="border border-neutral-200 rounded-lg p-4 bg-neutral-50">
+                        <div className="flex flex-col gap-3">
+                          <label className="text-sm font-medium text-neutral-700">
+                            {questions.length === 0
+                              ? "Question 1 - Select question type"
+                              : `Question ${
+                                  questions.length + 1
+                                } - Select question type`}
+                          </label>
+                          <select
+                            defaultValue=""
+                            onChange={(e) => {
+                              if (e.target.value) {
+                                handleSelectQuestionType(e.target.value);
+                                e.target.value = "";
+                              }
+                            }}
+                            className="w-full px-3 py-2 text-sm text-neutral-900 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors cursor-pointer"
+                          >
+                            <option value="">Select question type...</option>
+                            {questionTypes.data.map((item) => (
+                              <option key={item.type} value={item.type}>
+                                {item.label}
+                              </option>
+                            ))}
+                          </select>
                           <button
-                            className="block px-4 py-2 rounded text-neutral-400 border cursor-pointer "
-                            onClick={() => setCurrentQuestion(null)}
+                            type="button"
+                            onClick={() => setShowQuestionTypeSelector(false)}
+                            className="text-sm text-neutral-500 hover:text-neutral-700 focus:outline-none self-start transition-colors"
                           >
                             Cancel
                           </button>
-                          <button
-                            className="block px-4 py-2 rounded text-white bg-primary-blue border-primary-blue border cursor-pointer "
-                            onClick={() => {
-                              setQuestions((prev) => [
-                                ...prev,
-                                currentQuestion,
-                              ]);
-                              setCurrentQuestion(null);
-                            }}
-                          >
-                            Add
-                          </button>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+
+                    {/* Add Question Button */}
+                    {currentQuestion === null && !showQuestionTypeSelector && (
+                      <button
+                        type="button"
+                        onClick={() => setShowQuestionTypeSelector(true)}
+                        className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary-blue border border-primary-blue rounded-lg hover:bg-primary-blue/5 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-colors"
+                      >
+                        <span>+ Add Question</span>
+                      </button>
+                    )}
+                  </div>
                 </>
               )}
-              {/* Question Type Selector - shown when empty or when adding new */}
-              {showQuestionTypeSelector && (
-                <div className="border border-neutral-200 rounded-lg p-4 bg-neutral-50">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm text-neutral-600">
-                      {questions.length === 0
-                        ? "Question 1 - Select question type"
-                        : `Question ${
-                            questions.length + 1
-                          } - Select question type`}
-                    </label>
-                    <select
-                      defaultValue=""
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          handleSelectQuestionType(e.target.value);
-                          e.target.value = ""; // Reset dropdown
-                        }
-                      }}
-                      className="w-full px-3 py-2 text-sm text-neutral-900 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors"
-                    >
-                      <option value="">Select question type...</option>
-                      {questionTypes.data.map((item) => (
-                        <option key={item.type} value={item.type}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {showQuestionTypeSelector && (
-                    <button
-                      type="button"
-                      onClick={() => setShowQuestionTypeSelector(false)}
-                      className="mt-3 text-sm text-neutral-500 hover:text-neutral-700"
-                    >
-                      Cancel
-                    </button>
-                  )}
-                </div>
-              )}
-              {/* Add Question Button - shown when questions exist */}
-              {currentQuestion === null && !showQuestionTypeSelector && (
+            </div>
+
+            {testId !== null && (
+              <div className="flex items-center justify-between gap-3 pt-4 mt-4 border-t border-neutral-200">
                 <button
                   type="button"
-                  onClick={() => setShowQuestionTypeSelector(true)}
-                  className="flex items-center justify-center gap-2 px-4 py-2 text-sm text-primary-blue border border-primary-blue rounded-lg hover:bg-primary-blue/5 transition-colors"
+                  onClick={onResetTestForm}
+                  className="px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-200 transition-colors"
                 >
-                  <span>Add Question</span>
+                  Cancel
                 </button>
-              )}
-            </div>
-            {/* Action Buttons */}
-            <div className="flex items-center justify-between gap-2 pt-2 border-t border-neutral-200">
-              <button
-                type="button"
-                onClick={onResetTestForm}
-                className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                onClick={handleTestSubmit}
-                disabled={questions.length === 0}
-                className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-medium"
-              >
-                Save Test
-              </button>
-            </div>
+                <button
+                  type="submit"
+                  disabled={questions.length === 0}
+                  className="px-6 py-2 text-sm font-medium bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-blue/30 transition-colors"
+                >
+                  Save Test
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
