@@ -82,10 +82,6 @@ const CreateTestHeader = ({
         date: new Date().toISOString(),
       };
       setDraftTest(testDetails);
-      localStorage.setItem(
-        "unfinished-test",
-        JSON.stringify({ ...testDetails, questions: [] })
-      );
     } catch (err) {
       //TODO: Handle error
     }
@@ -115,10 +111,6 @@ const CreateTestHeader = ({
       };
       
       setDraftTest(updatedTestDetails);
-      localStorage.setItem(
-        "unfinished-test",
-        JSON.stringify(updatedTestDetails)
-      );
       setIsEditMode(false);
     } catch (err) {
       //TODO: Handle error
