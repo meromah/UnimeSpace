@@ -13,6 +13,7 @@ import PostMenu from "./PostMenu";
 import EditPostModal from "./EditPostModal";
 import ReportModal from "./ReportModal";
 import DeletePostModal from "./DeletePostModal";
+import { useToggleTestLikeMutation } from "../../../services/testsApi";
 const preventNavigation = (e) => {
   e.preventDefault();
   e.stopPropagation();
@@ -23,7 +24,8 @@ const PostCard = ({
   isLast,
   itemType = "post",
   communityType = "board",
-  communityUrl = "b/"
+  communityUrl = "b/",
+  onError,
 }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -33,9 +35,11 @@ const PostCard = ({
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const postLikesCountRef = useRef(null);
-  const [togglePostLike, { error: togglePostLikeError }] =
+  const [togglePostLike, { isLoading: isTogglePostLikeLoading }] =
     useTogglePostLikeMutation();
-
+  const [toggleTestLike, { isLoading: isToggleTestLikeLoading }] =
+    useToggleTestLikeMutation();
+  const isLoading = isTogglePostLikeLoading || isToggleTestLikeLoading;
   // Separate images and files based on mimetype
   const { images, files } = useMemo(() => {
     if (!item.files || item.files.length === 0) {
@@ -68,16 +72,21 @@ const PostCard = ({
       navigate("/login");
       return;
     }
-    const community = item[communityType].name;
-    const postId = item.id;
-    const res = await togglePostLike({ board: community, item: postId }).unwrap();
-    setLiked(res.toggle);
-    if (res.toggle) {
-      postLikesCountRef.current.textContent =
-        Number(postLikesCountRef.current.textContent) + 1;
-    } else {
-      postLikesCountRef.current.textContent =
-        Number(postLikesCountRef.current.textContent) - 1;
+    try {
+      const community = item[communityType].name;
+      const itemId = item.id;
+      const toggleLike = itemType === "test" ? toggleTestLike : togglePostLike;
+      setLiked((prev) => !prev);
+      const res = await toggleLike({
+        [communityType]: community,
+        [itemType]: itemId,
+      }).unwrap();
+      postLikesCountRef.current.textContent = res.toggle
+        ? Number(postLikesCountRef.current.textContent) + 1
+        : Number(postLikesCountRef.current.textContent) - 1;
+    } catch (err) {
+      onError({ message: err.data.message });
+      setLiked((prev) => !prev);
     }
   };
 
@@ -95,10 +104,12 @@ const PostCard = ({
     preventNavigation(e);
     setIsReportModalOpen(true);
   };
-  const handleStart = (e)=> {
-    preventNavigation(e)
-    navigate(`/${communityUrl}${item[communityType].name}/${itemType}/${item.id}/start`)
-  }
+  const handleStart = (e) => {
+    preventNavigation(e);
+    navigate(
+      `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}/start`
+    );
+  };
   return (
     <>
       <Link
@@ -150,7 +161,7 @@ const PostCard = ({
                   )
                 }
               >
-                {communityUrl}{item[communityType].name}
+                {communityUrl + item[communityType].name}
               </p>
               <p className="text-[12px] flex items-center gap-1">
                 <span
@@ -218,7 +229,9 @@ const PostCard = ({
             <FaRegComment /> {item.comments_count}
           </button>
           <button
-            className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer"
+            className={`${
+              isLoading ? "animate-pulse" : ""
+            } flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer`}
             title={liked ? "Unlike" : "Like"}
             aria-label={`${item.likes_count} likes. ${
               liked ? "Unlike" : "Like"
@@ -228,7 +241,13 @@ const PostCard = ({
             {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
             <span
               ref={postLikesCountRef}
-              className={liked ? "text-red-500" : ""}
+              className={
+                liked
+                  ? "text-red-500"
+                  : isLoading
+                  ? "invisible animate-pulse"
+                  : ""
+              }
             >
               {item.likes_count}
             </span>
