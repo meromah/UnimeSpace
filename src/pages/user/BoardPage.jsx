@@ -192,6 +192,14 @@ const BoardPage = () => {
                     itemType="post"
                     communityType="board"
                     communityUrl="b/"
+                    onError={(
+                      message = "Something happened!"
+                    ) => {
+                      setToast({
+                        message,
+                        type: "error",
+                      });
+                    }}
                   />
                 );
               })}
