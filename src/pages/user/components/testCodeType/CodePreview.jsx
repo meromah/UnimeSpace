@@ -53,7 +53,6 @@ const CodePreview = ({
           throw new Error(element.stderr);
         }
       }
-      console.log(result);
       setPythonOutput(result || "No output");
     } catch (err) {
       setError({
