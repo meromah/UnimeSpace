@@ -145,7 +145,6 @@ const Register = () => {
         userData
       ).unwrap();
       setShowSuccessModal(true);
-      localStorage.removeItem("unfinished-test");
     } catch (err) {
       const errorMessage =
         err?.data?.message ||

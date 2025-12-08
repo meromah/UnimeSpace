@@ -10,7 +10,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useDispatch();
   /*
   I have to implement error handling for login failures, such as incorrect credentials or server issues.
  */
@@ -25,7 +24,6 @@ const Login = () => {
       setShowSuccessModal(true);
       setEmail("");
       setPassword("");
-      localStorage.removeItem("unfinished-test");
     } catch (err) {
       console.error("Login failed:", err);
     }
