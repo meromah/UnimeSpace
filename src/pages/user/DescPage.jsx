@@ -15,6 +15,7 @@ import CreateTest from "./components/CreateTest";
 import DescHeader from "./components/DescHeader";
 import { IoAdd } from "react-icons/io5";
 import { SORT_BY } from "../../utils";
+import { setDescName, setIsPopUp } from "../../app/createTestSlice";
 
 // Helper function to extract error message from API error response
 const extractErrorMessage = (error) => {
@@ -89,6 +90,8 @@ const DescPage = () => {
       navigate("/login");
       return;
     }
+    dispatch(setIsPopUp(true));
+    dispatch(setDescName(descId));
     setShowCreateTest(true);
   };
 
@@ -118,13 +121,16 @@ const DescPage = () => {
     <div className="min-h-screen bg-primary-bg">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Desc Header */}
-        <DescHeader desc={descData?.data} isSubscribed={subscribedIds.has(descData?.data.id)} />
+        <DescHeader
+          desc={descData?.data}
+          isSubscribed={subscribedIds.has(descData?.data.id)}
+        />
 
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-semibold text-neutral-900">Tests</h2>
           <div className="flex items-center gap-3">
             <SortByComponent />
-            {!showCreateTest && isAuthenticated &&  (
+            {!showCreateTest && isAuthenticated && (
               <button
                 onClick={onShowCreateTest}
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-blue hover:bg-primary-blue/10 hover:text-primary-blue rounded-lg transition-colors shadow-sm"
@@ -140,7 +146,6 @@ const DescPage = () => {
         {/* Create Test Form */}
         {isAuthenticated && showCreateTest && (
           <CreateTest
-            descId={descId}
             onCancel={() => setShowCreateTest(false)}
             onError={(errorMessage) => {
               setToast({
