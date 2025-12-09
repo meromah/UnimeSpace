@@ -3,16 +3,19 @@ import { useNavigate } from "react-router-dom";
 import RelativeTime from "../../../components/RelativeTime";
 import { getFileUrl, getInitials } from "../../../utils";
 import PostMenu from "./PostMenu";
+import { useMemo } from "react";
 
 const getType = {
-  post: ["b", "board"],
-  quiz: ["d", "desc"],
-  library: ["b", "board"],
+  post: { url: "b/", community: "board" },
+  test: { url: "d/", community: "desc" },
 };
 
-const PostHeader = ({ postData, postType, onEdit, onDelete, onReport }) => {
+const PostHeader = ({ itemData, itemType, onEdit, onDelete, onReport }) => {
   const navigate = useNavigate();
-
+  const { url: communityUrl, community } = useMemo(
+    () => getType[itemType],
+    [itemType]
+  );
   const handleAuthorClick = (e, path) => {
     e.stopPropagation();
     navigate(path);
@@ -38,18 +41,18 @@ const PostHeader = ({ postData, postType, onEdit, onDelete, onReport }) => {
             <div
               className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white"
               onClick={(e) =>
-                handleAuthorClick(e, `/user/${postData.data.author.username}`)
+                handleAuthorClick(e, `/user/${itemData.data.author.username}`)
               }
             >
-              {postData?.data?.author?.avatar !== null ? (
+              {itemData?.data?.author?.avatar !== null ? (
                 <img
-                  src={getFileUrl(postData.data.author.avatar)}
+                  src={getFileUrl(itemData.data.author.avatar)}
                   alt="Board avatar"
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <p className="w-11 h-11 flex items-center justify-center rounded-full">
-                  {getInitials(postData.data.author.username)}
+                  {getInitials(itemData.data.author.username)}
                 </p>
               )}
             </div>
@@ -61,35 +64,36 @@ const PostHeader = ({ postData, postType, onEdit, onDelete, onReport }) => {
                 onClick={(e) =>
                   handleBoardClick(
                     e,
-                    `/${getType[postType][0]}/${postData.data.board.name}`
+                    `/${communityUrl}${itemData.data[community].name}`
                   )
                 }
                 onKeyDown={(e) =>
                   e.key === "Enter" &&
                   handleBoardClick(
                     e,
-                    `/${getType[postType][0]}/${postData.data.board.name}`
+                    `/${communityUrl}${itemData.data[community].name}`
                   )
                 }
               >
-                {getType[postType][0]}/{postData.data.board.name}
+                {communityUrl}
+                {itemData.data[community].name}
               </p>
               <p className="text-[12px] flex items-center gap-1">
                 <span
                   onClick={(e) =>
                     handleAuthorClick(
                       e,
-                      `/user/${postData.data.author.username}`
+                      `/user/${itemData.data.author.username}`
                     )
                   }
                   className="cursor-pointer hover:underline"
                   role="link"
                   tabIndex={0}
                 >
-                  u/{postData.data.author.username}
+                  u/{itemData.data.author.username}
                 </span>
                 <RelativeTime
-                  date={postData.data.created_at}
+                  date={itemData.data.created_at}
                   className="flex items-center text-gray-700 ml-1 "
                 />
               </p>
@@ -98,7 +102,7 @@ const PostHeader = ({ postData, postType, onEdit, onDelete, onReport }) => {
         </div>
         <div onClick={(e) => e.stopPropagation()}>
           <PostMenu
-            item={postData.data}
+            item={itemData.data}
             onEdit={onEdit}
             onDelete={onDelete}
             onReport={onReport}
