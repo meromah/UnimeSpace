@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useGetQuestionTypesQuery } from "../../../services/questionTypesApi";
-import CreateTestMcqType from "./CreateTestMcqType";
 import QuestionPreviewItem from "./QuestionPreviewItem";
 import CreateCodeQuestion from "./testCodeType/CreateCodeQuestion";
 import EditCodeQuestion from "./testCodeType/EditCodeQuestion";
@@ -12,6 +11,7 @@ import {
   useUpdateTestMutation,
 } from "../../../services/testsApi";
 import EditMcqQuestion from "./testMcqType/EditMcqQuestion";
+import CreateMcqQuestion from "./testMcqType/CreateMcqQuestion";
 import DraftTestSection from "./DraftTestSection";
 
 const CreateTest = ({ descId, onCancel = undefined }) => {
@@ -203,6 +203,9 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
           status: "published",
         },
       }).unwrap();
+      if(onCancel){
+        onCancel()
+      }
     } catch (err) {
       console.error(err);
     }
@@ -329,6 +332,7 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
                             index={index}
                             onRemove={() => handleRemoveQuestion(question.id)}
                             onEdit={handleEditQuestion}
+                            testId={testId}
                           />
                         ))}
                       </div>
@@ -384,7 +388,7 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
                               setIsEditMode={setIsEditMode}
                             />
                           ) : currentQuestion.type === "mcq" ? (
-                            <CreateTestMcqType
+                            <CreateMcqQuestion
                               currentQuestion={currentQuestion}
                               setCurrentQuestion={setCurrentQuestion}
                               onCreateSuccess={onCreateSuccess}
@@ -453,7 +457,7 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
                             className="w-full px-3 py-2 text-sm text-neutral-900 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors cursor-pointer"
                           >
                             <option value="">Select question type...</option>
-                            {questionTypes.data.map((item) => (
+                            {questionTypes?.data.map((item) => (
                               <option key={item.type} value={item.type}>
                                 {item.label}
                               </option>

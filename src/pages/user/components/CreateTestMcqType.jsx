@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useCreateQuestionMutation } from "../../../services/questionsApi";
+import {
+  useCreateQuestionMutation,
+  useUpdateQuestionMutation,
+} from "../../../services/questionsApi";
 import { useCreateOptionMutation } from "../../../services/questionOptionsApi";
+import { useDeleteOptionMutation } from "../../../services/questionOptionsApi";
 import Toast from "../../../components/Toast";
 import AutoResizeTextarea from "./AutoResizeTextarea";
 
@@ -8,21 +12,26 @@ const CreateTestMcqType = ({
   currentQuestion,
   setCurrentQuestion,
   onCreateSuccess,
+  onUpdateSuccess,
   onCancel,
   testId,
-  questionTypeId = 2, // Default to 2 for multiple_choice
+  questionTypeId = 2, // Default to 2 for "mcq"
+  isEditMode = false,
+  setIsEditMode,
 }) => {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [createQuestion] = useCreateQuestionMutation();
+  const [updateQuestion] = useUpdateQuestionMutation();
   const [createOption] = useCreateOptionMutation();
+  const [deleteOption] = useDeleteOptionMutation();
 
   // Initialize currentQuestion if null
   useEffect(() => {
     if (!currentQuestion) {
       setCurrentQuestion({
-        type: "multiple_choice",
+        type: "mcq",
         body: "",
         options: [
           { body: "", is_correct: false },
@@ -151,7 +160,7 @@ const CreateTestMcqType = ({
       // Build final hydrated object
       const finalQuestion = {
         id: questionId,
-        type: "multiple_choice",
+        type: "mcq",
         body: body.trim(),
         options: createdOptions,
       };
@@ -172,13 +181,91 @@ const CreateTestMcqType = ({
     }
   };
 
+  const handleUpdateMcqQuestion = async () => {
+    if (!isFormValid() || isSubmitting) return;
+    if (!testId || !currentQuestion?.id) {
+      setError("Question ID is required");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      await updateQuestion({
+        test: testId,
+        question: currentQuestion.id,
+        bodyData: {
+          body: body.trim(),
+          question_type_id: questionTypeId,
+        },
+      }).unwrap();
+
+      const originalOptionIds = currentQuestion.originalOptionIds || [];
+      for (const optionId of originalOptionIds) {
+        if (!optionId) continue;
+        await deleteOption({
+          test: testId,
+          question: currentQuestion.id,
+          option: optionId,
+        }).unwrap();
+      }
+
+      const createdOptions = [];
+      for (let i = 0; i < options.length; i++) {
+        const optionResult = await createOption({
+          test: testId,
+          question: currentQuestion.id,
+          bodyData: {
+            body: options[i].body.trim(),
+            is_correct: options[i].is_correct,
+          },
+        }).unwrap();
+
+        const optionId = optionResult.id || optionResult.data?.id;
+        createdOptions.push({
+          id: optionId,
+          body: options[i].body.trim(),
+          is_correct: options[i].is_correct,
+        });
+      }
+
+      const finalQuestion = {
+        id: currentQuestion.id,
+        type: "mcq",
+        body: body.trim(),
+        options: createdOptions,
+      };
+
+      if (setIsEditMode) {
+        setIsEditMode(false);
+      }
+
+      if (onUpdateSuccess) {
+        onUpdateSuccess(finalQuestion);
+      }
+
+      setCurrentQuestion(null);
+    } catch (err) {
+      const errorMessage =
+        err?.data?.message ||
+        err?.message ||
+        "Failed to update multiple choice question. Please try again.";
+      setError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
   return (
     <main className="fixed inset-0 flex items-start md:items-center justify-center bg-black/30 backdrop-blur-sm z-50 overflow-auto">
       <div className="w-full flex flex-col items-center justify-between min-h-full md:min-h-0 md:max-w-4xl md:max-h-[90vh] p-4 md:p-6 md:border md:border-neutral-200 md:rounded-lg bg-neutral-50 md:my-4 md:overflow-hidden">
         <div className="flex flex-col gap-4 md:gap-6 md:flex-1 min-h-0 w-full">
           {/* Header */}
           <p className="text-base md:text-sm font-medium text-neutral-700">
-            New Multiple Choice Question
+            {isEditMode
+              ? "Edit Multiple Choice Question"
+              : "New Multiple Choice Question"}
           </p>
 
           {/* Content */}
@@ -277,18 +364,31 @@ const CreateTestMcqType = ({
           <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-4 border-t border-neutral-200 bg-neutral-50">
             <button
               type="button"
-              onClick={onCancel}
+              onClick={() => {
+                if (setIsEditMode && isEditMode) {
+                  setIsEditMode(false);
+                }
+                onCancel();
+              }}
               className="w-full sm:w-auto px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-100 active:bg-neutral-200 rounded-lg transition-colors font-medium"
             >
               Cancel
             </button>
             <button
               type="button"
-              onClick={handleCreateMcqQuestion}
+              onClick={
+                isEditMode ? handleUpdateMcqQuestion : handleCreateMcqQuestion
+              }
               disabled={!isFormValid() || isSubmitting}
               className="w-full sm:w-auto px-4 py-2.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-medium"
             >
-              {isSubmitting ? "Creating..." : "Create Question"}
+              {isSubmitting
+                ? isEditMode
+                  ? "Updating..."
+                  : "Creating..."
+                : isEditMode
+                ? "Update Question"
+                : "Create Question"}
             </button>
           </div>
         </div>
