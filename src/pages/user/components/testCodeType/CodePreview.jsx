@@ -111,7 +111,7 @@ const CodePreview = ({
         <PreviewActionsMenu
           onEdit={() => onEdit && onEdit(question)}
           onPreview={() => setShowCodePreview(true)}
-          onRemove={() => onRemove && onRemove(question)}
+          onRemove={() => onRemove && onRemove(question.id)}
         />
       </div>
       {showCodePreview && (
