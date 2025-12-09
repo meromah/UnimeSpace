@@ -91,6 +91,7 @@ const Feeds = () => {
                       isLast={index === data.length - 1}
                       itemType={item["board_id"] ? "post" : "test"}
                       communityType={item["board_id"] ? "board" : "desc"}
+                      communityUrl={item["board_id"] ? "b/" : "d/"}
                       onError={(message = "Something happened!") => {
                         setToast({
                           message,
