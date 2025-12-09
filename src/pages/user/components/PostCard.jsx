@@ -104,7 +104,7 @@ const PostCard = ({
     preventNavigation(e);
     setIsReportModalOpen(true);
   };
-  const handleStart = (e) => {
+  const onStartTest = (e) => {
     preventNavigation(e);
     navigate(
       `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}/start`
@@ -124,10 +124,10 @@ const PostCard = ({
             <div
               className="w-10 h-10 rounded-full overflow-hidden"
               onClick={(e) =>
-                handleAuthorClick(e, `/user/${item.author.username}`)
+                item.author && handleAuthorClick(e, `/user/${item.author.username}`)
               }
             >
-              {item.author.avatar ? (
+              {item?.author?.avatar ? (
                 <img
                   src={getFileUrl(item.author.avatar.file_hash)}
                   alt={`${item.author.username}'s profile picture`}
@@ -138,7 +138,7 @@ const PostCard = ({
                 />
               ) : (
                 <p className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
-                  {getInitials(item.author.username)}
+                  {item.author?getInitials(item.author.username): ""}
                 </p>
               )}
             </div>
@@ -164,7 +164,7 @@ const PostCard = ({
                 {communityUrl + item[communityType].name}
               </p>
               <p className="text-[12px] flex items-center gap-1">
-                <span
+                {item?.author? <span
                   onClick={(e) =>
                     handleAuthorClick(e, `/user/${item.author.username}`)
                   }
@@ -173,7 +173,11 @@ const PostCard = ({
                   tabIndex={0}
                 >
                   u/{item.author.username}
-                </span>
+                </span>:
+                <span
+                >
+                  {`[deleted]`}
+                </span>}
                 <RelativeTime
                   date={item.created_at}
                   className="text-neutral-500"
@@ -201,7 +205,7 @@ const PostCard = ({
             </div>
             <button
               className="block ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
-              onClick={handleStart}
+              onClick={onStartTest}
             >
               Start
             </button>
