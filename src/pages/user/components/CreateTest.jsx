@@ -7,7 +7,7 @@ import CreateTestHeader from "./CreateTestHeader";
 import { useSelector } from "react-redux";
 import NotFound from "../../../components/NotFound";
 import {
-  useGetTestDraftsQuery,
+  useGetTestDraftsForDescQuery,
   useUpdateTestMutation,
 } from "../../../services/testsApi";
 import EditMcqQuestion from "./testMcqType/EditMcqQuestion";
@@ -57,7 +57,7 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
     () => (draftTest === null ? null : draftTest.id),
     [draftTest]
   );
-  const { data: draftTests } = useGetTestDraftsQuery(
+  const { data: draftTests } = useGetTestDraftsForDescQuery(
     { desc: descId },
     { skip: !descId }
   );

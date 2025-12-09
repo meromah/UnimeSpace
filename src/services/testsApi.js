@@ -32,7 +32,7 @@ const PrivateTestsApi = baseApi.injectEndpoints({
       query: ({ desc, test }) => `/descs/${desc}/tests/${test}`,
     }),
 
-    getTestDrafts: builder.query({
+    getTestDraftsForDesc: builder.query({
       query: ({ desc }) => `/descs/${desc}/tests/drafts`,
       providesTags: (result, error, { desc }) => [
         { type: "Desc", id: `draft-tests-${desc}` },
@@ -100,7 +100,7 @@ export const {
   useGetAllMyTestsQuery,
   useGetTestFromDescByIdQuery,
   useLazyGetTestFromDescByIdQuery,
-  useGetTestDraftsQuery,
+  useGetTestDraftsForDescQuery,
   useGetTestsByFilterQuery,
   useCreateTestMutation,
   useUpdateTestMutation,
