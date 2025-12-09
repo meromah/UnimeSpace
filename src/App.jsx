@@ -43,7 +43,8 @@ const App = () => {
         <Route path="user/:username" element={<Profile isMyProfile={false} />} />
         <Route path="/" element={<Feeds />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
-        <Route path="b/:board/post/:postId" element={<Post postType={"post"}/>} />
+        <Route path="b/:community/post/:itemId" element={<Post itemType={"post"}/>} />
+        <Route path="d/:community/test/:itemId" element={<Post itemType={"test"}/>} />
         <Route path="create/:action" element={<CreateAction />} />
         <Route path="b/all" element={<ExploreBoards />} />
         <Route path="d/all" element={<ExploreDescs />} />
