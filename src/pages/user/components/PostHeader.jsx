@@ -32,18 +32,18 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
             <div
               className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white"
               onClick={(e) =>
-                handleAuthorClick(e, `/user/${itemData.data.author.username}`)
+                itemData?.data?.author && handleAuthorClick(e, `/user/${itemData.data.author.username}`)
               }
             >
-              {itemData?.data?.author?.avatar !== null ? (
+              {itemData?.data?.author?.avatar ? (
                 <img
-                  src={getFileUrl(itemData.data.author.avatar)}
+                  src={getFileUrl(itemData?.data?.author?.avatar)}
                   alt="Board avatar"
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <p className="w-11 h-11 flex items-center justify-center rounded-full">
-                  {getInitials(itemData.data.author.username)}
+                  {itemData?.data?.author? getInitials(itemData.data.author.username):""}
                 </p>
               )}
             </div>
@@ -70,7 +70,7 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
                 {itemData.data[community].name}
               </p>
               <p className="text-[12px] flex items-center gap-1">
-                <span
+                {itemData?.data?.author?<span
                   onClick={(e) =>
                     handleAuthorClick(
                       e,
@@ -82,7 +82,11 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
                   tabIndex={0}
                 >
                   u/{itemData.data.author.username}
-                </span>
+                </span>:
+                <span
+                >
+                  [deleted]
+                </span>}
                 <RelativeTime
                   date={itemData.data.created_at}
                   className="flex items-center text-gray-700 ml-1 "
