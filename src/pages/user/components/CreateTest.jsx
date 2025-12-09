@@ -12,7 +12,7 @@ import {
 } from "../../../services/testsApi";
 import EditMcqQuestion from "./testMcqType/EditMcqQuestion";
 import CreateMcqQuestion from "./testMcqType/CreateMcqQuestion";
-import DraftTestSection from "./DraftTestSection";
+import TestDraftsSection from "./TestDraftsSection";
 
 const CreateTest = ({ descId, onCancel = undefined }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -277,7 +277,7 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
         }`}
       >
         {isDraftsOpen && !!descId && (
-          <DraftTestSection
+          <TestDraftsSection
             setDraftTest={setDraftTest}
             draftTests={draftTests}
             onShowDrafts={onShowDrafts}

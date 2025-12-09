@@ -4,7 +4,7 @@ import RelativeTime from "../../../components/RelativeTime";
 import { useDeleteTestMutation, useLazyGetTestFromDescByIdQuery } from "../../../services/testsApi";
 import { useLazyGetQuestionsForTestQuery } from "../../../services/questionsApi";
 
-const DraftTestSection = ({
+const TestDraftsSection = ({
   setDraftTest,
   onShowDrafts,
   draftTests,
@@ -98,7 +98,7 @@ const DraftTestSection = ({
   }, [draftTests])
   
   return (
-    <section className="flex items-start justify-center">
+    <div className="flex items-start justify-center">
       <div className="w-full flex flex-col gap-4">
         <button
           type="button"
@@ -177,8 +177,8 @@ const DraftTestSection = ({
           </ul>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default DraftTestSection;
+export default TestDraftsSection;
