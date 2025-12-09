@@ -163,7 +163,7 @@ const Post = ({ itemType = "post" }) => {
       <ShareModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
-        itemUrl={`${window.location.origin}/${communityType[0]}${itemData.data[communityType]?.name}/post/${itemData.data.id}`}
+        itemUrl={`${window.location.origin}/${communityUrl}${community}/${itemType}/${itemData.data.id}`}
         itemTitle={itemData.data.title}
       />
 
