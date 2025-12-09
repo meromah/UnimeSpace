@@ -14,10 +14,10 @@ import EditMcqQuestion from "./testMcqType/EditMcqQuestion";
 import CreateMcqQuestion from "./testMcqType/CreateMcqQuestion";
 import TestDraftsSection from "./TestDraftsSection";
 
-const CreateTest = ({ descId, onCancel = undefined }) => {
+const CreateTest = ({ onCancel = undefined }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [draftTest, setDraftTest] = useState(null);
-
+  const {isPopUp, descName, draftTestId, draftTestData} = useSelector((state) => state.testMetadata);
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -58,17 +58,21 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
     [draftTest]
   );
   const { data: draftTests } = useGetTestDraftsForDescQuery(
-    { desc: descId },
-    { skip: !descId }
+    { desc: descName },
+    { skip: !descName }
   );
   useEffect(() => {
-    if (!descId) return;
+    if (isPopUp) return;
     document.body.style.overflow = "hidden";
 
     return () => {
       document.body.style.overflow = "unset";
     };
   }, []);
+  useEffect(() => {
+    if (!draftTestId) return;
+    setDraftTest(draftTestData)
+  }, [draftTestData, draftTestId]);
   const handleSelectQuestionType = (type) => {
     const template = initialQuestionData[type];
     if (template) {
@@ -197,14 +201,14 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
     e.preventDefault();
     try {
       await updateTest({
-        desc: Boolean(descId) ? descId : draftTest.desc,
+        desc: Boolean(descName) ? descName : draftTest.desc,
         test: testId,
         bodyData: {
           status: "published",
         },
       }).unwrap();
-      if(onCancel){
-        onCancel()
+      if (onCancel) {
+        onCancel();
       }
     } catch (err) {
       console.error(err);
@@ -266,17 +270,17 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
     <form
       onSubmit={handleTestSubmit}
       className={
-        !!descId
+        isPopUp
           ? "flex flex-col items-center gap-4 fixed inset-0 z-50 p-4 bg-white/50 md:bg-black/30 backdrop-blur-lg"
           : ""
       }
     >
       <div
         className={`flex flex-col justify-between bg-white h-full rounded-lg md:m-6 border border-neutral-200 gap-4 p-6 ${
-          !!descId ? "w-full md:max-w-3/4 overflow-y-auto" : ""
+          isPopUp ? "w-full md:max-w-3/4 overflow-y-auto" : ""
         }`}
       >
-        {isDraftsOpen && !!descId && (
+        {isDraftsOpen && isPopUp && (
           <TestDraftsSection
             setDraftTest={setDraftTest}
             draftTests={draftTests}
@@ -286,9 +290,9 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
         )}
         {!isDraftsOpen && (
           <>
-            {!!descId && (
+            {isPopUp && (
               <div className="flex items-center justify-between mb-2 select-none">
-                <p className="font-medium opacity-50">d/{descId}</p>
+                <p className="font-medium opacity-50">d/{descName}</p>
                 <button
                   type="button"
                   disabled={!draftTests?.data?.length}
@@ -302,11 +306,13 @@ const CreateTest = ({ descId, onCancel = undefined }) => {
 
             <div
               className={
-                testId === null ? "flex flex-col justify-between h-full" : "h-full overflow-y-auto"
+                testId === null
+                  ? "flex flex-col justify-between h-full"
+                  : "h-full overflow-y-auto"
               }
             >
               <CreateTestHeader
-                descId={descId}
+                descId={descName}
                 draftTest={draftTest}
                 setDraftTest={setDraftTest}
                 setQuestions={setQuestions}
