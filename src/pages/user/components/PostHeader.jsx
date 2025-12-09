@@ -5,17 +5,8 @@ import { getFileUrl, getInitials } from "../../../utils";
 import PostMenu from "./PostMenu";
 import { useMemo } from "react";
 
-const getType = {
-  post: { url: "b/", community: "board" },
-  test: { url: "d/", community: "desc" },
-};
-
-const PostHeader = ({ itemData, itemType, onEdit, onDelete, onReport }) => {
+const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, community }) => {
   const navigate = useNavigate();
-  const { url: communityUrl, community } = useMemo(
-    () => getType[itemType],
-    [itemType]
-  );
   const handleAuthorClick = (e, path) => {
     e.stopPropagation();
     navigate(path);

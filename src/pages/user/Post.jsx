@@ -107,7 +107,8 @@ const Post = ({ itemType = "post" }) => {
         <div className="bg-white md:rounded-lg md:border md:border-gray-200 overflow-hidden">
           <PostHeader
             itemData={itemData}
-            itemType={itemType}
+            community={communityType}
+            communityUrl={communityUrl}
             onEdit={handleEdit}
             onDelete={handleDelete}
             onReport={handleReport}
