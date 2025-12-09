@@ -10,7 +10,7 @@ import {
   useTogglePostLikeMutation,
 } from "../services/postsApi";
 import { extractErrorMessage } from "../utils";
-import { useGetTestFromDescByIdQuery } from "../services/testsApi";
+import { useGetTestFromDescByIdQuery, useToggleTestLikeMutation } from "../services/testsApi";
 
 const useHandlePostPage = ({ community, itemId, itemType }) => {
   const navigate = useNavigate();
@@ -43,6 +43,8 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
 
   const [togglePostLike, { error: togglePostLikeError }] =
     useTogglePostLikeMutation();
+  const [toggleTestLike, { error: toggleTestLikeError }] =
+    useToggleTestLikeMutation();
 
   const {
     data: postData,
@@ -135,11 +137,13 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
     if (!isAuthenticated) return navigate("/login");
 
     try {
-      const res = await togglePostLike({
-        board: community,
-        post: itemId,
+      const toggleLike = itemType === "post"? togglePostLike: toggleTestLike
+      const communityType = itemType === "post"? "board" : "desc"
+      const res = await toggleLike ({
+        [communityType]: community,
+        [itemType]: itemId,
       }).unwrap();
-
+      console.log(res)
       setIsPostLiked(res.toggle);
 
       if (postLikesCountRef.current) {
