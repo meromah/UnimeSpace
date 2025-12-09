@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import myProfileReducer from "./myProfileSlice"
+import createTestReducer from './createTestSlice'
 import recentCommunitiesReducer, { recentCommunitiesMiddleware } from "./recentCommunitiesSlice"
 import { baseApi } from "../services/baseApi";
 
@@ -10,7 +11,7 @@ export const store = configureStore({
     auth: authReducer,
     myProfile: myProfileReducer,
     recentCommunities: recentCommunitiesReducer,
-
+    testMetadata: createTestReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
