@@ -17,7 +17,7 @@ const McqPreview = ({
         </div>
         <PreviewActionsMenu
           onEdit={() => onEdit && onEdit(question)}
-          onRemove={() => onRemove && onRemove(question)}
+          onRemove={() => onRemove && onRemove(question.id)}
         />
       </div>
 
@@ -45,9 +45,9 @@ const McqPreview = ({
                   option.is_correct ? "bg-green-500" : "bg-neutral-300"
                 }`}
               >
-                {option.is_correct && (
+                {option.is_correct ? (
                   <span className="text-white text-xs">✓</span>
-                )}
+                ): null}
               </div>
               <span className="text-sm text-neutral-900 flex-1">
                 {option.body || "No option text"}
