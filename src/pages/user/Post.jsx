@@ -16,9 +16,17 @@ import DeletePostModal from "./components/DeletePostModal";
 import DeleteCommentModal from "./components/DeleteCommentModal";
 
 import useHandlePostPage from "../../hooks/useHandlePostPage";
-
-const Post = ({ itemType = "post", communityType = "board" }) => {
+import { useMemo } from "react";
+const getType = {
+  post: { url: "b/", community: "board" },
+  test: { url: "d/", community: "desc" },
+};
+const Post = ({ itemType = "post" }) => {
   const { community, itemId } = useParams();
+  const { url: communityUrl, community: communityType } = useMemo(
+    () => getType[itemType],
+    [itemType]
+  );
 
   const {
     // main data
