@@ -22,6 +22,7 @@ import ExploreDescs from "./pages/user/components/ExploreDescs";
 import EditBoard from "./pages/user/EditBoard";
 import BoardMembers from "./pages/user/BoardMembers";
 import DescPage from "./pages/user/DescPage";
+import TestDrafts from "./pages/user/TestDrafts";
 
 const App = () => {
   return (
@@ -48,6 +49,7 @@ const App = () => {
         <Route path="create/:action" element={<CreateAction />} />
         <Route path="b/all" element={<ExploreBoards />} />
         <Route path="d/all" element={<ExploreDescs />} />
+        <Route path="test/drafts" element={<TestDrafts />} />
         <Route path="b/:boardId" element={<BoardPage />} />
         <Route path="b/:boardId/members" element={<BoardMembers />} />
         <Route path="b/:boardId/edit" element={<EditBoard />} />
