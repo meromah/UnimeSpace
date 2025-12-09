@@ -17,8 +17,8 @@ const CommentCard = ({
   activeReplyId,
   setActiveReplyId,
   handleReplySubmit,
-  board,
-  postId,
+  community,
+  itemId,
   onEditComment,
   onDeleteComment,
   onReportComment,
@@ -120,8 +120,8 @@ const CommentCard = ({
     }
     try {
       await updateComment({
-        board,
-        post: postId,
+        board: community,
+        post: itemId,
         comment: comment.id,
         bodyData: { body: editText.trim() },
       }).unwrap();
@@ -314,8 +314,8 @@ const CommentCard = ({
                     activeReplyId={activeReplyId}
                     setActiveReplyId={setActiveReplyId}
                     handleReplySubmit={handleReplySubmit}
-                    board={board}
-                    postId={postId}
+                    community={community}
+                    itemId={itemId}
                     onEditComment={onEditComment}
                     onDeleteComment={onDeleteComment}
                     onReportComment={onReportComment}

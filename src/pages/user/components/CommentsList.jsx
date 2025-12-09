@@ -10,8 +10,8 @@ const CommentsList = ({
   activeReplyId,
   setActiveReplyId,
   handleReplySubmit,
-  board,
-  postId,
+  community,
+  itemId,
   onEditComment,
   onDeleteComment,
   onReportComment,
@@ -41,8 +41,8 @@ const CommentsList = ({
                 activeReplyId={activeReplyId}
                 setActiveReplyId={setActiveReplyId}
                 handleReplySubmit={handleReplySubmit}
-                board={board}
-                postId={postId}
+                community={community}
+                itemId={itemId}
                 onEditComment={onEditComment}
                 onDeleteComment={onDeleteComment}
                 onReportComment={onReportComment}

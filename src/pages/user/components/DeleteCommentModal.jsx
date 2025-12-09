@@ -5,8 +5,8 @@ import DeleteModal from "./DeleteModal";
 const DeleteCommentModal = ({
   isOpen,
   onClose,
-  board,
-  postId,
+  community,
+  itemId,
   commentId,
   onSuccess,
 }) => {
@@ -15,8 +15,8 @@ const DeleteCommentModal = ({
 
   const handleConfirm = async () => {
     await deleteComment({
-      board,
-      post: postId,
+      board: community,
+      post: itemId,
       comment: commentId,
     }).unwrap();
   };
