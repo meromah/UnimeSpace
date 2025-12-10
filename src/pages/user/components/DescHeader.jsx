@@ -10,6 +10,9 @@ import {
 import { useSelector } from "react-redux";
 import Toast from "../../../components/Toast";
 import { getFileUrl, getInitials } from "../../../utils";
+import DescMenu from "./DescMenu";
+import DeleteDescModal from "./DeleteDescModal";
+import ReportModal from "./ReportModal";
 
 // Helper function to extract error message from API error response
 const extractErrorMessage = (error) => {
@@ -28,6 +31,8 @@ const extractErrorMessage = (error) => {
 const DescHeader = ({ desc, isSubscribed = false }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [toast, setToast] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const { isAuthenticated } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -89,6 +94,18 @@ const DescHeader = ({ desc, isSubscribed = false }) => {
       // Error will be handled by useEffect above
     }
   };
+
+  const handleDelete = () => {
+    setShowDeleteModal(true);
+  };
+
+  const handleReport = () => {
+    setShowReportModal(true);
+  };
+
+  const handleDeleteSuccess = () => {
+    navigate("/d/all");
+  };
   return (
     <div className="bg-white rounded-xl shadow-sm border border-neutral-200 mb-6 overflow-hidden">
       {/* Cover Image */}
@@ -103,6 +120,12 @@ const DescHeader = ({ desc, isSubscribed = false }) => {
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 opacity-100 transition-opacity flex items-center justify-center"></div>
           )}
+          <DescMenu
+            desc={desc}
+            onDelete={handleDelete}
+            onReport={handleReport}
+            className="pr-2 pt-2 z-50 top-2 right-2"
+          />
         </div>
 
         {/* Mobile Layout (< sm) */}
@@ -290,6 +313,22 @@ const DescHeader = ({ desc, isSubscribed = false }) => {
           onClose={() => setToast(null)}
         />
       )}
+
+      {/* Delete Desc Modal */}
+      <DeleteDescModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        desc={desc}
+        onSuccess={handleDeleteSuccess}
+      />
+
+      {/* Report Desc Modal */}
+      <ReportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        item={desc}
+        itemType="desc"
+      />
     </div>
   );
 };
