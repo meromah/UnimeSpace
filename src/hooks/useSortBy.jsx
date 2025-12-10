@@ -1,10 +1,33 @@
 import { useState, useEffect, useMemo } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
-const useSortBy = ({isAuthenticated, sortOptionsConfig}) => {
+const useSortBy = ({
+  isAuthenticated,
+  sortOptionsConfig = [],
+  initialSort = false,
+  searchParam = false,
+  setSearchParams,
+}) => {
   // Sorting/Filtering State
-  const [sortBy, setSortBy] = useState(sortOptionsConfig[0].id);
-  const [label, setLabel] = useState(sortOptionsConfig[0].label)
+  const [sortBy, setSortBy] = useState(() => {
+    if (!initialSort) return sortOptionsConfig[0].id;
+    const initialOption = sortOptionsConfig.find(
+      (option) => option.id === initialSort
+    );
+    if (!initialOption) return sortOptionsConfig[0].id;
+    return initialOption.id;
+  });
+  const [label, setLabel] = useState(() => {
+    if (initialSort) {
+      const initialOption = sortOptionsConfig.find(
+        (option) => option.id === initialSort
+      );
+      if (initialOption) {
+        return initialOption.label;
+      }
+    }
+    return sortOptionsConfig[0].label;
+  });
   const [showSortDropdown, setShowSortDropdown] = useState(false);
 
   // Get current sort option configuration
@@ -19,31 +42,38 @@ const useSortBy = ({isAuthenticated, sortOptionsConfig}) => {
 
   // Reset sort option if current selection requires auth but user is not authenticated
   useEffect(() => {
-    let currentOption = {}
+    if (isAuthenticated === undefined) return;
+    let currentOption = {};
     const noAuthOptions = sortOptionsConfig.filter((option) => {
-      if(option.id === sortBy){
-        currentOption = option
+      if (option.id === sortBy) {
+        currentOption = option;
       }
-      if(!option.requiresAuth){
-        return option
+      if (!option.requiresAuth) {
+        return option;
       }
-    })
-    console.log(currentOption)
+    });
     if (currentOption?.requiresAuth && !isAuthenticated) {
       if (noAuthOptions.length > 0) {
-        setSortBy(noAuthOptions[0].id);
-        setLabel(noAuthOptions[0].label)
-        return
+        const firstOption = noAuthOptions[0];
+        if (searchParam && setSearchParams) {
+          setSearchParams({ [searchParam]: firstOption.id });
+        }
+        setSortBy(firstOption.id);
+        setLabel(firstOption.label);
+        return;
       }
       setSortBy(null);
-      setLabel(null)
+      setLabel(null);
     }
   }, [isAuthenticated, sortBy, sortOptionsConfig]);
 
   // Handle sorting/filtering
-  const handleSortChange = ({sortType, label}) => {
-    setSortBy(sortType)
-    setLabel(label)
+  const handleSortChange = ({ sortType, label }) => {
+    if (searchParam && setSearchParams) {
+      setSearchParams({ [searchParam]: sortType });
+    }
+    setSortBy(sortType);
+    setLabel(label);
     setShowSortDropdown(false);
   };
 
@@ -83,7 +113,9 @@ const useSortBy = ({isAuthenticated, sortOptionsConfig}) => {
             {availableSortOptions.map((option) => (
               <button
                 key={option.id}
-                onClick={() => handleSortChange({sortType: option.id, label: option.label})}
+                onClick={() =>
+                  handleSortChange({ sortType: option.id, label: option.label })
+                }
                 className={`w-full text-left px-4 py-2 text-sm hover:bg-neutral-50 transition-colors ${
                   sortBy === option.id
                     ? "text-primary-blue font-medium bg-primary-blue/5"
@@ -98,12 +130,12 @@ const useSortBy = ({isAuthenticated, sortOptionsConfig}) => {
       )}
     </div>
   );
-  const resetSortBy = ()=> {
-    setSortBy(sortOptionsConfig[0].id)
-    setLabel(sortOptionsConfig[0].label)
-    setShowSortDropdown(false)
-  }
-  return { sortBy, label, SortByComponent, emptyStateMessages, resetSortBy};
+  const resetSortBy = () => {
+    setSortBy(sortOptionsConfig[0].id);
+    setLabel(sortOptionsConfig[0].label);
+    setShowSortDropdown(false);
+  };
+  return { sortBy, label, SortByComponent, emptyStateMessages, resetSortBy };
 };
 
 export default useSortBy;
