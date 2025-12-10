@@ -19,11 +19,24 @@ const useSortBy = ({isAuthenticated, sortOptionsConfig}) => {
 
   // Reset sort option if current selection requires auth but user is not authenticated
   useEffect(() => {
-    const currentOption = sortOptionsConfig.find(
-      (option) => option.id === sortBy
-    );
+    let currentOption = {}
+    const noAuthOptions = sortOptionsConfig.filter((option) => {
+      if(option.id === sortBy){
+        currentOption = option
+      }
+      if(!option.requiresAuth){
+        return option
+      }
+    })
+    console.log(currentOption)
     if (currentOption?.requiresAuth && !isAuthenticated) {
-      setSortBy(sortOptionsConfig[0].id);
+      if (noAuthOptions.length > 0) {
+        setSortBy(noAuthOptions[0].id);
+        setLabel(noAuthOptions[0].label)
+        return
+      }
+      setSortBy(null);
+      setLabel(null)
     }
   }, [isAuthenticated, sortBy, sortOptionsConfig]);
 
