@@ -1,8 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import { BiChevronLeft } from "react-icons/bi";
 import RelativeTime from "../../../components/RelativeTime";
-import { useDeleteTestMutation, useLazyGetTestFromDescByIdQuery } from "../../../services/testsApi";
+import {
+  useDeleteTestMutation,
+  useLazyGetTestFromDescByIdQuery,
+} from "../../../services/testsApi";
 import { useLazyGetQuestionsForTestQuery } from "../../../services/questionsApi";
+import { useDispatch } from "react-redux";
+import {
+  setDescName,
+  setDraftTestId,
+  setIsPopUp,
+} from "../../../app/createTestSlice";
+import { normalizeDraftTestData } from "../../../utils";
 
 const TestDraftsSection = ({
   setDraftTest,
@@ -10,93 +20,49 @@ const TestDraftsSection = ({
   draftTests,
   questionTypes,
 }) => {
-  const closeRef = useRef(null)
+  const closeRef = useRef(null);
   const [getTest] = useLazyGetTestFromDescByIdQuery();
+  const dispatch = useDispatch();
   const [getQuestions] = useLazyGetQuestionsForTestQuery();
-  const [deleteDraftTest] = useDeleteTestMutation()
+  const [deleteDraftTest] = useDeleteTestMutation();
   const onDraftSelect = async (e, item) => {
     e.preventDefault();
-    const res_Test = await getTest({
-      desc: item.desc.name,
-      test: item.id,
-    }).unwrap();
-    const res_Questions = await getQuestions({
-      test: res_Test.data.id,
-    }).unwrap();
-    const test = {
-      desc: item.desc.name,
-      description: res_Test.data.description,
-      title: res_Test.data.title,
-      id: res_Test.data.id,
-      questions: [],
-    };
-    if (res_Questions?.data?.length) {
-      for (const question of res_Questions.data) {
-        switch (question.question_type_id) {
-          case questionTypes.code.id:
-            const test_cases = [];
-            const questionArguments = [];
-            for (const testCase of question.testcases) {
-              test_cases.push({
-                id: testCase.id,
-                expected_output: testCase.expected_output,
-              });
-              if (
-                Array.isArray(testCase.arguments) &&
-                testCase.arguments.length > 0
-              ) {
-                for (const a of testCase.arguments) {
-                  questionArguments.push({
-                    id: a.id,
-                    value: a.body,
-                    order: a.arg_order,
-                    test_case_id: a.testcase_id,
-                  });
-                }
-              }
-            }
-            test.questions.push({
-              id: question.id,
-              type: "code",
-              body: question.body,
-              signature: {
-                id: question.signature.id,
-                value: question.signature.signature,
-                numberOfArguments: question.signature.arg_nums,
-              },
-              test_cases,
-              arguments: questionArguments,
-            });
-            break;
-          case questionTypes.mcq.id:
-            test.questions.push({
-              id: question.id,
-              type: "mcq",
-              body: question.body,
-              options: question.options,
-            });
-            break;
-          default:
-            break;
-        }
-      }
+    try {
+      const res_Test = await getTest({
+        desc: item.desc.name,
+        test: item.id,
+      }).unwrap();
+      const res_Questions = await getQuestions({
+        test: res_Test.data.id,
+      }).unwrap();
+      const test = normalizeDraftTestData({
+        item,
+        testData: res_Test.data,
+        questionData: res_Questions.data,
+        questionTypes,
+      });
+      dispatch(setIsPopUp(true));
+      dispatch(setDraftTestId(test.id));
+      dispatch(setDescName(test.desc));
+      setDraftTest(test);
+      onShowDrafts(e);
+    } catch (err) {
+      console.error(err);
     }
-    setDraftTest(test);
-    onShowDrafts(e);
   };
   const onDraftRemove = async (e, item) => {
-    e.preventDefault()
+    e.preventDefault();
     await deleteDraftTest({
       desc: item.desc.name,
       test: item.id,
-    }).unwrap()
-    setDraftTest(null)
+    }).unwrap();
+    setDraftTest(null);
   };
   useEffect(() => {
-    if(Array.isArray(draftTests?.data) && draftTests.data.length > 0) return;
-    closeRef.current.click()
-  }, [draftTests])
-  
+    if (Array.isArray(draftTests?.data) && draftTests.data.length > 0) return;
+    closeRef.current.click();
+  }, [draftTests]);
+
   return (
     <div className="flex items-start justify-center">
       <div className="w-full flex flex-col gap-4">
