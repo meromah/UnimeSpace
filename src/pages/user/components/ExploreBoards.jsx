@@ -23,7 +23,7 @@ const ExploreBoards = () => {
     isLoading: isAllBoardsLoading,
     error: allBoardsError,
   } = useGetBoardsQuery(undefined, {
-    skip: sortParam !== "all",
+    skip: sortParam === "all" ? false : sortParam === null ? false : true,
   });
   const {
     data: myBoardSubscriptions,
@@ -47,6 +47,8 @@ const ExploreBoards = () => {
     const result =
       sortParam === "all"
         ? allBoards
+        : sortParam === null
+        ? allBoards
         : sortParam === "subscribed"
         ? myBoardSubscriptions
         : sortParam === "my"
@@ -56,6 +58,8 @@ const ExploreBoards = () => {
     const isLoading =
       sortParam === "all"
         ? isAllBoardsLoading
+        : sortParam === null
+        ? isAllBoardsLoading
         : sortParam === "subscribed"
         ? isMyBoardSubsLoading
         : sortParam === "my"
@@ -64,6 +68,8 @@ const ExploreBoards = () => {
 
     const error =
       sortParam === "all"
+        ? allBoardsError
+        : sortParam === null
         ? allBoardsError
         : sortParam === "subscribed"
         ? myBoardSubsError
@@ -91,6 +97,9 @@ const ExploreBoards = () => {
   const { sortBy, label, SortByComponent, emptyStateMessages } = useSortBy({
     isAuthenticated,
     sortOptionsConfig: SORT_BY_BOARD_TYPE,
+    initialSort: sortParam,
+    searchParam: "sort",
+    setSearchParams: (param) => setSearchParams(param),
   });
   const onSubscribe = async (e, board) => {
     e.preventDefault();
@@ -118,11 +127,6 @@ const ExploreBoards = () => {
       console.error("Failed to unsubscribe:", err);
     }
   };
-
-  useEffect(() => {
-    if (sortBy === null || searchParams.get("sort") === sortBy) return;
-    setSearchParams({ sort: sortBy });
-  }, [sortBy, searchParams]);
 
   // Handle loading state
   if (isLoading) {

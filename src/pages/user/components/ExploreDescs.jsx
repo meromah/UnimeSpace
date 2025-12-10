@@ -10,7 +10,7 @@ import {
 } from "../../../services/descSubscriptionsApi";
 import { useSelector } from "react-redux";
 import { getFileUrl, getInitials, SORT_BY_DESC_TYPE } from "../../../utils";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import useSortBy from "../../../hooks/useSortBy";
 
 const ExploreDescs = () => {
@@ -24,7 +24,7 @@ const ExploreDescs = () => {
     isLoading: isAllDescsLoading,
     error: allDescsError,
   } = useGetDescsQuery(undefined, {
-    skip: sortParam !== "all",
+    skip: sortParam === "all" ? false : sortParam === null ? false : true,
   });
   const {
     data: myDescSubscriptions,
@@ -37,7 +37,7 @@ const ExploreDescs = () => {
     data: myDescs,
     isLoading: isMyDescsLoading,
     error: isMyDescsError,
-  } = useGetMyDescsQuery({
+  } = useGetMyDescsQuery(undefined, {
     skip: sortParam !== "my",
   });
   const [subscribeToDesc, { isLoading: isSubscribing }] =
@@ -45,9 +45,11 @@ const ExploreDescs = () => {
   const [unsubscribeFromDesc, { isLoading: isUnsubscribing }] =
     useUnsubscribeFromDescMutation();
 
-  const { result, isLoading, subscribedIds, error} = useMemo(() => {
+  const { result, isLoading, subscribedIds, error } = useMemo(() => {
     const result =
       sortParam === "all"
+        ? allDescs
+        : sortParam === null
         ? allDescs
         : sortParam === "subscribed"
         ? myDescSubscriptions
@@ -57,6 +59,8 @@ const ExploreDescs = () => {
     const isLoading =
       sortParam === "all"
         ? isAllDescsLoading
+        : sortParam === null
+        ? isAllDescsLoading
         : sortParam === "subscribed"
         ? isMyDescSubsLoading
         : sortParam === "my"
@@ -64,6 +68,8 @@ const ExploreDescs = () => {
         : false;
     const error =
       sortParam === "all"
+        ? allDescsError
+        : sortParam === null
         ? allDescsError
         : sortParam === "subscribed"
         ? myDescSubsError
@@ -91,6 +97,9 @@ const ExploreDescs = () => {
   const { sortBy, label, SortByComponent, emptyStateMessages } = useSortBy({
     isAuthenticated,
     sortOptionsConfig: SORT_BY_DESC_TYPE,
+    initialSort: sortParam,
+    searchParam: "sort",
+    setSearchParams: (param) => setSearchParams(param),
   });
   const onSubscribe = async (e, desc) => {
     e.preventDefault();
@@ -119,11 +128,6 @@ const ExploreDescs = () => {
       console.error("Failed to unsubscribe:", err);
     }
   };
-  // Handle loading state
-  useEffect(() => {
-    if (sortBy === null || searchParams.get("sort") === sortBy) return;
-    setSearchParams({ sort: sortBy });
-  }, [sortBy, searchParams]);
   if (isLoading) {
     return (
       <div className="max-w-5xl mx-auto p-4 md:p-6">
