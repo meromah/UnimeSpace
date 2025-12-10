@@ -17,6 +17,7 @@ import { useLogoutMutation } from "../services/authApi.js";
 import { useGetMyDescSubscriptionsQuery } from "../services/descSubscriptionsApi.js";
 import { useGetMyBoardSubscriptionsQuery } from "../services/boardSubscriptionsApi.js";
 import { getFileUrl } from "../utils/helpers";
+import { RiDraftLine } from "react-icons/ri";
 const MenuLink = ({ to, label, icon: Icon, onClick }) => {
   return (
     <Link
@@ -49,7 +50,8 @@ const exploreData = [
 const createActionArr = [
   { label: "Community", path: "/create/community", icon: Grid },
   { label: "Post", path: "/create/post", icon: FileText },
-  { label: "Test", path: "/create/test", icon: Layers },
+  { label: "Test", path: "/create/test", icon: RiDraftLine },
+  { label: "Drafts", path: "/test/drafts", icon: Layers },
 ];
 
 const UserSidebar = () => {
