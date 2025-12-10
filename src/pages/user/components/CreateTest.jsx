@@ -13,11 +13,16 @@ import {
 import EditMcqQuestion from "./testMcqType/EditMcqQuestion";
 import CreateMcqQuestion from "./testMcqType/CreateMcqQuestion";
 import TestDraftsSection from "./TestDraftsSection";
+import { useNavigate } from "react-router-dom";
+import { BiChevronLeft } from "react-icons/bi";
 
 const CreateTest = ({ onCancel = undefined }) => {
+  const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [draftTest, setDraftTest] = useState(null);
-  const {isPopUp, descName, draftTestId, draftTestData} = useSelector((state) => state.testMetadata);
+  const { isPopUp, descName, draftTestId, draftTestData } = useSelector(
+    (state) => state.testMetadata
+  );
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -71,7 +76,7 @@ const CreateTest = ({ onCancel = undefined }) => {
   }, []);
   useEffect(() => {
     if (!draftTestId) return;
-    setDraftTest(draftTestData)
+    setDraftTest(draftTestData);
   }, [draftTestData, draftTestId]);
   const handleSelectQuestionType = (type) => {
     const template = initialQuestionData[type];
@@ -263,7 +268,12 @@ const CreateTest = ({ onCancel = undefined }) => {
   };
   const onShowDrafts = (e) => {
     e.preventDefault();
-    setIsDraftsOpen((prev) => !prev);
+    
+    if (isPopUp) {
+      setIsDraftsOpen((prev) => !prev);
+      return
+    }
+    navigate("/test/drafts")
   };
   if (!isAuthenticated) return <NotFound />;
   return (
@@ -276,8 +286,10 @@ const CreateTest = ({ onCancel = undefined }) => {
       }
     >
       <div
-        className={`flex flex-col justify-between bg-white h-full rounded-lg md:m-6 border border-neutral-200 gap-4 p-6 ${
-          isPopUp ? "w-full md:max-w-3/4 overflow-y-auto" : ""
+        className={`flex flex-col justify-between bg-white h-full gap-4 p-6 ${
+          isPopUp
+            ? "w-full md:max-w-3/4 overflow-y-auto rounded-lg border border-neutral-200 md:m-6"
+            : "w-full"
         }`}
       >
         {isDraftsOpen && isPopUp && (
@@ -290,19 +302,28 @@ const CreateTest = ({ onCancel = undefined }) => {
         )}
         {!isDraftsOpen && (
           <>
-            {isPopUp && (
               <div className="flex items-center justify-between mb-2 select-none">
-                <p className="font-medium opacity-50">d/{descName}</p>
+                {isPopUp ? (
+                  <p className="font-medium opacity-50">d/{descName}</p>
+                ) : (
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 text-neutral-700 hover:text-neutral-900 focus:outline-none w-fit transition-colors"
+                    onClick={() => navigate(-1)}
+                  >
+                    <BiChevronLeft className="text-2xl cursor-pointer" />
+                    <span className="cursor-pointer">Back</span>
+                  </button>
+                )}
                 <button
                   type="button"
-                  disabled={!draftTests?.data?.length}
+                  disabled={isPopUp && !draftTests?.data?.length}
                   onClick={onShowDrafts}
                   className="font-medium text-primary-blue rounded hover:underline focus:outline-none disabled:text-neutral-400 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   Drafts
                 </button>
               </div>
-            )}
 
             <div
               className={
