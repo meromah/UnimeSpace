@@ -112,196 +112,186 @@ const PostCard = ({
   };
   return (
     <>
-      <Link
-        to={`/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`}
-        className={`block bg-white border-x border-b border-gray-200 p-4 hover:bg-primary-bg transition-colors duration-200 ${
-          isFirst && "rounded-t-lg border-t"
-        } ${isLast && "rounded-b-lg"}`}
-      >
-        {/* Author */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-full overflow-hidden"
-              onClick={(e) =>
-                item.author && handleAuthorClick(e, `/user/${item.author.username}`)
-              }
-            >
-              {item?.author?.avatar ? (
-                <img
-                  src={getFileUrl(item.author.avatar.file_hash)}
-                  alt={`${item.author.username}'s profile picture`}
-                  className="w-full h-full object-cover cursor-pointer"
-                  onClick={(e) =>
-                    handleAuthorClick(e, `/user/${item.author.username}`)
-                  }
-                />
-              ) : (
-                <p className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
-                  {item.author?getInitials(item.author.username): ""}
-                </p>
-              )}
-            </div>
-            <div>
-              <p
-                className="w-fit text-primary-blue text-base cursor-pointer hover:underline truncate"
-                onClick={(e) =>
-                  handleBoardClick(
-                    e,
-                    `/${communityUrl}${item[communityType].name}`
-                  )
-                }
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) =>
-                  e.key === "Enter" &&
-                  handleBoardClick(
-                    e,
-                    `/${communityUrl}${item[communityType].name}`
-                  )
-                }
-              >
-                {communityUrl + item[communityType].name}
-              </p>
-              <p className="text-[12px] flex items-center gap-1">
-                {item?.author? <span
-                  onClick={(e) =>
-                    handleAuthorClick(e, `/user/${item.author.username}`)
-                  }
-                  className="cursor-pointer hover:underline"
-                  role="link"
-                  tabIndex={0}
-                >
-                  u/{item.author.username}
-                </span>:
-                <span
-                >
-                  {`[deleted]`}
-                </span>}
-                <RelativeTime
-                  date={item.created_at}
-                  className="text-neutral-500"
-                />
-              </p>
-            </div>
-          </div>
-          <div onClick={preventNavigation}>
-            <PostMenu
-              itemType={itemType}
-              item={item}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onReport={handleReport}
+  <Link
+    to={`/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`}
+    className={`block bg-white border-x border-b border-gray-200 p-4 hover:bg-primary-bg transition-colors duration-200 ${
+      isFirst ? "rounded-t-lg border-t" : isLast ? "rounded-b-lg" : ""
+    }`}
+  >
+    {/* Header */}
+    <div className="relative flex items-start justify-between mb-3">
+      <div className="flex items-start gap-3">
+
+        {/* Avatar */}
+        <button
+          onClick={(e) =>
+            item.author &&
+            handleAuthorClick(e, `/user/${item.author.username}`)
+          }
+          className="w-10 h-10 rounded-full overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+        >
+          {item?.author?.avatar ? (
+            <img
+              src={getFileUrl(item.author.avatar.file_hash)}
+              alt={`${item.author.username}'s profile picture`}
+              className="w-full h-full object-cover"
             />
-          </div>
-        </div>
-
-        {/* Content */}
-        {itemType === "test" ? (
-          <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 p-3 px-4 rounded hover:bg-blue-100 transition-colors duration-200">
-            <div className="flex-1 overflow-hidden flex flex-col gap-0.5">
-              <p className="font-medium">{item.title}</p>
-              <p className="text-sm text-neutral-600 truncate">{item.body}</p>
-            </div>
-            <button
-              className="block ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
-              onClick={onStartTest}
-            >
-              Start
-            </button>
-          </div>
-        ) : (
-          <div className="mb-3">
-            <div>
-              <p className="mb-1 font-medium">{item.title}</p>
-              <p className="text-sm text-neutral-600">{item.body}</p>
-            </div>
-            {/* Display images if available */}
-            {images.length > 0 && <PostImages images={images} />}
-            {/* Display files if available */}
-            {files.length > 0 && <PostFiles files={files} />}
-          </div>
-        )}
-
-        {/* Actions */}
-        <div className="flex items-center gap-4 text-neutral-600 text-sm">
-          <button
-            className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none"
-            title="Comments"
-            aria-label={`${item.comments_count} comments`}
-          >
-            <FaRegComment /> {item.comments_count}
-          </button>
-          <button
-            className={`${
-              isLoading ? "animate-pulse" : ""
-            } flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer`}
-            title={liked ? "Unlike" : "Like"}
-            aria-label={`${item.likes_count} likes. ${
-              liked ? "Unlike" : "Like"
-            } this item`}
-            onClick={onTogglePostLike}
-          >
-            {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
-            <span
-              ref={postLikesCountRef}
-              className={
-                liked
-                  ? "text-red-500"
-                  : isLoading
-                  ? "invisible animate-pulse"
-                  : ""
-              }
-            >
-              {item.likes_count}
+          ) : (
+            <span className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
+              {item.author ? getInitials(item.author.username) : ""}
             </span>
-          </button>
+          )}
+        </button>
+
+        {/* User + Community */}
+        <div className="flex flex-col gap-0.5">
           <button
-            className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer"
-            title="Share"
-            onClick={(e) => {
-              preventNavigation(e);
-              setIsShareModalOpen(true);
-            }}
+            className="w-fit text-primary-blue text-base cursor-pointer hover:underline truncate focus:outline-none"
+            onClick={(e) =>
+              handleBoardClick(
+                e,
+                `/${communityUrl}${item[communityType].name}`
+              )
+            }
           >
-            <FiShare2 />
+            {communityUrl + item[communityType].name}
           </button>
+
+          <p className="text-xs text-neutral-600 flex items-center gap-1">
+            {item?.author ? (
+              <button
+                onClick={(e) =>
+                  handleAuthorClick(e, `/user/${item.author.username}`)
+                }
+                className="cursor-pointer hover:underline focus:outline-none"
+              >
+                u/{item.author.username}
+              </button>
+            ) : (
+              <span>[deleted]</span>
+            )}
+            <RelativeTime date={item.created_at} className="text-neutral-500" />
+          </p>
         </div>
-      </Link>
+      </div>
 
-      {/* Share Modal */}
-      <ShareModal
-        isOpen={isShareModalOpen}
-        onClose={() => setIsShareModalOpen(false)}
-        itemUrl={`${window.location.origin}/b/${item[communityType].name}/${itemType}/${item.id}`}
-        itemTitle={item.title}
-      />
+      {/* Post Menu */}
+      <div className="absolute top-0 right-0" onClick={preventNavigation}>
+        <PostMenu
+          itemType={itemType}
+          item={item}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onReport={handleReport}
+        />
+      </div>
+    </div>
 
-      {/* Edit Post Modal */}
-      <EditPostModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        post={item}
-        boardName={item[communityType].name}
-      />
+    {/* Content */}
+    {itemType === "test" ? (
+      <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 p-3 rounded hover:bg-blue-100 transition-colors duration-200">
+        <div className="flex-1 overflow-hidden flex flex-col gap-0.5">
+          <p className="font-medium">{item.title}</p>
+          <p className="text-sm text-neutral-600 truncate">{item.body}</p>
+        </div>
+        <button
+          className="px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+          onClick={onStartTest}
+        >
+          Start
+        </button>
+      </div>
+    ) : (
+      <div className="mb-3 flex flex-col gap-2">
+        <div>
+          <p className="font-medium mb-1">{item.title}</p>
+          <p className="text-sm text-neutral-600">{item.body}</p>
+        </div>
 
-      {/* Report Post Modal */}
-      <ReportModal
-        isOpen={isReportModalOpen}
-        onClose={() => setIsReportModalOpen(false)}
-        item={item}
-        itemType={itemType}
-      />
+        {images.length > 0 && <PostImages images={images} />}
+        {files.length > 0 && <PostFiles files={files} />}
+      </div>
+    )}
 
-      {/* Delete Post Modal */}
-      <DeletePostModal
-        communityType={communityType}
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        communityName={item[communityType].name}
-        itemId={item.id}
-      />
-    </>
+    {/* Actions */}
+    <div className="flex items-center gap-4 text-neutral-600 text-sm">
+      <button
+        className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
+        title="Comments"
+        aria-label={`${item.comments_count} comments`}
+      >
+        <FaRegComment /> {item.comments_count}
+      </button>
+
+      <button
+        onClick={onTogglePostLike}
+        className={`${
+          isLoading ? "animate-pulse" : ""
+        } flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer`}
+        aria-label={`${item.likes_count} likes. ${
+          liked ? "Unlike" : "Like"
+        } this item`}
+        title={liked ? "Unlike" : "Like"}
+      >
+        {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
+        <span
+          ref={postLikesCountRef}
+          className={
+            liked
+              ? "text-red-500"
+              : isLoading
+              ? "invisible animate-pulse"
+              : ""
+          }
+        >
+          {item.likes_count}
+        </span>
+      </button>
+
+      <button
+        className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
+        title="Share"
+        onClick={(e) => {
+          preventNavigation(e);
+          setIsShareModalOpen(true);
+        }}
+      >
+        <FiShare2 />
+      </button>
+    </div>
+  </Link>
+
+  {/* Modals */}
+  <ShareModal
+    isOpen={isShareModalOpen}
+    onClose={() => setIsShareModalOpen(false)}
+    itemUrl={`${window.location.origin}/b/${item[communityType].name}/${itemType}/${item.id}`}
+    itemTitle={item.title}
+  />
+
+  <EditPostModal
+    isOpen={isEditModalOpen}
+    onClose={() => setIsEditModalOpen(false)}
+    post={item}
+    boardName={item[communityType].name}
+  />
+
+  <ReportModal
+    isOpen={isReportModalOpen}
+    onClose={() => setIsReportModalOpen(false)}
+    item={item}
+    itemType={itemType}
+  />
+
+  <DeletePostModal
+    communityType={communityType}
+    isOpen={isDeleteModalOpen}
+    onClose={() => setIsDeleteModalOpen(false)}
+    communityName={item[communityType].name}
+    itemId={item.id}
+  />
+</>
+
   );
 };
 

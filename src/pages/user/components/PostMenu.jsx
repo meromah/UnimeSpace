@@ -4,11 +4,11 @@ import { useSelector } from "react-redux";
 
 const PostMenu = ({
   itemType = "post",
-  item, 
-  onEdit, 
-  onDelete, 
+  item,
+  onEdit,
+  onDelete,
   onReport,
-  className = "" 
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
@@ -16,11 +16,11 @@ const PostMenu = ({
   const { profileData } = useSelector((state) => state.myProfile);
 
   // Check if current user is the item author
-  const isAuthor = profileData && (
-    profileData.id === item.author_id || 
-    profileData.username === item.author?.username ||
-    profileData.id === item.author?.id
-  );
+  const isAuthor =
+    profileData &&
+    (profileData.id === item.author_id ||
+      profileData.username === item.author?.username ||
+      profileData.id === item.author?.id);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -73,7 +73,7 @@ const PostMenu = ({
       <button
         ref={buttonRef}
         onClick={handleToggle}
-        className="p-1.5 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 cursor-pointer"
+        className="p-2 rounded-full hover:bg-gray-100 text-gray-700 hover:text-gray-900 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 cursor-pointer"
         aria-label="Post options"
         aria-expanded={isOpen}
       >
@@ -83,31 +83,40 @@ const PostMenu = ({
       {isOpen && (
         <div
           ref={menuRef}
-          className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50 min-w-[160px]"
+          role="menu"
+          className="absolute right-0 top-full mt-1 bg-white rounded-xl shadow-lg border border-gray-200 py-1 z-50 min-w-[180px]"
           onClick={(e) => e.stopPropagation()}
         >
           {isAuthor ? (
             <>
               <button
+                role="menuitem"
                 onClick={(e) => handleMenuAction(e, onEdit)}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+                className="w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-50 transition-colors duration-150"
               >
                 Edit {itemType}
               </button>
+
+              {/* Divider for visual grouping */}
+              <div className="my-1 border-t border-gray-200"></div>
+
               <button
+                role="menuitem"
                 onClick={(e) => handleMenuAction(e, onDelete)}
-                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150 cursor-pointer"
+                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150"
               >
                 Delete {itemType}
               </button>
             </>
-          ): (<button
-          onClick={(e) => handleMenuAction(e, onReport)}
-          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
-        >
-          Report {itemType}
-        </button>)}
-          
+          ) : (
+            <button
+              role="menuitem"
+              onClick={(e) => handleMenuAction(e, onReport)}
+              className="w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-50 transition-colors duration-150"
+            >
+              Report {itemType}
+            </button>
+          )}
         </div>
       )}
     </div>
@@ -115,4 +124,3 @@ const PostMenu = ({
 };
 
 export default PostMenu;
-

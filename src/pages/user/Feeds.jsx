@@ -77,12 +77,9 @@ const Feeds = () => {
               className={`transition-opacity duration-150 ${
                 isTransitioning ? "opacity-40" : "opacity-100"
               }`}
-              role="region"
-              aria-live="polite"
-              aria-label="Feed posts"
             >
               {data !== null && data.length > 0 ? (
-                <div className="">
+                <>
                   {data.map((item, index) => (
                     <PostCard
                       key={item.id}
@@ -100,7 +97,7 @@ const Feeds = () => {
                       }}
                     />
                   ))}
-                </div>
+                </>
               ) : (
                 <div className="flex flex-col items-center justify-center py-16 px-4">
                   <div className="bg-neutral-100 rounded-full p-6 mb-4">
