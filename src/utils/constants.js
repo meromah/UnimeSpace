@@ -71,3 +71,49 @@ export const SORT_BY_TYPE = [
     emptyStateMessage: "Be the first to share something!",
   },
 ];
+export const SORT_BY_BOARD_TYPE = [
+  {
+    id: "all",
+    label: "All",
+    requiresAuth: false,
+    emptyStateTitle: "Nothing yet here!",
+    emptyStateMessage: "Be the first to Create Community!",
+  },
+  {
+    id: "my",
+    label: "My boards",
+    requiresAuth: true,
+    emptyStateTitle: "No boards you created yet!",
+    emptyStateMessage: "Create boards using Create Community!",
+  },
+  {
+    id: "subscribed",
+    label: "Subscribed",
+    requiresAuth: true,
+    emptyStateTitle: "No subscribed board yet!",
+    emptyStateMessage: "Subscribe to boards, then you can see them in here.",
+  },
+];
+export const SORT_BY_DESC_TYPE = [
+  {
+    id: "all",
+    label: "All",
+    requiresAuth: false,
+    emptyStateTitle: "Nothing yet here!",
+    emptyStateMessage: "Be the first to Create Community!",
+  },
+  {
+    id: "my",
+    label: "My descs",
+    requiresAuth: true,
+    emptyStateTitle: "No descs you created yet!",
+    emptyStateMessage: "Create descs using Create Community!",
+  },
+  {
+    id: "subscribed",
+    label: "Subscribed",
+    requiresAuth: true,
+    emptyStateTitle: "No subscribed desc yet!",
+    emptyStateMessage: "Subscribe to descs, then you can see them in here.",
+  },
+];
