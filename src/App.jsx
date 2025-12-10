@@ -23,6 +23,7 @@ import EditBoard from "./pages/user/EditBoard";
 import BoardMembers from "./pages/user/BoardMembers";
 import DescPage from "./pages/user/DescPage";
 import TestDrafts from "./pages/user/TestDrafts";
+import Playground from "./pages/user/Playground";
 
 const App = () => {
   return (
@@ -56,6 +57,7 @@ const App = () => {
         <Route path="d/:descId" element={<DescPage />} />
       </Route>
       <Route path="/admin/*" element={<AdminPage />} />
+      <Route path="/playground" element={<Playground />} />
     </Routes>
   );
 };
