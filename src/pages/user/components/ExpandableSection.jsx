@@ -1,14 +1,22 @@
+import { useMemo } from "react";
 import { FiChevronDown } from "react-icons/fi";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+const MAX_ITEMS_NUM = 5
 const ExpandableSection = ({
-  section,
+  section={items:[]},
   isExpanded,
   toggleSection,
   closeMobileMenu,
 }) => {
+  const navigate = useNavigate();
   const Icon = section.icon;
+  const items = useMemo(() => section.items.slice(0, MAX_ITEMS_NUM), [section])
 
+  const onViewAllClick = ()=>{
+    closeMobileMenu()
+    const url = `${section.id[0]}/all?sort=subscribed`
+    navigate(url)
+  }
   return (
     <div>
       <button
@@ -30,8 +38,8 @@ const ExpandableSection = ({
         } overflow-hidden`}
       >
         <div className="space-y-0.5 pl-9">
-          {section.items?.length > 0 ? (
-            section.items?.map((item, i) => (
+          {items?.length > 0 ? (
+            items?.map((item, i) => (
               <Link
                 //Here, temporary key value inserted, later it will be removed or altered
                 key={`${item.name} + ${i} + ${item.id}`}
@@ -53,7 +61,7 @@ const ExpandableSection = ({
 
           {section.id !== "recent" && section.items.length > 5 && (
             <button
-              onClick={closeMobileMenu}
+              onClick={()=> onViewAllClick()}
               className="w-full text-left px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-all"
             >
               View all
