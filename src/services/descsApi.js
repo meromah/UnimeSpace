@@ -53,6 +53,12 @@ const DescsApi = baseApi.injectEndpoints({
       query: (desc) => `/descs/${desc}`,
       providesTags: (result, error, desc)=> [{type: "Desc", id: `desc-${desc}`}]
     }),
+    getMyDescs: builder.query({
+      query: ()=> 'descs/my',
+      providesTags: [
+        { type: "Desc", id: "my-descs" },
+      ]
+    }),
     searchDescs: builder.query({
       query: (queryParams) => `/descs/search${toQueryString(queryParams)}`,
     }),
@@ -104,6 +110,7 @@ export const {
   useDeleteDescMutation,
   useToggleDescLikeMutation,
   useGetDescsQuery,
+  useGetMyDescsQuery,
   useGetDescQuery,
   useSearchDescsQuery,
   useGetDescLikesQuery,

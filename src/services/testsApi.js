@@ -38,6 +38,10 @@ const PrivateTestsApi = baseApi.injectEndpoints({
         { type: "Desc", id: `draft-tests-${desc}` },
       ],
     }),
+    getTestAllDrafts: builder.query({
+      query: () => `/tests/drafts`,
+      providesTags: [{ type: "Desc", id: "tests/drafts" }],
+    }),
     // POST /descs/{desc}/tests
     createTest: builder.mutation({
       query: ({ desc, bodyData }) => ({
@@ -80,6 +84,20 @@ const PrivateTestsApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
+
+    // POST /descs/{desc}/tests/{test}/submit
+    submitTest: builder.mutation({
+      query: ({ desc, test, bodyData }) => ({
+        url: `/descs/${desc}/tests/${test}/submit`,
+        method: "POST",
+        body: bodyData,
+      }),
+    }),
+
+    // GET /descs/{desc}/tests/{test}/result
+    getTestResult: builder.query({
+      query: ({ desc, test }) => `/descs/${desc}/tests/${test}/result`,
+    }),
   }),
   overrideExisting: true,
 });
@@ -100,12 +118,15 @@ export const {
   useGetAllMyTestsQuery,
   useGetTestFromDescByIdQuery,
   useLazyGetTestFromDescByIdQuery,
+  useGetTestAllDraftsQuery,
   useGetTestDraftsForDescQuery,
   useGetTestsByFilterQuery,
   useCreateTestMutation,
   useUpdateTestMutation,
   useDeleteTestMutation,
   useToggleTestLikeMutation,
+  useSubmitTestMutation,
+  useGetTestResultQuery,
 } = PrivateTestsApi;
 
 export const { useGetTestLikesQuery } = PublicTestsApi;

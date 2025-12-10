@@ -94,6 +94,12 @@ const PublicBoardApi = baseApi.injectEndpoints({
         { type: "Board", id: `board-${board}` },
       ],
     }),
+    getMyBoards: builder.query({
+      query: ()=> 'boards/my',
+      providesTags: [
+        { type: "Board", id: "my-boards" },
+      ]
+    }),
     searchBoards: builder.query({
       query: (queryParams) => `/boards/search${toQueryString(queryParams)}`,
     }),
@@ -111,4 +117,4 @@ export const {
   useDeleteBoardAvatarMutation
 } = PrivateBoardApi;
 
-export const { useGetBoardsQuery, useGetBoardQuery, useSearchBoardsQuery } = PublicBoardApi;
+export const { useGetBoardsQuery, useGetBoardQuery, useSearchBoardsQuery, useGetMyBoardsQuery } = PublicBoardApi;
