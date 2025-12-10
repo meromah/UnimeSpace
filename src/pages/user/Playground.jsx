@@ -9,8 +9,10 @@ import {
   FiTerminal,
   FiCode,
   FiClock,
+  FiChevronLeft,
 } from "react-icons/fi";
 import { usePlayPythonApiMutation } from "../../services/solutionsApi";
+import { Link } from "react-router-dom";
 
 const Playground = () => {
   const STORAGE_KEY = "playground_code";
@@ -45,8 +47,6 @@ const Playground = () => {
   // Update line numbers
   useEffect(() => {
     const lines = code.split("\n");
-    console.log(code, lines);
-    // setLineNumbers([...lines.map((_, i) => i + 1), lines.length + 1]);
     setLineNumbers(lines.map((_, i) => i + 1));
   }, [code]);
 
@@ -78,7 +78,7 @@ const Playground = () => {
       } else {
         setOutput(res?.stdout ?? "");
       }
-      setActiveTab('console')
+      setActiveTab("console");
     } catch (err) {
       setError(
         err?.data?.message ||
@@ -109,18 +109,18 @@ const Playground = () => {
   return (
     <div className="bg-neutral-950 text-neutral-100 flex flex-col h-screen w-full">
       {/* Top Bar */}
-      <div className="h-14 bg-neutral-800 border-b border-neutral-700 flex items-center justify-between px-4 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <FiTerminal className="w-5 h-5 text-green-400" />
-            <h1 className="text-base font-semibold text-white">
+      <div className=" bg-neutral-800 border-b border-neutral-700 flex md:items-center justify-between px-4 flex-shrink-0">
+          <div className="flex items-center gap-2 py-2 justify-between md:justify-baseline">
+            <Link to={"/"} className="flex gap-0.5 items-center cursor-pointer">
+              <FiChevronLeft />
+              <span>Home</span>
+            </Link>
+            <h1 className="text-base font-semibold text-white border-l border-l-neutral-600 px-3">
               Python Playground
             </h1>
           </div>
-          <div className="h-6 w-px bg-neutral-700" />
-        </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 py-2 justify-between md:justify-baseline">
           <button
             onClick={handleClear}
             className="p-2 text-neutral-400 hover:text-white hover:bg-neutral-700 rounded transition"
@@ -156,7 +156,7 @@ const Playground = () => {
       <div className="bg-neutral-800 border-b border-neutral-700 flex items-center">
         <div
           className={`flex items-center gap-2 text-xs py-2 px-4 md:hidden ${
-            activeTab === 'code'? 'bg-black text-white': 'bg-neutral-800'
+            activeTab === "code" ? "bg-black text-white" : "bg-neutral-800"
           }`}
           onClick={() => setActiveTab("code")}
         >
@@ -165,7 +165,7 @@ const Playground = () => {
         </div>
         <div
           className={`flex items-center gap-2 text-xs py-2 px-4 md:hidden ${
-            activeTab === 'console'? 'bg-black text-white': 'bg-neutral-800'
+            activeTab === "console" ? "bg-black text-white" : "bg-neutral-800"
           }`}
           onClick={() => setActiveTab("console")}
         >
@@ -176,11 +176,11 @@ const Playground = () => {
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Editor Section */}
-        <div className={`flex-1 flex flex-col border-r border-neutral-700 overflow-hidden md:w-[55%]
-          ${
-            activeTab === 'code'? "w-full": "w-0"
-          }
-          `}>
+        <div
+          className={`flex-1 flex flex-col border-r border-neutral-700 overflow-hidden md:w-[55%]
+          ${activeTab === "code" ? "w-full" : "w-0"}
+          `}
+        >
           {/* Editor Header */}
           <div className="hidden h-10 bg-neutral-800 border-b border-neutral-700 md:flex items-center px-4">
             <div className="flex items-center gap-2 text-xs">
@@ -220,7 +220,11 @@ const Playground = () => {
         </div>
 
         {/* Output Section */}
-        <div className={`flex flex-col md:bg-neutral-800 overflow-hidden md:w-[45%] ${ activeTab === 'console'? "w-full": "w-0"}`}>
+        <div
+          className={`flex flex-col md:bg-neutral-800 overflow-hidden md:w-[45%] ${
+            activeTab === "console" ? "w-full" : "w-0"
+          }`}
+        >
           {/* Output Header */}
           <div className=" hidden h-10 bg-neutral-800 border-b border-neutral-700 md:flex items-center justify-between px-4">
             <div className="flex items-center gap-2 text-xs">
