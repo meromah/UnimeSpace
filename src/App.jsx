@@ -57,6 +57,7 @@ const App = () => {
         <Route path="d/:descId" element={<DescPage />} />
       </Route>
       <Route path="/admin/*" element={<AdminPage />} />
+      <Route path="/about" element={<AboutUs />} />
       <Route path="/playground" element={<Playground />} />
     </Routes>
   );
