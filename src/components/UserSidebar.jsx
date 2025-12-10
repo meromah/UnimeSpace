@@ -18,6 +18,7 @@ import { useGetMyDescSubscriptionsQuery } from "../services/descSubscriptionsApi
 import { useGetMyBoardSubscriptionsQuery } from "../services/boardSubscriptionsApi.js";
 import { getFileUrl } from "../utils/helpers";
 import { RiDraftLine } from "react-icons/ri";
+import { FaInfoCircle } from "react-icons/fa";
 const MenuLink = ({ to, label, icon: Icon, onClick }) => {
   return (
     <Link
@@ -31,7 +32,39 @@ const MenuLink = ({ to, label, icon: Icon, onClick }) => {
     </Link>
   );
 };
-
+const resourcesSection = {
+  id: "resources",
+  title: "Resources",
+  path: "",
+  icon: FaInfoCircle,
+  items: [
+    {
+      id: "playground",
+      name: "Python Playground",
+      path: "/playground",
+    },
+    {
+      id: "how-to",
+      name: "How to ...",
+      path: "/how-to",
+    },
+    {
+      id: "about",
+      name: "About Us",
+      path: "/about",
+    },
+    {
+      id: "contact",
+      path: "/contact",
+      name: "Contact Us",
+    },
+    {
+      id: "terms",
+      path: "/terms",
+      name: "Terms & Conditions",
+    },
+  ],
+};
 const exploreData = [
   {
     id: "boards",
@@ -305,6 +338,15 @@ const UserSidebar = () => {
               />
             ))}
           </div>
+          <div className="my-2 h-px bg-neutral-200" />
+          <div>
+            <ExpandableSection
+              section={resourcesSection}
+              isExpanded={expandedSections["resources"]}
+              toggleSection={toggleSection}
+              closeMobileMenu={closeMobileMenu}
+            />
+          </div>
         </div>
 
         {/* User Card at Bottom */}
@@ -377,7 +419,10 @@ const UserSidebar = () => {
                   {profileData?.email || "no email"}
                 </div>
                 <div className="p-1.5">
-                  <Link to="profile/edit" className="w-full flex items-center justify-between px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all">
+                  <Link
+                    to="profile/edit"
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
+                  >
                     <button className="flex items-center gap-2">
                       <Settings className="w-4 h-4" />
                       <span>Edit profile</span>

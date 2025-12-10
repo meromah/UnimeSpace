@@ -43,7 +43,7 @@ const ExpandableSection = ({
               <Link
                 //Here, temporary key value inserted, later it will be removed or altered
                 key={`${item.name} + ${i} + ${item.id}`}
-                to={section.path + "/" + item.name || "#"}
+                to={section.id === "resources" ? item.path : section.path + "/" + item.name}
                 onClick={() => {
                   closeMobileMenu();
                   toggleSection(section.id);
@@ -59,7 +59,7 @@ const ExpandableSection = ({
             </p>
           )}
 
-          {section.id !== "recent" && section.items.length > 5 && (
+          {section.id !== "recent" && section.id !== "resources" && section.items.length > 5 && (
             <button
               onClick={()=> onViewAllClick()}
               className="w-full text-left px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-all"
