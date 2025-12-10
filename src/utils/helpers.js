@@ -15,7 +15,7 @@ export const getImage = (e) => {
       size: file.size,
       url: URL.createObjectURL(file),
       isUploading: true,
-      error: false
+      error: false,
     }));
   return newImages;
 };
@@ -30,19 +30,19 @@ export const getFile = (e) => {
       size: file.size,
       type: file.type,
       isUploading: true,
-      error: false
+      error: false,
     }));
   return newFiles;
 };
 
 export const getInitials = (name) => {
-    return name
-      .split(" ")
-      .map((word) => word[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
+  return name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+};
 export const getFileUrl = (hash) => {
   const API_BASE_URL = import.meta.env.DEV
     ? "/api"
@@ -50,37 +50,37 @@ export const getFileUrl = (hash) => {
   return `${API_BASE_URL}/files/${hash}`;
 };
 export const handleDownload = async (file, e, downloadElement) => {
-    e.preventDefault();
-    e.stopPropagation();
-    downloadElement.disabled = true;
-    try {
-      const url = getFileUrl(file.hash);
+  e.preventDefault();
+  e.stopPropagation();
+  downloadElement.disabled = true;
+  try {
+    const url = getFileUrl(file.hash);
 
-      const response = await fetch(url, {
-        method: "GET",
-        credentials: "include", // only if your API needs cookies
-      });
+    const response = await fetch(url, {
+      method: "GET",
+      credentials: "include", // only if your API needs cookies
+    });
 
-      if (!response.ok) throw new Error("Failed to download");
+    if (!response.ok) throw new Error("Failed to download");
 
-      const blob = await response.blob();
+    const blob = await response.blob();
 
-      const objectUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = objectUrl;
-      link.download = file.filename;
+    const objectUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = file.filename;
 
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
 
-      window.URL.revokeObjectURL(objectUrl);
-      downloadElement.disabled = false;
-    } catch (error) {
-      downloadElement.disabled = false;
-      console.error("Failed to download file:", error);
-    }
-  };
+    window.URL.revokeObjectURL(objectUrl);
+    downloadElement.disabled = false;
+  } catch (error) {
+    downloadElement.disabled = false;
+    console.error("Failed to download file:", error);
+  }
+};
 
 // Helper function to extract error message from API error response
 export const extractErrorMessage = (error) => {
@@ -94,4 +94,66 @@ export const extractErrorMessage = (error) => {
     error.response?.data?.message ??
     "An unexpected error occurred. Please try again."
   );
+};
+
+export const normalizeDraftTestData = ({ item, testData, questionData, questionTypes }) => {
+  const test = {
+    desc: item.desc.name,
+    description: testData.description,
+    title: testData.title,
+    id: testData.id,
+    questions: [],
+  };
+  if (Array.isArray(questionData) && questionData.length > 0) {
+    for (const question of questionData) {
+      switch (question.question_type_id) {
+        case questionTypes.code.id:
+          const test_cases = [];
+          const questionArguments = [];
+          for (const testCase of question.testcases) {
+            test_cases.push({
+              id: testCase.id,
+              expected_output: testCase.expected_output,
+            });
+            if (
+              Array.isArray(testCase.arguments) &&
+              testCase.arguments.length > 0
+            ) {
+              for (const a of testCase.arguments) {
+                questionArguments.push({
+                  id: a.id,
+                  value: a.body,
+                  order: a.arg_order,
+                  test_case_id: a.testcase_id,
+                });
+              }
+            }
+          }
+          test.questions.push({
+            id: question.id,
+            type: "code",
+            body: question.body,
+            signature: {
+              id: question.signature.id,
+              value: question.signature.signature,
+              numberOfArguments: question.signature.arg_nums,
+            },
+            test_cases,
+            arguments: questionArguments,
+          });
+          break;
+        case questionTypes.mcq.id:
+          test.questions.push({
+            id: question.id,
+            type: "mcq",
+            body: question.body,
+            options: question.options,
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  }
+  return test;
 };
