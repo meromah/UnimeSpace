@@ -39,7 +39,7 @@ const Feeds = () => {
     resetSortBy,
   } = useSortBy({ isAuthenticated, sortOptionsConfig: SORT_BY });
   //API call hook
-  const { data, isLoading, error } = useGetHomeData({
+  const { data, likedData, isLoading, error } = useGetHomeData({
     sortBy,
     sortByType,
     tab,
@@ -80,23 +80,31 @@ const Feeds = () => {
             >
               {data !== null && data.length > 0 ? (
                 <>
-                  {data.map((item, index) => (
-                    <PostCard
-                      key={item.id}
-                      item={item}
-                      isFirst={index === 0}
-                      isLast={index === data.length - 1}
-                      itemType={item["board_id"] ? "post" : "test"}
-                      communityType={item["board_id"] ? "board" : "desc"}
-                      communityUrl={item["board_id"] ? "b/" : "d/"}
-                      onError={(message = "Something happened!") => {
-                        setToast({
-                          message,
-                          type: "error",
-                        });
-                      }}
-                    />
-                  ))}
+                  {data.map((item, index) => {
+                    const isBoard = item?.board_id || false;
+                    const itemType = isBoard ? "post" : "test";
+                    const communityType = isBoard ? "board" : "desc";
+                    const communityUrl = isBoard ? "b/" : "d/";
+                    const likedSet = likedData[itemType]
+                    return (
+                      <PostCard
+                        key={item.id}
+                        item={item}
+                        isFirst={index === 0}
+                        isLast={index === data.length - 1}
+                        itemType={itemType}
+                        communityType={communityType}
+                        communityUrl={communityUrl}
+                        onError={(message = "Something happened!") => {
+                          setToast({
+                            message,
+                            type: "error",
+                          });
+                        }}
+                        isLiked={likedSet.has(item.id)}
+                      />
+                    );
+                  })}
                 </>
               ) : (
                 <div className="flex flex-col items-center justify-center py-16 px-4">

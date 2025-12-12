@@ -26,10 +26,11 @@ const PostCard = ({
   communityType = "board",
   communityUrl = "b/",
   onError,
+  isLiked = false,
 }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const [liked, setLiked] = useState(item.youLiked);
+  const [liked, setLiked] = useState(isLiked);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -72,6 +73,7 @@ const PostCard = ({
       navigate("/login");
       return;
     }
+    if(isLoading) return
     try {
       const community = item[communityType].name;
       const itemId = item.id;
@@ -112,186 +114,181 @@ const PostCard = ({
   };
   return (
     <>
-  <Link
-    to={`/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`}
-    className={`block bg-white border-x border-b border-gray-200 p-4 hover:bg-primary-bg transition-colors duration-200 ${
-      isFirst ? "rounded-t-lg border-t" : isLast ? "rounded-b-lg" : ""
-    }`}
-  >
-    {/* Header */}
-    <div className="relative flex items-start justify-between mb-3">
-      <div className="flex items-start gap-3">
+      <Link
+        to={`/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`}
+        className={`block bg-white border-x border-b border-gray-200 p-4 hover:bg-primary-bg transition-colors duration-200 ${
+          isFirst ? "rounded-t-lg border-t" : isLast ? "rounded-b-lg" : ""
+        }`}
+      >
+        {/* Header */}
+        <div className="relative flex items-start justify-between mb-3">
+          <div className="flex items-start gap-3">
+            {/* Avatar */}
+            <button
+              onClick={(e) =>
+                item.author &&
+                handleAuthorClick(e, `/user/${item.author.username}`)
+              }
+              className="w-10 h-10 rounded-full overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+            >
+              {item?.author?.avatar ? (
+                <img
+                  src={getFileUrl(item.author.avatar.file_hash)}
+                  alt={`${item.author.username}'s profile picture`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
+                  {item.author ? getInitials(item.author.username) : ""}
+                </span>
+              )}
+            </button>
 
-        {/* Avatar */}
-        <button
-          onClick={(e) =>
-            item.author &&
-            handleAuthorClick(e, `/user/${item.author.username}`)
-          }
-          className="w-10 h-10 rounded-full overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
-        >
-          {item?.author?.avatar ? (
-            <img
-              src={getFileUrl(item.author.avatar.file_hash)}
-              alt={`${item.author.username}'s profile picture`}
-              className="w-full h-full object-cover"
+            {/* User + Community */}
+            <div className="flex flex-col gap-0.5">
+              <button
+                className="w-fit text-primary-blue text-base cursor-pointer hover:underline truncate focus:outline-none"
+                onClick={(e) =>
+                  handleBoardClick(
+                    e,
+                    `/${communityUrl}${item[communityType].name}`
+                  )
+                }
+              >
+                {communityUrl + item[communityType].name}
+              </button>
+
+              <p className="text-xs text-neutral-600 flex items-center gap-1">
+                {item?.author ? (
+                  <button
+                    onClick={(e) =>
+                      handleAuthorClick(e, `/user/${item.author.username}`)
+                    }
+                    className="cursor-pointer hover:underline focus:outline-none"
+                  >
+                    u/{item.author.username}
+                  </button>
+                ) : (
+                  <span>[deleted]</span>
+                )}
+                <RelativeTime
+                  date={item.created_at}
+                  className="text-neutral-500"
+                />
+              </p>
+            </div>
+          </div>
+
+          {/* Post Menu */}
+          <div className="absolute top-0 right-0" onClick={preventNavigation}>
+            <PostMenu
+              itemType={itemType}
+              item={item}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onReport={handleReport}
             />
-          ) : (
-            <span className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
-              {item.author ? getInitials(item.author.username) : ""}
-            </span>
-          )}
-        </button>
+          </div>
+        </div>
 
-        {/* User + Community */}
-        <div className="flex flex-col gap-0.5">
+        {/* Content */}
+        {itemType === "test" ? (
+          <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 p-3 rounded hover:bg-blue-100 transition-colors duration-200">
+            <div className="flex-1 overflow-hidden flex flex-col gap-0.5">
+              <p className="font-medium">{item.title}</p>
+              <p className="text-sm text-neutral-600 truncate">{item.body}</p>
+            </div>
+            <button
+              className="px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+              onClick={onStartTest}
+            >
+              Start
+            </button>
+          </div>
+        ) : (
+          <div className="mb-3 flex flex-col gap-2">
+            <div>
+              <p className="font-medium mb-1">{item.title}</p>
+              <p className="text-sm text-neutral-600">{item.body}</p>
+            </div>
+
+            {images.length > 0 && <PostImages images={images} />}
+            {files.length > 0 && <PostFiles files={files} />}
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="flex items-center gap-4 text-neutral-600 text-sm">
           <button
-            className="w-fit text-primary-blue text-base cursor-pointer hover:underline truncate focus:outline-none"
-            onClick={(e) =>
-              handleBoardClick(
-                e,
-                `/${communityUrl}${item[communityType].name}`
-              )
-            }
+            className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
+            title="Comments"
+            aria-label={`${item.comments_count} comments`}
           >
-            {communityUrl + item[communityType].name}
+            <FaRegComment /> {item.comments_count}
           </button>
 
-          <p className="text-xs text-neutral-600 flex items-center gap-1">
-            {item?.author ? (
-              <button
-                onClick={(e) =>
-                  handleAuthorClick(e, `/user/${item.author.username}`)
-                }
-                className="cursor-pointer hover:underline focus:outline-none"
-              >
-                u/{item.author.username}
-              </button>
-            ) : (
-              <span>[deleted]</span>
-            )}
-            <RelativeTime date={item.created_at} className="text-neutral-500" />
-          </p>
+          <button
+            onClick={onTogglePostLike}
+            className={`${
+              isLoading ? "animate-pulse" : ""
+            } flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer`}
+            aria-label={`${item.likes_count} likes. ${
+              liked ? "Unlike" : "Like"
+            } this item`}
+            title={liked ? "Unlike" : "Like"}
+          >
+            {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
+            <span
+              ref={postLikesCountRef}
+              className={liked ? "text-red-500" : ""}
+            >
+              {item.likes_count}
+            </span>
+          </button>
+
+          <button
+            className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
+            title="Share"
+            onClick={(e) => {
+              preventNavigation(e);
+              setIsShareModalOpen(true);
+            }}
+          >
+            <FiShare2 />
+          </button>
         </div>
-      </div>
+      </Link>
 
-      {/* Post Menu */}
-      <div className="absolute top-0 right-0" onClick={preventNavigation}>
-        <PostMenu
-          itemType={itemType}
-          item={item}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onReport={handleReport}
-        />
-      </div>
-    </div>
+      {/* Modals */}
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        itemUrl={`${window.location.origin}/b/${item[communityType].name}/${itemType}/${item.id}`}
+        itemTitle={item.title}
+      />
 
-    {/* Content */}
-    {itemType === "test" ? (
-      <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 p-3 rounded hover:bg-blue-100 transition-colors duration-200">
-        <div className="flex-1 overflow-hidden flex flex-col gap-0.5">
-          <p className="font-medium">{item.title}</p>
-          <p className="text-sm text-neutral-600 truncate">{item.body}</p>
-        </div>
-        <button
-          className="px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
-          onClick={onStartTest}
-        >
-          Start
-        </button>
-      </div>
-    ) : (
-      <div className="mb-3 flex flex-col gap-2">
-        <div>
-          <p className="font-medium mb-1">{item.title}</p>
-          <p className="text-sm text-neutral-600">{item.body}</p>
-        </div>
+      <EditPostModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        post={item}
+        boardName={item[communityType].name}
+      />
 
-        {images.length > 0 && <PostImages images={images} />}
-        {files.length > 0 && <PostFiles files={files} />}
-      </div>
-    )}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        item={item}
+        itemType={itemType}
+      />
 
-    {/* Actions */}
-    <div className="flex items-center gap-4 text-neutral-600 text-sm">
-      <button
-        className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
-        title="Comments"
-        aria-label={`${item.comments_count} comments`}
-      >
-        <FaRegComment /> {item.comments_count}
-      </button>
-
-      <button
-        onClick={onTogglePostLike}
-        className={`${
-          isLoading ? "animate-pulse" : ""
-        } flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer`}
-        aria-label={`${item.likes_count} likes. ${
-          liked ? "Unlike" : "Like"
-        } this item`}
-        title={liked ? "Unlike" : "Like"}
-      >
-        {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
-        <span
-          ref={postLikesCountRef}
-          className={
-            liked
-              ? "text-red-500"
-              : isLoading
-              ? "invisible animate-pulse"
-              : ""
-          }
-        >
-          {item.likes_count}
-        </span>
-      </button>
-
-      <button
-        className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
-        title="Share"
-        onClick={(e) => {
-          preventNavigation(e);
-          setIsShareModalOpen(true);
-        }}
-      >
-        <FiShare2 />
-      </button>
-    </div>
-  </Link>
-
-  {/* Modals */}
-  <ShareModal
-    isOpen={isShareModalOpen}
-    onClose={() => setIsShareModalOpen(false)}
-    itemUrl={`${window.location.origin}/b/${item[communityType].name}/${itemType}/${item.id}`}
-    itemTitle={item.title}
-  />
-
-  <EditPostModal
-    isOpen={isEditModalOpen}
-    onClose={() => setIsEditModalOpen(false)}
-    post={item}
-    boardName={item[communityType].name}
-  />
-
-  <ReportModal
-    isOpen={isReportModalOpen}
-    onClose={() => setIsReportModalOpen(false)}
-    item={item}
-    itemType={itemType}
-  />
-
-  <DeletePostModal
-    communityType={communityType}
-    isOpen={isDeleteModalOpen}
-    onClose={() => setIsDeleteModalOpen(false)}
-    communityName={item[communityType].name}
-    itemId={item.id}
-  />
-</>
-
+      <DeletePostModal
+        communityType={communityType}
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        communityName={item[communityType].name}
+        itemId={item.id}
+      />
+    </>
   );
 };
 

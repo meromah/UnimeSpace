@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useGetTestsByFilterQuery } from "../services/testsApi";
 import { useGetPostsByFilterQuery } from "../services/postsApi";
 import { TabFilters } from "../utils/tabFilters";
@@ -28,6 +28,13 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
   } = useGetPostsByFilterQuery(
     { queryParams: sortBy },
     { skip: sortByType === "tests" || tab !== tabFilters.firstValue() }
+  );
+  const likedData = useMemo(
+    () => ({
+      post: new Set(posts?.liked || []),
+      test: new Set(tests?.liked || []),
+    }),
+    [posts, tests]
   );
 
   useEffect(() => {
@@ -151,7 +158,7 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     isPostsError,
     isTestsError,
   ]);
-  return { data, error, isLoading };
+  return { data, likedData, error, isLoading };
 };
 
 export default useGetHomeData;
