@@ -8,6 +8,7 @@ import { useUploadPostFilesMutation } from "../../../services/fileApi";
 import { useCreatePostMutation } from "../../../services/postsApi";
 import CommunitySelection from "./CommunitySelection";
 import { useNavigate } from "react-router-dom";
+import AutoResizeTextarea from "./AutoResizeTextarea";
 
 // Helper function to extract error message from API error response
 const extractErrorMessage = (error) => {
@@ -202,7 +203,10 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
       navigate("/home");
     }
   };
-
+  const handleBodyChange = (e)=>{
+    postBodyRef.current = {value: e.target.value || ""}
+    checkFormValidity()
+  }
   return (
     <form
       onSubmit={handlePostSubmit}
@@ -214,8 +218,10 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
       {/* Board Selection - only show when boardId is not provided */}
       {!boardId && (
         <CommunitySelection
+          communityName={boardId}
           communityType={"board"}
-          onSelectBoard={handleSelectBoard}
+          onSelectCommunity={handleSelectBoard}
+          disabled={false}
           onClearSelection={handleClearBoardSelection}
           resetRef={boardSelectionResetRef}
         />
@@ -238,12 +244,10 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
         <label className="text-sm font-medium text-neutral-800">
           Post Body *
         </label>
-        <textarea
-          ref={postBodyRef}
+        <AutoResizeTextarea
           placeholder="What's on your mind?"
-          rows={4}
-          onChange={checkFormValidity}
-          className="w-full px-3 py-2 text-sm text-neutral-900 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors resize-y"
+          onChange={handleBodyChange}
+          className="w-full min-h-[120px] px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400 resize-y"
         />
       </div>
 
