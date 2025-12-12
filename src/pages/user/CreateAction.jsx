@@ -1,5 +1,7 @@
-import React, { lazy, Suspense } from "react";
-import { useParams } from "react-router-dom";
+import React, { lazy, Suspense, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useSearchParams } from "react-router-dom";
+import { resetTestSlice } from "../../app/createTestSlice";
 
 // Lazy load each action
 const CreatePost = lazy(() => import("./components/CreatePost"));
@@ -13,12 +15,22 @@ const actions = {
 
 const CreateAction = () => {
   const { action } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { descName } = useSelector((state) => state.testMetadata);
+  const dispatch = useDispatch();
   const ActionComponent = actions[action];
 
   if (!ActionComponent) {
     return <h2>Unknown action: {action}</h2>;
   }
-
+  useEffect(() => {
+    if (descName === null && searchParams.get("from") === "drafts") {
+      setSearchParams({});
+    }
+    if (action === "test" && searchParams.get("from") !== "drafts") {
+      dispatch(resetTestSlice());
+    }
+}, [descName, searchParams, setSearchParams, action]);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ActionComponent />

@@ -4,7 +4,7 @@ const initialState = {
   isPopUp: false,
   descName: null,
   draftTestId: null,
-  draftTestData: {}
+  draftTestData: {},
 };
 const createTestSlice = createSlice({
   name: "testMetadata",
@@ -20,8 +20,14 @@ const createTestSlice = createSlice({
       state.draftTestId = action.payload;
     },
     setDraftTestData: (state, action) => {
-      const {payload} = action
-      state.draftTestData = {...payload};
+      const { payload } = action;
+      state.draftTestData = { ...payload };
+    },
+    resetTestSlice: (state, payload) => {
+      state.isPopUp = false;
+      state.descName = null;
+      state.draftTestId = null;
+      state.draftTestData = {};
     },
   },
 });
@@ -30,7 +36,8 @@ export const {
   setIsPopUp,
   setDescName,
   setDraftTestId,
-  setDraftTestData
+  setDraftTestData,
+  resetTestSlice,
 } = createTestSlice.actions;
 
 export default createTestSlice.reducer;
