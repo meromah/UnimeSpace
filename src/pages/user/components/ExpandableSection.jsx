@@ -21,7 +21,7 @@ const ExpandableSection = ({
     <div>
       <button
         onClick={() => toggleSection(section.id)}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all cursor-pointer"
+        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-all cursor-pointer"
       >
         {Icon && <Icon className="w-4 h-4 text-neutral-400" />}
         <span className="flex-1 text-left">{section.title}</span>
@@ -37,7 +37,7 @@ const ExpandableSection = ({
           isExpanded ? "max-h-96 opacity-100 mt-0.5" : "max-h-0 opacity-0"
         } overflow-hidden`}
       >
-        <div className="space-y-0.5 pl-9">
+        <div className="space-y-0.5 pl-1">
           {items?.length > 0 ? (
             items?.map((item, i) => (
               <Link
