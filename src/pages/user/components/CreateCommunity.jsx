@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { FiArrowLeft, FiSend } from "react-icons/fi";
-
 import {
   useCheckDescNameIsAvailableQuery,
   useCreateDescMutation,
@@ -13,6 +11,7 @@ import SuccessModal from "../../main/components/SuccessModal.jsx";
 import Toast from "../.../../../../components/Toast.jsx";
 import { useNavigate } from "react-router-dom";
 import NameAvailabilityInput from "../../../components/NameAvailabilityInput.jsx";
+import AutoResizeTextarea from "./AutoResizeTextarea.jsx";
 const communityTypes = {
   board: { name: "Board", path: "b" },
   desc: { name: "Desc", path: "d" },
@@ -137,7 +136,7 @@ const CreateCommunity = () => {
                 <span className="font-medium text-neutral-800">
                   Description
                 </span>
-                <textarea
+                <AutoResizeTextarea 
                   value={communityDescription}
                   onChange={(e) => setCommunityDescription(e.target.value)}
                   placeholder={`What is this ${communityTypes[communityType].name} about? Who is it for?`}
