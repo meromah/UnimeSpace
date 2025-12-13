@@ -16,7 +16,7 @@ const PrivateDescSubscriptionsApi = baseApi.injectEndpoints({
       invalidatesTags: (result, error, { desc }) => [
         { type: "Desc", id: "desc-subscriptions" },
         { type: "Desc", id: "all-descs" },
-        {type: "Desc", id: `desc-${desc}`}
+        { type: "Desc", id: `desc-${desc}` },
       ],
     }),
 
@@ -29,7 +29,7 @@ const PrivateDescSubscriptionsApi = baseApi.injectEndpoints({
       invalidatesTags: (result, error, { desc }) => [
         { type: "Desc", id: "desc-subscriptions" },
         { type: "Desc", id: "all-descs" },
-        {type: "Desc", id: `desc-${desc}`}
+        { type: "Desc", id: `desc-${desc}` },
       ],
     }),
 
@@ -70,6 +70,13 @@ const PrivateDescSubscriptionsApi = baseApi.injectEndpoints({
       }),
       providesTags: [{ type: "Desc", id: "desc-subscriptions" }],
     }),
+    restrictUserInDesc: builder.mutation({
+      query: ({ user, desc }) => ({
+        url: `/descs/${desc}/users/${user}/restrict`,
+        method: "POST",
+      }),
+      // invalidatesTags
+    }),
   }),
   overrideExisting: true,
 });
@@ -82,4 +89,5 @@ export const {
   useGetDescSubscriptionPrivilegedQuery,
   useCreateDescSubscriptionPrivilegedMutation,
   useGetMyDescSubscriptionsQuery,
+  useRestrictUserInDescMutation
 } = PrivateDescSubscriptionsApi;

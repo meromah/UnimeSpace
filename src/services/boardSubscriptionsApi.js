@@ -15,9 +15,9 @@ const PrivateBoardSubscriptionsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, { board }) => [
         { type: "Board", id: `board-${board}` },
-        { type: "Board", id: 'board-subscriptions' },
-        { type: "Board", id: "all-boards" }
-      ]
+        { type: "Board", id: "board-subscriptions" },
+        { type: "Board", id: "all-boards" },
+      ],
     }),
 
     // DELETE /boards/{board}/subscribe - Unsubscribe from a board
@@ -28,9 +28,9 @@ const PrivateBoardSubscriptionsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, { board }) => [
         { type: "Board", id: `board-${board}` },
-        { type: "Board", id: 'board-subscriptions' },
-        { type: "Board", id: "all-boards" }
-      ]
+        { type: "Board", id: "board-subscriptions" },
+        { type: "Board", id: "all-boards" },
+      ],
     }),
 
     // GET /boards/{board}/subscribers - Author-only list
@@ -45,7 +45,7 @@ const PrivateBoardSubscriptionsApi = baseApi.injectEndpoints({
       query: () => ({
         url: `/me/board-subscriptions`,
       }),
-      providesTags: [{ type: "Board", id: 'board-subscriptions' }]
+      providesTags: [{ type: "Board", id: "board-subscriptions" }],
     }),
 
     // GET /board-subscriptions/all - Admin list with filters
@@ -57,7 +57,7 @@ const PrivateBoardSubscriptionsApi = baseApi.injectEndpoints({
 
     // GET /board-subscriptions/{board} - Admin detail
     getBoardSubscriptionPrivileged: builder.query({
-      query: ( board ) => ({
+      query: (board) => ({
         url: `/board-subscriptions/${board}`,
       }),
     }),
@@ -69,6 +69,14 @@ const PrivateBoardSubscriptionsApi = baseApi.injectEndpoints({
         method: "POST",
         body: bodyData,
       }),
+    }),
+
+    restrictUserInBoard: builder.mutation({
+      query: ({ user, board }) => ({
+        url: `/boards/${board}/users/${user}/restrict`,
+        method: "POST",
+      }),
+      // invalidatesTags
     }),
   }),
   overrideExisting: true,
@@ -82,6 +90,5 @@ export const {
   useGetAllBoardSubscriptionsPrivilegedQuery,
   useGetBoardSubscriptionPrivilegedQuery,
   useCreateBoardSubscriptionPrivilegedMutation,
+  useRestrictUserInBoardMutation,
 } = PrivateBoardSubscriptionsApi;
-
-
