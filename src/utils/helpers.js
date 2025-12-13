@@ -96,7 +96,12 @@ export const extractErrorMessage = (error) => {
   );
 };
 
-export const normalizeDraftTestData = ({ item, testData, questionData, questionTypes }) => {
+export const normalizeDraftTestData = ({
+  item,
+  testData,
+  questionData,
+  questionTypes,
+}) => {
   const test = {
     desc: item.desc.name,
     description: testData.description,
@@ -157,3 +162,67 @@ export const normalizeDraftTestData = ({ item, testData, questionData, questionT
   }
   return test;
 };
+export const mergeSortedBy = (a = [], b = [], sortBy) => {
+  const result = [];
+  let i = 0,
+    j = 0;
+  // SortBy Date
+  if (sortBy === "latest=1" || sortBy === "oldest1") {
+    while (i < a.length && j < b.length) {
+      const dateA = new Date(a[i].created_at);
+      const dateB = new Date(b[j].created_at);
+      switch (sortBy) {
+        case "latest=1":
+          if (dateA >= dateB) {
+            result.push(a[i]);
+            i++;
+          } else {
+            result.push(b[j]);
+            j++;
+          }
+          break;
+        case "oldest=1":
+          if (dateA <= dateB) {
+            result.push(a[i]);
+            i++;
+          } else {
+            result.push(b[j]);
+            j++;
+          }
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+  // SortBy Popularity
+  if (sortBy === "popular=1") {
+    while (i < a.length && j < b.length) {
+      const itemA = Number(a[i].likes_count);
+      const itemB = Number(b[j].likes_count);
+      if (itemA >= itemB) {
+        result.push(a[i]);
+        i++;
+      } else {
+        result.push(b[j]);
+        j++;
+      }
+    }
+  }
+  if (sortBy === "hot=1") {
+    while (i < a.length && j < b.length) {
+      const itemA = Number(a[i].comments_count);
+      const itemB = Number(b[j].comments_count);
+      if (itemA >= itemB) {
+        result.push(a[i]);
+        i++;
+      } else {
+        result.push(b[j]);
+        j++;
+      }
+    }
+  }
+  // Append remaining items
+  return result.concat(a.slice(i)).concat(b.slice(j));
+}
