@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import {
-  useRestrictUserInBoardMutation,
-  useGetBoardSubscribersPrivilegedQuery,
-} from "../../services/boardSubscriptionsApi";
+  useGetDescSubscribersPrivilegedQuery,
+  useRestrictUserInDescMutation,
+} from "../../services/descSubscriptionsApi";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useGetBoardQuery } from "../../services/boardsApi";
 import CommunityMembers from "./components/CommunityMember/CommunityMembers";
+import { useGetDescQuery } from "../../services/descsApi";
 
-const BoardMembers = () => {
-  const { boardId } = useParams();
+const DescMembers = () => {
+  const { descId } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
@@ -19,17 +19,16 @@ const BoardMembers = () => {
       return;
     }
   }, [isAuthenticated]);
-
   return (
     <CommunityMembers
-      communityId={boardId}
-      communityType="board"
+      communityId={descId}
+      communityType="desc"
       isAuthenticated={isAuthenticated}
-      useGetCommunityMembers={useGetBoardSubscribersPrivilegedQuery}
-      useGetCommunityQuery={useGetBoardQuery}
-      useRestrictUserInCommunityMutation={useRestrictUserInBoardMutation}
+      useGetCommunityMembers={useGetDescSubscribersPrivilegedQuery}
+      useGetCommunityQuery={useGetDescQuery}
+      useRestrictUserInCommunityMutation={useRestrictUserInDescMutation}
     />
   );
 };
 
-export default BoardMembers;
+export default DescMembers;
