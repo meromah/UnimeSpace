@@ -21,6 +21,7 @@ import ExploreBoards from "./pages/user/components/ExploreBoards";
 import ExploreDescs from "./pages/user/components/ExploreDescs";
 import EditBoard from "./pages/user/EditBoard";
 import BoardMembers from "./pages/user/BoardMembers";
+import DescMembers from "./pages/user/DescMembers";
 import DescPage from "./pages/user/DescPage";
 import TestDrafts from "./pages/user/TestDrafts";
 import Playground from "./pages/user/Playground";
@@ -53,6 +54,7 @@ const App = () => {
         <Route path="test/drafts" element={<TestDrafts />} />
         <Route path="b/:boardId" element={<BoardPage />} />
         <Route path="b/:boardId/members" element={<BoardMembers />} />
+        <Route path="d/:descId/members" element={<DescMembers />} />
         <Route path="b/:boardId/edit" element={<EditBoard />} />
         <Route path="d/:descId" element={<DescPage />} />
       </Route>
