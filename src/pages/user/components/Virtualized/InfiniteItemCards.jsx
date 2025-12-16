@@ -300,20 +300,12 @@ export default function InfiniteItemCards({
   // Stable scroll handler
   const handleScroll = useCallback(() => {
     if (!containerRef.current || !prefixSums) return;
-
-    const scrollTop = containerRef.current.scrollTop;
-    const viewportHeight = containerRef.current.clientHeight;
-    const totalHeight = prefixSums[items.length];
-
-    const distanceFromBottom = totalHeight - (scrollTop + viewportHeight);
-    const isNearBottom = distanceFromBottom < (viewportHeight*3);
-
+    const isNearBottom = items.length === range.end;
     if (isNearBottom && !hasFetchRequest && items.length > 0) {
       dispatch(setHasFetchRequest({ state: !hasFetchRequest }));
     }
-
     recomputeRange();
-  }, [prefixSums, items.length, hasFetchRequest, dispatch, recomputeRange]);
+  }, [prefixSums, items.length, hasFetchRequest, dispatch, recomputeRange, range.end]);
 
   // Throttled scroll with stable reference
   const throttledHandleScroll = useMemo(() => {
