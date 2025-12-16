@@ -81,6 +81,7 @@ const PostImages = ({ images }) => {
                   src={getFileUrl(image.hash)}
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover blur-3xl scale-110 opacity-60"
+                  loading="lazy"
                 />
 
                 {/* Dark overlay */}
