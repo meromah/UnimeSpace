@@ -136,6 +136,7 @@ const PostCard = ({
                   src={getFileUrl(item.author.avatar.file_hash)}
                   alt={`${item.author.username}'s profile picture`}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               ) : (
                 <span className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
@@ -145,9 +146,9 @@ const PostCard = ({
             </button>
 
             {/* User + Community */}
-            <div className="flex flex-col gap-0.5">
+            <div className="max-w-52 sm:max-w-full flex flex-col gap-0.5">
               <button
-                className="w-fit text-primary-blue text-base cursor-pointer hover:underline truncate focus:outline-none"
+                className="w-full text-primary-blue text-base cursor-pointer hover:underline truncate focus:outline-none"
                 onClick={(e) =>
                   handleBoardClick(
                     e,
@@ -292,4 +293,4 @@ const PostCard = ({
   );
 };
 
-export default PostCard;
+export default React.memo(PostCard);
