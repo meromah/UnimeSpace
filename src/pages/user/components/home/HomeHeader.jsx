@@ -3,7 +3,7 @@ import { TabFilters } from '../../../../utils/tabFilters'
 const tabFilters = new TabFilters().all()
 const HomeHeader = ({onTabChange, tab }) => {
   return (
-    <div className="grid grid-cols-2 bg-white border-b border-b-neutral-200">
+    <div className="sticky top-0 left-0 right-0 grid grid-cols-2 bg-white/40 backdrop-blur-sm border-b border-b-neutral-200 z-50">
         {tabFilters.map(({ value, label }) => (
           <div
             className="flex items-center group cursor-pointer hover:bg-neutral-100 transition-all duration-200 ease-in-out "
