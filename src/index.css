@@ -122,3 +122,11 @@ body::-webkit-scrollbar {
 .story-icon {
   @apply p-3 rounded-lg text-xl m-0.5 z-10 text-white;
 }
+
+.virtual-item-padding-x {
+  @apply px-4 md:px-6
+
+}
+.virtual-item-padding {
+  @apply p-4 md:p-6
+}
