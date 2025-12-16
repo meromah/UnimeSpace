@@ -212,7 +212,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
       onSubmit={handlePostSubmit}
       className={`p-4 space-y-4 ${
         !boardId &&
-        "max-h-5/6 bg-white rounded-lg shadow-sm border border-neutral-200 m-6"
+        "bg-white rounded-lg shadow-sm border border-neutral-200 m-6"
       }`}
     >
       {/* Board Selection - only show when boardId is not provided */}
