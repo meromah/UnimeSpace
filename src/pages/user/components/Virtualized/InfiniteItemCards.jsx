@@ -170,12 +170,14 @@ export default function InfiniteItemCards({
     status: undefined,
     message: undefined,
   },
+  layoutVersion
 }) {
+  const INITIAL_MEASURE_COUNT = useMemo(() => Math.min(20, items.length), [items?.length]); // Measure first 20 items
   const { hasFetchRequest } = useSelector((s) => s.homeFeed);
   const dispatch = useDispatch();
 
   const containerRef = useRef(null);
-  const [range, setRange] = useState({ start: 0, end: 20 });
+  const [range, setRange] = useState({ start: 0, end: INITIAL_MEASURE_COUNT });
   const [, forceUpdate] = useState({});
   const [measuringPhase, setMeasuringPhase] = useState(true);
   const [, setMeasuredCount] = useState(0);
@@ -183,7 +185,6 @@ export default function InfiniteItemCards({
   const rafIdRef = useRef(null);
 
   const OVERSCAN = 5;
-  const INITIAL_MEASURE_COUNT = Math.min(20, items.length); // Measure first 20 items
   const heightStore = useMemo(() => getHeightStore(tab), [tab]);
   // Reset measuring phase when items change significantly
   useEffect(() => {
@@ -209,7 +210,7 @@ export default function InfiniteItemCards({
     (key, height) => {
       setMeasuredCount((prev) => {
         const newCount = prev + 1;
-        if (newCount >= INITIAL_MEASURE_COUNT) {
+        if (newCount >= Math.min(INITIAL_MEASURE_COUNT, items.length)) {
           setMeasuringPhase(false);
         }
         return newCount;
@@ -308,7 +309,7 @@ export default function InfiniteItemCards({
       if (delta !== 0) {
         const itemIndex = indexMap.get(key);
 
-        if (itemIndex !== -1 && itemIndex < range.start) {
+        if (itemIndex !== undefined && itemIndex < range.start) {
           scheduleScrollAdjustment(delta);
         }
       }
@@ -355,7 +356,22 @@ export default function InfiniteItemCards({
       recomputeRange();
     }
   }, [measuringPhase, items.length, recomputeRange]);
+  useEffect(() => {
+    if (items.length === 0) {
+      setMeasuringPhase(false);
+      setRange({ start: 0, end: 0 });
+    }
+  }, [items.length]);
+  useEffect(() => {
+    if(layoutVersion === undefined) return
+    // Hard layout reset
+    setRange({ start: 0, end: INITIAL_MEASURE_COUNT });
+    containerRef.current?.scrollTo(0, 0);
 
+    // Prefix sums must be recomputed
+    setMeasuringPhase(true);
+    setMeasuredCount(0);
+  }, [layoutVersion]);
   // Attach scroll listener
   useEffect(() => {
     const container = containerRef.current;
@@ -372,7 +388,6 @@ export default function InfiniteItemCards({
       }
     };
   }, [throttledHandleScroll]);
-  console.log(error);
   // Render measuring phase
   if (measuringPhase && items.length && !error.hasError) {
     return (
@@ -402,14 +417,14 @@ export default function InfiniteItemCards({
   const topSpacerHeight =
     items.length && prefixSums[range.start] ? prefixSums[range.start] : 0;
   const bottomSpacerHeight =
-    items.length && prefixSums[range.length]
+    items.length && prefixSums[items.length]
       ? prefixSums[items.length] - prefixSums[range.end]
       : 0;
 
   return (
     <div ref={containerRef} style={{ overflow: "auto", height: "100vh" }}>
       {children}
-      <div style={{ height: topSpacerHeight }} aria-hidden="true" />
+      <div style={{ height: Number.isInteger(topSpacerHeight)?topSpacerHeight: 0 }} aria-hidden="true" />
       {items.length && !error.hasError
         ? items.slice(range.start, range.end).map((item, idx) => {
             const globalIndex = range.start + idx;
@@ -426,7 +441,7 @@ export default function InfiniteItemCards({
             );
           })
         : null}
-      <div style={{ height: bottomSpacerHeight }} aria-hidden="true" />
+      <div style={{ height: Number.isInteger(bottomSpacerHeight)?bottomSpacerHeight: 0 }} aria-hidden="true" />
     </div>
   );
 }
