@@ -12,7 +12,6 @@ import { TabFilters } from "../../utils/tabFilters.js";
 import Toast from "../../components/Toast.jsx";
 import InfiniteItemCards from "./components/Virtualized/InfiniteItemCards.jsx";
 import FeedsSkeleton from "./components/Skeleton/FeedsSkeleton.jsx";
-import { useNavigate } from "react-router-dom";
 import LoginWarning from "../../components/LoginWarning.jsx";
 const tabFilters = new TabFilters();
 const firstTab = tabFilters.firstValue();
@@ -40,7 +39,7 @@ const Feeds = () => {
     resetSortBy,
   } = useSortBy({ isAuthenticated, sortOptionsConfig: SORT_BY });
   //API call hook
-  const { data, likedData, error, hasMore, requestedPageRef } = useGetHomeData({
+  const { data, likedData, error, hasMore } = useGetHomeData({
     sortBy,
     sortByType,
     tab,
@@ -58,7 +57,6 @@ const Feeds = () => {
       setIsFirstLoading(false);
     }
   }, [data, isFirstLoading]);
-  console.log(error);
   return (
     <>
       <div>
@@ -77,6 +75,7 @@ const Feeds = () => {
                   likedData={likedData}
                   tab={tab}
                   error={error[firstTab]}
+                  layoutVersion={`${tab}-${sortByType}-${sortBy}`}
                 >
                   <HomeHeader tab={tab} onTabChange={handleTabChange} />
 
