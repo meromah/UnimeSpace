@@ -9,11 +9,11 @@ import React, {
 import PostCard from "../PostCard";
 import { useDispatch, useSelector } from "react-redux";
 import { setHasFetchRequest } from "../../../../app/homeFeedSlice";
-
-const getKey = (item) => {
+const getKey = (item, tab) => {
   const isBoard = item?.board_id || false;
+  const communityName = isBoard ? item.board_id : item.desc_id;
   const itemType = isBoard ? "post" : "test";
-  return `${itemType}-${item.id}`;
+  return `${tab}-${communityName}-${itemType}-${item.id}`;
 };
 
 /* ---------------- Persistent Height Store ---------------- */
@@ -54,17 +54,22 @@ class HeightStore {
   }
 }
 
-const heightStore = new HeightStore();
-
+const heightStores = new Map();
+const getHeightStore = (tab) => {
+  if (!heightStores.has(tab)) {
+    heightStores.set(tab, new HeightStore());
+  }
+  return heightStores.get(tab);
+};
 /* ---------------- Measurement Component ---------------- */
-function ItemMeasurer({ item, onMeasured }) {
+function ItemMeasurer({ item, onMeasured, heightStore, tab }) {
   const ref = useRef(null);
   const measuredRef = useRef(false);
 
   useLayoutEffect(() => {
     if (!ref.current || measuredRef.current) return;
 
-    const key = getKey(item);
+    const key = getKey(item, tab);
     const height = ref.current.offsetHeight;
 
     if (height > 0) {
@@ -100,13 +105,13 @@ function ItemMeasurer({ item, onMeasured }) {
 }
 
 /* ---------------- Stable Resize Observer Hook ---------------- */
-function useMeasure(item, onResize) {
+function useMeasure(item, onResize, heightStore, tab) {
   const ref = useRef(null);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
 
-    const key = getKey(item);
+    const key = getKey(item, tab);
 
     const ro = new ResizeObserver(([entry]) => {
       const newHeight = entry.contentRect.height;
@@ -120,14 +125,14 @@ function useMeasure(item, onResize) {
 
     ro.observe(ref.current);
     return () => ro.disconnect();
-  }, [item.id, onResize]);
+  }, [item.id, tab, heightStore, onResize]);
 
   return ref;
 }
 
 /* ---------------- Virtual Item ---------------- */
-function VirtualItem({ item, index, onResize, likedData }) {
-  const ref = useMeasure(item, onResize);
+function VirtualItem({ item, index, onResize, likedData, heightStore, tab }) {
+  const ref = useMeasure(item, onResize, heightStore, tab);
 
   const isBoard = item?.board_id || false;
   const itemType = isBoard ? "post" : "test";
@@ -159,6 +164,12 @@ export default function InfiniteItemCards({
   items,
   children,
   likedData,
+  tab,
+  error = {
+    hasError: false,
+    status: undefined,
+    message: undefined,
+  },
 }) {
   const { hasFetchRequest } = useSelector((s) => s.homeFeed);
   const dispatch = useDispatch();
@@ -173,25 +184,25 @@ export default function InfiniteItemCards({
 
   const OVERSCAN = 5;
   const INITIAL_MEASURE_COUNT = Math.min(20, items.length); // Measure first 20 items
-
+  const heightStore = useMemo(() => getHeightStore(tab), [tab]);
   // Reset measuring phase when items change significantly
   useEffect(() => {
     const needsMeasurement = items
       .slice(0, INITIAL_MEASURE_COUNT)
-      .some((item) => !heightStore.has(getKey(item)));
+      .some((item) => !heightStore.has(getKey(item, tab)));
 
     if (needsMeasurement && items.length > 0) {
       setMeasuringPhase(true);
       setMeasuredCount(0);
     }
-  }, [items.length]);
+  }, [items.length, tab, heightStore]);
 
   // Subscribe to height changes
   useEffect(() => {
     return heightStore.subscribe(() => {
       forceUpdate({});
     });
-  }, []);
+  }, [heightStore]);
 
   // Handle initial measurements
   const handleItemMeasured = useCallback(
@@ -214,7 +225,7 @@ export default function InfiniteItemCards({
     const sums = new Array(items.length + 1).fill(0);
 
     for (let i = 0; i < items.length; i++) {
-      const key = getKey(items[i]);
+      const key = getKey(items[i], tab);
       const height = heightStore.get(key);
 
       if (height === undefined) {
@@ -227,6 +238,14 @@ export default function InfiniteItemCards({
 
     return sums;
   }, [items, measuringPhase, forceUpdate]);
+
+  const indexMap = useMemo(() => {
+    const map = new Map();
+    items.forEach((item, i) => {
+      map.set(getKey(item, tab), i);
+    });
+    return map;
+  }, [items, tab]);
 
   // Binary search that handles partial visibility correctly
   const findStartIndex = useCallback(
@@ -287,7 +306,7 @@ export default function InfiniteItemCards({
       const delta = newHeight - oldHeight;
 
       if (delta !== 0) {
-        const itemIndex = items.findIndex((item) => getKey(item) === key);
+        const itemIndex = indexMap.get(key);
 
         if (itemIndex !== -1 && itemIndex < range.start) {
           scheduleScrollAdjustment(delta);
@@ -301,11 +320,18 @@ export default function InfiniteItemCards({
   const handleScroll = useCallback(() => {
     if (!containerRef.current || !prefixSums) return;
     const isNearBottom = items.length === range.end;
-    if (isNearBottom && !hasFetchRequest && items.length > 0) {
-      dispatch(setHasFetchRequest({ state: !hasFetchRequest }));
+    if (isNearBottom && !hasFetchRequest[tab] && items.length > 0) {
+      dispatch(setHasFetchRequest({ state: !hasFetchRequest[tab], tab }));
     }
     recomputeRange();
-  }, [prefixSums, items.length, hasFetchRequest, dispatch, recomputeRange, range.end]);
+  }, [
+    prefixSums,
+    items.length,
+    hasFetchRequest[tab],
+    dispatch,
+    recomputeRange,
+    range.end,
+  ]);
 
   // Throttled scroll with stable reference
   const throttledHandleScroll = useMemo(() => {
@@ -346,9 +372,9 @@ export default function InfiniteItemCards({
       }
     };
   }, [throttledHandleScroll]);
-
+  console.log(error);
   // Render measuring phase
-  if (measuringPhase) {
+  if (measuringPhase && items.length && !error.hasError) {
     return (
       <div style={{ overflow: "auto", height: "100vh" }}>
         {children}
@@ -357,9 +383,11 @@ export default function InfiniteItemCards({
         >
           {items.slice(0, INITIAL_MEASURE_COUNT).map((item) => (
             <ItemMeasurer
-              key={getKey(item)}
+              key={getKey(item, tab)}
               item={item}
               onMeasured={handleItemMeasured}
+              heightStore={heightStore}
+              tab={tab}
             />
           ))}
         </div>
@@ -371,26 +399,33 @@ export default function InfiniteItemCards({
     );
   }
 
-  const topSpacerHeight = prefixSums[range.start] || 0;
+  const topSpacerHeight =
+    items.length && prefixSums[range.start] ? prefixSums[range.start] : 0;
   const bottomSpacerHeight =
-    prefixSums[items.length] - (prefixSums[range.end] || 0);
+    items.length && prefixSums[range.length]
+      ? prefixSums[items.length] - prefixSums[range.end]
+      : 0;
 
   return (
     <div ref={containerRef} style={{ overflow: "auto", height: "100vh" }}>
       {children}
       <div style={{ height: topSpacerHeight }} aria-hidden="true" />
-      {items.slice(range.start, range.end).map((item, idx) => {
-        const globalIndex = range.start + idx;
-        return (
-          <VirtualItem
-            key={getKey(item)}
-            item={item}
-            index={globalIndex}
-            onResize={handleResize}
-            likedData={likedData}
-          />
-        );
-      })}
+      {items.length && !error.hasError
+        ? items.slice(range.start, range.end).map((item, idx) => {
+            const globalIndex = range.start + idx;
+            return (
+              <VirtualItem
+                key={getKey(item, tab)}
+                item={item}
+                index={globalIndex}
+                onResize={handleResize}
+                likedData={likedData}
+                heightStore={heightStore}
+                tab={tab}
+              />
+            );
+          })
+        : null}
       <div style={{ height: bottomSpacerHeight }} aria-hidden="true" />
     </div>
   );
