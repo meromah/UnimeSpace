@@ -18,9 +18,18 @@ import {
 const tabFilters = new TabFilters();
 const PAGE_SIZE = 50;
 const useGetHomeData = ({ sortBy, sortByType, tab }) => {
+  /* ----------------------------------*/
+  /* Redux */
+  /* ----------------------------------*/
+
   const { items, page, hasFetchRequest } = useSelector(
     (state) => state.homeFeed
   );
+  const dispatch = useDispatch();
+
+  /* ----------------------------------*/
+  /* States */
+  /* ----------------------------------*/
   const [error, setError] = useState({
     hasError: false,
     status: undefined,
@@ -32,14 +41,17 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     followingPosts: true,
     followingTests: true,
   });
+  const [isFetching, setIsFetching] = useState(false);
+
+  /* ----------------------------------*/
+  /* Refs */
+  /* ----------------------------------*/
   const remainingRef = useRef({
     posts: 1,
     tests: 1,
     followingPosts: 1,
     followingTests: 1,
   });
-  const [isFetching, setIsFetching] = useState(false);
-  const dispatch = useDispatch();
   const loaderRef = useRef(null);
   const requestedPageRef = useRef(page[tab]);
   const {
@@ -57,6 +69,10 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
         !hasMore.tests,
     }
   );
+
+  /* ----------------------------------*/
+  /* API Queries */
+  /* ----------------------------------*/
   const {
     data: posts,
     isFetching: isPostsFetching,
@@ -81,7 +97,9 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
   } = useGetUserFollowingFeedTestsQuery(
     { queryParams: `page=${page[tab]}` },
     {
-      skip: tab !== tabFilters.secondValue() || (tab !== tabFilters.secondValue() && !hasMore.followingTests),
+      skip:
+        tab !== tabFilters.secondValue() ||
+        (tab !== tabFilters.secondValue() && !hasMore.followingTests),
     }
   );
   const {
@@ -93,9 +111,15 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
   } = useGetUserFollowingFeedPostsQuery(
     { queryParams: `page=${page[tab]}` },
     {
-      skip: tab !== tabFilters.secondValue() || (tab !== tabFilters.secondValue() && !hasMore.followingPosts),
+      skip:
+        tab !== tabFilters.secondValue() ||
+        (tab !== tabFilters.secondValue() && !hasMore.followingPosts),
     }
   );
+
+  /* ----------------------------------*/
+  /* useMemo - Derive Data */
+  /* ----------------------------------*/
   const likedData = useMemo(() => {
     if (tab === tabFilters.firstValue()) {
       return {
@@ -107,7 +131,13 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
       post: new Set(followingPosts?.liked || []),
       test: new Set(followingTests?.liked || []),
     };
-  }, [posts, tests, followingPosts, followingTests, tab]);
+  }, [
+    posts?.likedData,
+    tests?.likedData,
+    followingPosts?.likedData,
+    followingTests?.likedData,
+    tab,
+  ]);
   const isSuccess = useMemo(() => {
     const isFirstTab = tab === tabFilters.firstValue();
     const isSecondTab = tab === tabFilters.secondValue();
@@ -149,10 +179,16 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     isFollowingTestsSuccess,
   ]);
 
+  /* ----------------------------------*/
+  /* useEffects */
+  /* ----------------------------------*/
+
+  //Reset feed data for one of the dependencies changes
   useEffect(() => {
     dispatch(resetFeed({ sortBy, itemType: sortByType, tab }));
-  }, [sortBy, sortByType, dispatch]);
+  }, [sortBy, sortByType, dispatch, tab]);
 
+  //Save data to Redux if for the 'for-you' tab
   useEffect(() => {
     // Determine active data source
     if (tab === tabFilters.secondValue()) return;
@@ -186,7 +222,9 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
         );
       }
     }
-  }, [sortBy, sortByType, tab, isSuccess, posts, tests]);
+  }, [sortBy, sortByType, tab, isSuccess, posts?.data, tests?.data]);
+
+  //Save data to Redux if the tab is 'following'
   useEffect(() => {
     if (tab === tabFilters.firstValue()) return;
     if (isSuccess && followingPosts?.data && followingTests?.data) {
@@ -203,6 +241,7 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     }
   }, [followingPosts, followingTests, isSuccess, tab]);
 
+  //Extract error from API queries
   useEffect(() => {
     const getActiveError = {
       [tabFilters.firstValue()]: { posts: postsError, tests: testsError },
@@ -224,7 +263,30 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     }
   }, [postsError, testsError, isPostsError, isTestsError]);
   useEffect(() => {
-    // if any active source is fetching from first tab, we are Fetching
+    if (isFollowingPostsError && followingPostsError) {
+      setError({
+        hasError: true,
+        status: followingPostsError.status,
+        message: followingPostsError.data?.message,
+      });
+    } else if (isFollowingTestsError && followingTestsError) {
+      setError({
+        hasError: true,
+        status: followingTestsError.status,
+        message: followingTestsError.data?.message,
+      });
+    } else {
+      setError({ hasError: false, status: undefined, message: undefined });
+    }
+  }, [
+    isFollowingPostsError,
+    isFollowingTestsError,
+    followingTestsError,
+    followingPostsError,
+  ]);
+
+  //Extract isFetching from API queries
+  useEffect(() => {
     if (tab === tabFilters.firstValue()) {
       const anyFetching =
         (sortByType === "all" && (isPostsFetching || isTestsFetching)) ||
@@ -234,13 +296,13 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     }
   }, [isPostsFetching, isTestsFetching, sortByType]);
   useEffect(() => {
-    // if any active source is fetching from second tab, we are Fetching
     if (tab === tabFilters.secondValue()) {
       const anyFetching = isFollowingPostsFetching || isFollowingTestsFetching;
       setIsFetching(Boolean(anyFetching));
     }
   }, [isFollowingPostsFetching, isFollowingTestsFetching]);
 
+  //Checking if the data available to fetch from API queries
   useEffect(() => {
     if (tab !== tabFilters.firstValue()) return;
     if (posts && posts.data) {
@@ -264,6 +326,9 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     }
   }, [followingPosts, followingTests, tab]);
 
+  /* ----------------------------------*/
+  /* Pagination useEffect*/
+  /* ----------------------------------*/
   useEffect(() => {
     requestedPageRef.current = page[tab];
   }, [page[tab]]);
@@ -308,23 +373,6 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     hasFetchRequest[tab],
     items,
   ]);
-  useEffect(() => {
-    if (isFollowingPostsError && followingPostsError) {
-      setError({
-        hasError: true,
-        status: followingPostsError.status,
-        message: followingPostsError.data?.message,
-      });
-    } else if (isFollowingTestsError && followingTestsError) {
-      setError({
-        hasError: true,
-        status: followingTestsError.status,
-        message: followingTestsError.data?.message,
-      });
-    } else {
-      setError({ hasError: false, status: undefined, message: undefined });
-    }
-  }, [isFollowingPostsError, isFollowingTestsError, followingTestsError, followingPostsError]);
   return {
     data: items[tab],
     likedData,
