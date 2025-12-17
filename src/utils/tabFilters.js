@@ -24,14 +24,14 @@ export class TabFilters {
     return this._items[0]["label"]
   }
   getSecond() {
-    return this._items[0];
+    return this._items[1];
   }
 
   secondValue() {
-    return this._items[0]["value"]
+    return this._items[1]["value"]
   }
 
   secondLabel() {
-    return this._items[0]["label"]
+    return this._items[1]["label"]
   }
 }
