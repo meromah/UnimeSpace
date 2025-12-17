@@ -16,6 +16,9 @@ import {
   setItems,
 } from "../app/homeFeedSlice";
 const tabFilters = new TabFilters();
+const firstTab = tabFilters.firstValue();
+const secondTab = tabFilters.secondValue();
+
 const PAGE_SIZE = 50;
 const useGetHomeData = ({ sortBy, sortByType, tab }) => {
   /* ----------------------------------*/
@@ -31,9 +34,16 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
   /* States */
   /* ----------------------------------*/
   const [error, setError] = useState({
-    hasError: false,
-    status: undefined,
-    message: undefined,
+    [firstTab]: {
+      hasError: false,
+      status: undefined,
+      message: undefined,
+    },
+    [secondTab]: {
+      hasError: false,
+      status: undefined,
+      message: undefined,
+    },
   });
   const [hasMore, setHasMore] = useState({
     posts: true,
@@ -253,30 +263,45 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     const isActiveError = getIsActiveError[tab][sortByType];
     // Update error state
     if (isActiveError && activeError) {
-      setError({
-        hasError: true,
-        status: activeError.status,
-        message: activeError.data?.message,
-      });
+      setError((e) => ({
+        ...e,
+        [firstTab]: {
+          hasError: true,
+          status: activeError.status,
+          message: activeError.data?.message,
+        },
+      }));
     } else if (isActiveError === false) {
-      setError({ hasError: false, status: undefined, message: undefined });
+      setError((e) => ({
+        ...e,
+        [firstTab]: { hasError: false, status: undefined, message: undefined },
+      }));
     }
   }, [postsError, testsError, isPostsError, isTestsError]);
   useEffect(() => {
     if (isFollowingPostsError && followingPostsError) {
-      setError({
-        hasError: true,
-        status: followingPostsError.status,
-        message: followingPostsError.data?.message,
-      });
+      setError((e) => ({
+        ...e,
+        [secondTab]: {
+          hasError: true,
+          status: followingPostsError.status,
+          message: followingPostsError.data?.message,
+        },
+      }));
     } else if (isFollowingTestsError && followingTestsError) {
-      setError({
-        hasError: true,
-        status: followingTestsError.status,
-        message: followingTestsError.data?.message,
-      });
+      setError((e) => ({
+        ...e,
+        [secondTab]: {
+          hasError: true,
+          status: followingTestsError.status,
+          message: followingTestsError.data?.message,
+        },
+      }));
     } else {
-      setError({ hasError: false, status: undefined, message: undefined });
+      setError((e) => ({
+        ...e,
+        [secondTab]: { hasError: false, status: undefined, message: undefined },
+      }));
     }
   }, [
     isFollowingPostsError,
