@@ -106,7 +106,7 @@ const homeFeedSlice = createSlice({
         state.itemType = action.payload.itemType;
         state.sortBy = action.payload.sortBy;
       }
-      state.hasFetchRequest[tab] = true
+      state.hasFetchRequest[tab] = false
       state.activeTab = tab;
     },
   },
