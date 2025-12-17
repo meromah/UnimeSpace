@@ -98,6 +98,11 @@ const PrivateTestsApi = baseApi.injectEndpoints({
     getTestResult: builder.query({
       query: ({ desc, test }) => `/descs/${desc}/tests/${test}/result`,
     }),
+    getUserFollowingFeedTests: builder.query({
+      query: ({queryParams}) => ({
+        url: `feeds/tests${toQueryString(queryParams)}`,
+      }),
+    }),
   }),
   overrideExisting: true,
 });
@@ -116,6 +121,7 @@ const PublicTestsApi = baseApi.injectEndpoints({
 export const {
   useGetTestsForDescQuery,
   useGetAllMyTestsQuery,
+  useGetUserFollowingFeedTestsQuery,
   useGetTestFromDescByIdQuery,
   useLazyGetTestFromDescByIdQuery,
   useGetTestAllDraftsQuery,

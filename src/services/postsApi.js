@@ -58,6 +58,11 @@ const PrivatePostApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
+    getUserFollowingFeedPosts: builder.query({
+      query: ( {queryParams} ) => ({
+        url: `feeds/posts${toQueryString(queryParams)}`,
+      }),
+    }),
   }),
   overrideExisting: true,
 });
@@ -88,6 +93,7 @@ export const {
   useDeletePostMutation,
   useTogglePostLikeMutation,
   useGetAllMyPostsQuery,
+  useGetUserFollowingFeedPostsQuery
 } = PrivatePostApi;
 
 export const {
