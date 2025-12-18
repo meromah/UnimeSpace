@@ -198,6 +198,7 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     dispatch(resetFeed({ sortBy, itemType: sortByType, tab }));
   }, [sortBy, sortByType, dispatch, tab]);
 
+  
   //Save data to Redux if for the 'for-you' tab
   useEffect(() => {
     // Determine active data source
@@ -226,7 +227,7 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
             data: activeData.data,
             sortBy,
             itemType: sortByType,
-            page,
+            page: page[tab],
             tab,
           })
         );
