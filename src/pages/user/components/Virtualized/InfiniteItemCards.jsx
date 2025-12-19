@@ -9,11 +9,9 @@ import React, {
 import PostCard from "../PostCard";
 import { useDispatch, useSelector } from "react-redux";
 import { setHasFetchRequest } from "../../../../app/homeFeedSlice";
-const getKey = (item, tab) => {
-  const isBoard = item?.board_id || false;
-  const communityName = isBoard ? item.board_id : item.desc_id;
-  const itemType = isBoard ? "post" : "test";
-  return `${tab}-${communityName}-${itemType}-${item.id}`;
+
+const getKey = (item, layoutKey) => {
+  return `${layoutKey}-${item.id}`;
 };
 
 /* ---------------- Persistent Height Store ---------------- */
@@ -21,6 +19,7 @@ class HeightStore {
   constructor() {
     this.heights = new Map();
     this.listeners = new Set();
+    this.notificationScheduled = false;
   }
 
   get(key) {
@@ -35,7 +34,7 @@ class HeightStore {
     const changed = this.heights.get(key) !== value;
     this.heights.set(key, value);
     if (changed) {
-      this.notifyListeners();
+      this.scheduleNotification();
     }
   }
 
@@ -44,13 +43,19 @@ class HeightStore {
     return () => this.listeners.delete(callback);
   }
 
-  notifyListeners() {
-    this.listeners.forEach((cb) => cb());
+  scheduleNotification() {
+    if (this.notificationScheduled) return;
+    this.notificationScheduled = true;
+    
+    requestAnimationFrame(() => {
+      this.notificationScheduled = false;
+      this.listeners.forEach((cb) => cb());
+    });
   }
 
   clear() {
     this.heights.clear();
-    this.notifyListeners();
+    this.scheduleNotification();
   }
 }
 
@@ -61,23 +66,23 @@ const getHeightStore = (tab) => {
   }
   return heightStores.get(tab);
 };
+
 /* ---------------- Measurement Component ---------------- */
-function ItemMeasurer({ item, onMeasured, heightStore, tab }) {
+function ItemMeasurer({ item, onMeasured, heightStore, itemKey }) {
   const ref = useRef(null);
   const measuredRef = useRef(false);
 
   useLayoutEffect(() => {
     if (!ref.current || measuredRef.current) return;
 
-    const key = getKey(item, tab);
     const height = ref.current.offsetHeight;
 
     if (height > 0) {
-      heightStore.set(key, height);
+      heightStore.set(itemKey, height);
       measuredRef.current = true;
-      onMeasured(key, height);
+      onMeasured(itemKey, height);
     }
-  }, [item, onMeasured]);
+  }, [item, onMeasured, heightStore, itemKey]);
 
   const isBoard = item?.board_id || false;
   const itemType = isBoard ? "post" : "test";
@@ -105,34 +110,39 @@ function ItemMeasurer({ item, onMeasured, heightStore, tab }) {
 }
 
 /* ---------------- Stable Resize Observer Hook ---------------- */
-function useMeasure(item, onResize, heightStore, tab) {
+function useMeasure(item, onResize, heightStore, itemKey) {
   const ref = useRef(null);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
 
-    const key = getKey(item, tab);
-
     const ro = new ResizeObserver(([entry]) => {
       const newHeight = entry.contentRect.height;
-      const oldHeight = heightStore.get(key);
+      const oldHeight = heightStore.get(itemKey);
 
       if (newHeight > 0 && oldHeight !== newHeight) {
-        heightStore.set(key, newHeight);
-        onResize(key, newHeight, oldHeight || 0);
+        heightStore.set(itemKey, newHeight);
+        onResize(itemKey, newHeight, oldHeight || 0);
       }
     });
 
     ro.observe(ref.current);
     return () => ro.disconnect();
-  }, [item.id, tab, heightStore, onResize]);
+  }, [item.id, heightStore, onResize, itemKey]);
 
   return ref;
 }
 
 /* ---------------- Virtual Item ---------------- */
-function VirtualItem({ item, index, onResize, likedData, heightStore, tab }) {
-  const ref = useMeasure(item, onResize, heightStore, tab);
+function VirtualItem({
+  item,
+  index,
+  onResize,
+  likedData,
+  heightStore,
+  itemKey,
+}) {
+  const ref = useMeasure(item, onResize, heightStore, itemKey);
 
   const isBoard = item?.board_id || false;
   const itemType = isBoard ? "post" : "test";
@@ -153,7 +163,7 @@ function VirtualItem({ item, index, onResize, likedData, heightStore, tab }) {
         itemType={itemType}
         communityType={communityType}
         communityUrl={communityUrl}
-        isLiked={likedData[itemType].has(item.id)}
+        isLiked={likedData[itemType]?.has(item.id) || false}
       />
     </div>
   );
@@ -162,7 +172,7 @@ function VirtualItem({ item, index, onResize, likedData, heightStore, tab }) {
 /* ---------------- Feed Window ---------------- */
 export default function InfiniteItemCards({
   items,
-  children,
+  headerElements,
   likedData,
   tab,
   error = {
@@ -170,38 +180,81 @@ export default function InfiniteItemCards({
     status: undefined,
     message: undefined,
   },
-  layoutVersion
+  layoutVersion,
+  layoutSchemaVersion,
 }) {
-  const INITIAL_MEASURE_COUNT = useMemo(() => Math.min(20, items.length), [items?.length]); // Measure first 20 items
+  const INITIAL_MEASURE_COUNT = useMemo(
+    () => Math.max(1, Math.min(20, items.length)),
+    [items?.length]
+  );
+  
+  const layoutKey = useMemo(
+    () => `${tab}:${layoutSchemaVersion}`,
+    [tab, layoutSchemaVersion]
+  );
+
   const { hasFetchRequest } = useSelector((s) => s.homeFeed);
   const dispatch = useDispatch();
+  const hasFetchRequestRef = useRef(hasFetchRequest);
+  
+  useEffect(() => {
+    hasFetchRequestRef.current = hasFetchRequest;
+  }, [hasFetchRequest]);
 
   const containerRef = useRef(null);
+  const headerRef = useRef([]);
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!headerRef.current.length) return;
+
+    const ro = new ResizeObserver(() => {
+      let total = 0;
+      for (const el of headerRef.current) {
+        if (el) total += el.offsetHeight;
+      }
+      setHeaderHeight(total);
+    });
+
+    headerRef.current.forEach((el) => el && ro.observe(el));
+    return () => ro.disconnect();
+  }, [headerElements]);
+
   const [range, setRange] = useState({ start: 0, end: INITIAL_MEASURE_COUNT });
-  const [, forceUpdate] = useState({});
+  const [heightsVersion, setHeightsVersion] = useState(0);
   const [measuringPhase, setMeasuringPhase] = useState(true);
-  const [, setMeasuredCount] = useState(0);
+  const [measuredCount, setMeasuredCount] = useState(0);
   const pendingScrollAdjustmentRef = useRef(0);
-  const rafIdRef = useRef(null);
+  const scrollRafIdRef = useRef(null);
 
   const OVERSCAN = 5;
-  const heightStore = useMemo(() => getHeightStore(tab), [tab]);
+  const BOTTOM_THRESHOLD = 1000; // pixels from bottom to trigger fetch
+  const heightStore = useMemo(() => getHeightStore(layoutKey), [layoutKey]);
+
   // Reset measuring phase when items change significantly
   useEffect(() => {
+    if (items.length === 0) {
+      setMeasuringPhase(false);
+      setRange({ start: 0, end: 0 });
+      return;
+    }
+
     const needsMeasurement = items
       .slice(0, INITIAL_MEASURE_COUNT)
-      .some((item) => !heightStore.has(getKey(item, tab)));
+      .some((item) => !heightStore.has(getKey(item, layoutKey)));
 
-    if (needsMeasurement && items.length > 0) {
+    if (needsMeasurement) {
       setMeasuringPhase(true);
       setMeasuredCount(0);
+    } else {
+      setMeasuringPhase(false);
     }
-  }, [items.length, tab, heightStore]);
+  }, [items.length, layoutKey, heightStore, INITIAL_MEASURE_COUNT]);
 
   // Subscribe to height changes
   useEffect(() => {
     return heightStore.subscribe(() => {
-      forceUpdate({});
+      setHeightsVersion(v => v + 1);
     });
   }, [heightStore]);
 
@@ -210,49 +263,67 @@ export default function InfiniteItemCards({
     (key, height) => {
       setMeasuredCount((prev) => {
         const newCount = prev + 1;
-        if (newCount >= Math.min(INITIAL_MEASURE_COUNT, items.length)) {
+        const target = Math.min(INITIAL_MEASURE_COUNT, items.length);
+        if (newCount >= target && target > 0) {
           setMeasuringPhase(false);
         }
         return newCount;
       });
     },
-    [INITIAL_MEASURE_COUNT]
+    [INITIAL_MEASURE_COUNT, items.length]
   );
 
-  // Compute prefix sums ONLY with measured heights
+  // Compute prefix sums with better height estimation
   const prefixSums = useMemo(() => {
-    if (measuringPhase) return null;
-
+    if (measuringPhase || items.length === 0) return null;
+    
     const sums = new Array(items.length + 1).fill(0);
-
+    const DEFAULT_HEIGHT = 400;
+    const WINDOW_SIZE = 10;
+    
     for (let i = 0; i < items.length; i++) {
-      const key = getKey(items[i], tab);
+      const key = getKey(items[i], layoutKey);
       const height = heightStore.get(key);
 
-      if (height === undefined) {
-        const avgHeight = i > 0 ? sums[i] / i : 400;
-        sums[i + 1] = sums[i] + avgHeight;
-      } else {
+      if (height !== undefined) {
         sums[i + 1] = sums[i] + height;
+      } else {
+        // Use moving average of recent measured items
+        let recentSum = 0;
+        let recentCount = 0;
+        
+        for (let j = Math.max(0, i - WINDOW_SIZE); j < i; j++) {
+          const recentKey = getKey(items[j], layoutKey);
+          const recentHeight = heightStore.get(recentKey);
+          if (recentHeight !== undefined) {
+            recentSum += recentHeight;
+            recentCount++;
+          }
+        }
+        
+        const estimatedHeight = recentCount > 0 
+          ? recentSum / recentCount 
+          : DEFAULT_HEIGHT;
+        
+        sums[i + 1] = sums[i] + estimatedHeight;
       }
     }
 
     return sums;
-  }, [items, measuringPhase, forceUpdate]);
+  }, [items, measuringPhase, heightsVersion, layoutKey, heightStore]);
 
   const indexMap = useMemo(() => {
     const map = new Map();
     items.forEach((item, i) => {
-      map.set(getKey(item, tab), i);
+      map.set(getKey(item, layoutKey), i);
     });
     return map;
-  }, [items, tab]);
+  }, [items, layoutKey]);
 
-  // Binary search that handles partial visibility correctly
+  // Binary search for visible range
   const findStartIndex = useCallback(
     (scrollTop) => {
-      if (!prefixSums) return 0;
-
+      if (!prefixSums || items.length === 0) return 0;
       let low = 0;
       let high = items.length;
 
@@ -273,35 +344,34 @@ export default function InfiniteItemCards({
 
   const recomputeRange = useCallback(() => {
     if (!containerRef.current || items.length === 0 || !prefixSums) return;
-
-    const scrollTop = containerRef.current.scrollTop;
+    
+    const scrollTop = Math.max(0, containerRef.current.scrollTop - headerHeight);
     const viewportHeight = containerRef.current.clientHeight;
 
     const startIdx = findStartIndex(scrollTop);
     const endIdx = findStartIndex(scrollTop + viewportHeight);
-
     const overscanStart = Math.max(0, startIdx - OVERSCAN);
     const overscanEnd = Math.min(items.length, endIdx + OVERSCAN + 1);
-
+    
     setRange({ start: overscanStart, end: overscanEnd });
-  }, [findStartIndex, items.length, prefixSums]);
+  }, [findStartIndex, items.length, prefixSums, headerHeight]);
 
   // Batched scroll compensation
   const scheduleScrollAdjustment = useCallback((delta) => {
     pendingScrollAdjustmentRef.current += delta;
 
-    if (!rafIdRef.current) {
-      rafIdRef.current = requestAnimationFrame(() => {
+    if (!scrollRafIdRef.current) {
+      scrollRafIdRef.current = requestAnimationFrame(() => {
         if (containerRef.current && pendingScrollAdjustmentRef.current !== 0) {
           containerRef.current.scrollTop += pendingScrollAdjustmentRef.current;
           pendingScrollAdjustmentRef.current = 0;
         }
-        rafIdRef.current = null;
+        scrollRafIdRef.current = null;
       });
     }
   }, []);
 
-  // Handle resize with batched scroll compensation
+  // Handle resize with proper index lookup
   const handleResize = useCallback(
     (key, newHeight, oldHeight) => {
       const delta = newHeight - oldHeight;
@@ -314,65 +384,79 @@ export default function InfiniteItemCards({
         }
       }
     },
-    [items, range.start, scheduleScrollAdjustment]
+    [indexMap, range.start, scheduleScrollAdjustment]
   );
+
+  // Check if near bottom using scroll position
+  const checkNearBottom = useCallback(() => {
+    if (!containerRef.current || !prefixSums || items.length === 0) return false;
+    
+    const scrollTop = containerRef.current.scrollTop;
+    const scrollHeight = containerRef.current.scrollHeight;
+    const clientHeight = containerRef.current.clientHeight;
+    
+    const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
+    
+    return distanceFromBottom < BOTTOM_THRESHOLD;
+  }, [prefixSums, items.length]);
 
   // Stable scroll handler
   const handleScroll = useCallback(() => {
     if (!containerRef.current || !prefixSums) return;
-    const isNearBottom = items.length === range.end;
-    if (isNearBottom && !hasFetchRequest[tab] && items.length > 0) {
-      dispatch(setHasFetchRequest({ state: !hasFetchRequest[tab], tab }));
+    
+    const isNearBottom = checkNearBottom();
+    
+    if (isNearBottom && !hasFetchRequestRef.current[tab] && items.length > 0) {
+      dispatch(setHasFetchRequest({ state: true, tab }));
     }
+    
     recomputeRange();
-  }, [
-    prefixSums,
-    items.length,
-    hasFetchRequest[tab],
-    dispatch,
-    recomputeRange,
-    range.end,
-  ]);
+  }, [prefixSums, checkNearBottom, dispatch, recomputeRange, tab, items.length]);
 
-  // Throttled scroll with stable reference
+  // Throttled scroll with cleanup
   const throttledHandleScroll = useMemo(() => {
     let rafId = null;
-    let lastArgs = null;
-
-    return (...args) => {
-      lastArgs = args;
+    
+    const throttled = () => {
       if (!rafId) {
         rafId = requestAnimationFrame(() => {
-          handleScroll(...lastArgs);
+          handleScroll();
           rafId = null;
         });
       }
     };
+    
+    throttled.cancel = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    };
+    
+    return throttled;
   }, [handleScroll]);
 
   // Initial range computation
   useEffect(() => {
-    if (!measuringPhase) {
+    if (!measuringPhase && prefixSums) {
       recomputeRange();
     }
-  }, [measuringPhase, items.length, recomputeRange]);
-  useEffect(() => {
-    if (items.length === 0) {
-      setMeasuringPhase(false);
-      setRange({ start: 0, end: 0 });
-    }
-  }, [items.length]);
-  useEffect(() => {
-    if(layoutVersion === undefined) return
-    // Hard layout reset
-    setRange({ start: 0, end: INITIAL_MEASURE_COUNT });
-    containerRef.current?.scrollTo(0, 0);
+  }, [measuringPhase, prefixSums, recomputeRange]);
 
-    // Prefix sums must be recomputed
+  // Layout version reset
+  useEffect(() => {
+    if (layoutVersion === undefined) return;
+    
+    setRange({ start: 0, end: INITIAL_MEASURE_COUNT });
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+    }
+
     setMeasuringPhase(true);
     setMeasuredCount(0);
-  }, [layoutVersion]);
-  // Attach scroll listener
+  }, [layoutVersion, INITIAL_MEASURE_COUNT]);
+
+  // Attach scroll listener with cleanup
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -383,30 +467,38 @@ export default function InfiniteItemCards({
 
     return () => {
       container.removeEventListener("scroll", throttledHandleScroll);
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current);
+      throttledHandleScroll.cancel();
+      if (scrollRafIdRef.current) {
+        cancelAnimationFrame(scrollRafIdRef.current);
       }
     };
   }, [throttledHandleScroll]);
+
   // Render measuring phase
-  if (measuringPhase && items.length && !error.hasError) {
+  if (measuringPhase && items.length > 0 && !error.hasError) {
     return (
-      <div style={{ overflow: "auto", height: "100vh" }}>
-        {children}
+      <div className="relative" style={{ overflow: "auto", height: "100vh" }}>
+        {(() => {
+          headerRef.current.length = 0;
+          return headerElements.map((element, idx) =>
+            element((el) => (headerRef.current[idx] = el))
+          );
+        })()}
+
         <div
           style={{ visibility: "hidden", position: "absolute", width: "100%" }}
         >
           {items.slice(0, INITIAL_MEASURE_COUNT).map((item) => (
             <ItemMeasurer
-              key={getKey(item, tab)}
+              key={getKey(item, layoutKey)}
+              itemKey={getKey(item, layoutKey)}
               item={item}
               onMeasured={handleItemMeasured}
               heightStore={heightStore}
-              tab={tab}
             />
           ))}
         </div>
-        {/* Show loading indicator */}
+        
         <div className="flex items-center justify-center py-8">
           <div className="text-gray-500">Loading feed...</div>
         </div>
@@ -414,23 +506,37 @@ export default function InfiniteItemCards({
     );
   }
 
-  const topSpacerHeight =
-    items.length && prefixSums[range.start] ? prefixSums[range.start] : 0;
-  const bottomSpacerHeight =
-    items.length && prefixSums[items.length]
-      ? prefixSums[items.length] - prefixSums[range.end]
-      : 0;
+  const topSpacerHeight = prefixSums && items.length > 0 && range.start < items.length
+    ? prefixSums[range.start] 
+    : 0;
+    
+  const bottomSpacerHeight = prefixSums && items.length > 0 && range.end <= items.length
+    ? prefixSums[items.length] - prefixSums[range.end]
+    : 0;
 
   return (
     <div ref={containerRef} style={{ overflow: "auto", height: "100vh" }}>
-      {children}
-      <div style={{ height: Number.isInteger(topSpacerHeight)?topSpacerHeight: 0 }} aria-hidden="true" />
-      {items.length && !error.hasError
+      {(() => {
+        headerRef.current.length = 0;
+        return headerElements.map((element, idx) =>
+          element((el) => (headerRef.current[idx] = el))
+        );
+      })()}
+
+      {topSpacerHeight > 0 && (
+        <div
+          style={{ height: topSpacerHeight }}
+          aria-hidden="true"
+        />
+      )}
+      
+      {items.length > 0 && !error.hasError
         ? items.slice(range.start, range.end).map((item, idx) => {
             const globalIndex = range.start + idx;
             return (
               <VirtualItem
-                key={getKey(item, tab)}
+                key={getKey(item, layoutKey)}
+                itemKey={getKey(item, layoutKey)}
                 item={item}
                 index={globalIndex}
                 onResize={handleResize}
@@ -441,7 +547,13 @@ export default function InfiniteItemCards({
             );
           })
         : null}
-      <div style={{ height: Number.isInteger(bottomSpacerHeight)?bottomSpacerHeight: 0 }} aria-hidden="true" />
+      
+      {bottomSpacerHeight > 0 && (
+        <div
+          style={{ height: bottomSpacerHeight }}
+          aria-hidden="true"
+        />
+      )}
     </div>
   );
 }
