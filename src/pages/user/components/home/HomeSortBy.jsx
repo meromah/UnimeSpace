@@ -6,7 +6,8 @@ const HomeSortBy = ({
   labelByTime,
   SortByTypeComponent,
   SortByTimeComponent,
-  className=""
+  className="",
+  ref=null
 }) => {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const menuRef = useRef(null);
@@ -40,7 +41,7 @@ const HomeSortBy = ({
   }, [labelByTime, labelByType]);
 
   return (
-    <div className={`flex items-center justify-between ${className}`}>
+    <div ref={ref ?? null} className={`flex items-center justify-between ${className}`}>
       <h2 className="text-lg font-semibold text-neutral-900 cursor-pointer select-none" onClick={() => setShowSortDropdown(!showSortDropdown)}>{labelByType}</h2>
 
       <div ref={menuRef} className="relative">
