@@ -76,17 +76,27 @@ const Feeds = () => {
                   tab={tab}
                   error={error[firstTab]}
                   layoutVersion={`${tab}-${sortByType}-${sortBy}`}
-                >
-                  <HomeHeader tab={tab} onTabChange={handleTabChange} />
-
-                  <HomeSortBy
-                    SortByTimeComponent={SortByTimeComponent}
-                    SortByTypeComponent={SortByTypeComponent}
-                    labelByTime={labelByTime}
-                    labelByType={labelByType}
-                    className="virtual-item-padding"
-                  />
-                </InfiniteItemCards>
+                  layoutSchemaVersion={"feeds-itemCards"}
+                  headerElements={[
+                    (ref) => (
+                      <HomeHeader
+                        ref={ref}
+                        tab={tab}
+                        onTabChange={handleTabChange}
+                      />
+                    ),
+                    (ref) => (
+                      <HomeSortBy
+                        ref={ref}
+                        SortByTimeComponent={SortByTimeComponent}
+                        SortByTypeComponent={SortByTypeComponent}
+                        labelByTime={labelByTime}
+                        labelByType={labelByType}
+                        className="virtual-item-padding"
+                      />
+                    ),
+                  ]}
+                />
               ) : tab === secondTab ? (
                 <InfiniteItemCards
                   key={tab}
@@ -95,28 +105,32 @@ const Feeds = () => {
                   likedData={likedData}
                   tab={tab}
                   error={error[secondTab]}
-                >
-                  <HomeHeader tab={tab} onTabChange={handleTabChange} />
-                  {error[secondTab].hasError &&
-                  error[secondTab].status === 401 ? (
-                    <LoginWarning message="You need to log in to see this page." />
-                  ) : null}
-                  {error[secondTab].hasError &&
-                  error[secondTab].status === 404 ? (
-                    <NotFound />
-                  ) : error[secondTab].hasError && error[secondTab].status !== 401? (
-                    <ErrorDisplay error={error[secondTab]} />
-                  ) : null}
-                  {!error[secondTab].hasError && (
-                    <HomeSortBy
-                      SortByTimeComponent={SortByTimeComponent}
-                      SortByTypeComponent={SortByTypeComponent}
-                      labelByTime={labelByTime}
-                      labelByType={labelByType}
-                      className="virtual-item-padding"
-                    />
-                  )}
-                </InfiniteItemCards>
+                  layoutSchemaVersion={"feeds-itemCards"}
+                  headerElements={[
+                    (ref) => (
+                      <HomeHeader
+                        ref={ref}
+                        tab={tab}
+                        onTabChange={handleTabChange}
+                      />
+                    ),
+                    (ref) => (
+                      <div ref={ref}>
+                        {error[secondTab].hasError &&
+                        error[secondTab].status === 401 ? (
+                          <LoginWarning message="You need to log in to see this page." />
+                        ) : null}
+                        {error[secondTab].hasError &&
+                        error[secondTab].status === 404 ? (
+                          <NotFound />
+                        ) : error[secondTab].hasError &&
+                          error[secondTab].status !== 401 ? (
+                          <ErrorDisplay error={error[secondTab]} />
+                        ) : null}
+                      </div>
+                    ),
+                  ]}
+                />
               ) : (
                 <>
                   <HomeHeader tab={tab} onTabChange={handleTabChange} />
