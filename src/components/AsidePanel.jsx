@@ -1,32 +1,27 @@
-import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
+import SearchPanel from "./SearchPanel";
 
 const AsidePanel = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    // TODO: Implement search functionality
-    console.log("Searching for:", searchQuery);
-  };
-
   const announcements = [
     {
       id: 1,
       title: "New Feature: Enhanced Search",
-      content: "We've improved our search functionality with better filters and faster results.",
+      content:
+        "We've improved our search functionality with better filters and faster results.",
       date: "2 days ago",
     },
     {
       id: 2,
       title: "Community Guidelines Update",
-      content: "Please review our updated community guidelines to ensure a positive experience for everyone.",
+      content:
+        "Please review our updated community guidelines to ensure a positive experience for everyone.",
       date: "1 week ago",
     },
     {
       id: 3,
       title: "Maintenance Scheduled",
-      content: "Scheduled maintenance will occur this weekend. Services may be temporarily unavailable.",
+      content:
+        "Scheduled maintenance will occur this weekend. Services may be temporarily unavailable.",
       date: "2 weeks ago",
     },
   ];
@@ -60,29 +55,9 @@ const AsidePanel = () => {
   };
 
   return (
-    <aside className="xl:h-screen xl:sticky xl:top-0 overflow-y-auto scrollbar-hide px-4 py-6 space-y-6">
+    <aside className="xl:h-screen xl:sticky xl:top-0 overflow-y-auto scrollbar-hide px-4 space-y-4">
       {/* Search Panel */}
-      <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4">
-        <h2 className="text-sm font-semibold text-neutral-900 mb-3">Search</h2>
-        <form onSubmit={handleSearch} className="space-y-2">
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search posts, communities..."
-              className="w-full px-3 py-2 pl-10 pr-4 text-sm text-neutral-900 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors"
-            />
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
-          </div>
-          <button
-            type="submit"
-            className="w-full px-4 py-2 bg-primary-blue text-white rounded-lg text-sm font-medium hover:bg-primary-blue/90 transition-colors duration-200"
-          >
-            Search
-          </button>
-        </form>
-      </div>
+      <SearchPanel className="pt-4"/>
 
       {/* Announcements Panel */}
       <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4">
@@ -144,4 +119,3 @@ const AsidePanel = () => {
 };
 
 export default AsidePanel;
-
