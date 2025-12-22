@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PostCard from "./components/PostCard";
+import InfiniteItemCards from "./components/Virtualized/InfiniteItemCards";
 import BoardHeader from "../../components/BoardHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { addRecentCommunity } from "../../app/recentCommunitiesSlice";
@@ -106,107 +107,96 @@ const BoardPage = () => {
   if (!boardData || !postData) return null;
   return (
     <div className="min-h-screen bg-primary-bg">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Board Header */}
-        <BoardHeader
-          board={boardData.data}
-          isSubscribed={subscribedIds.has(boardData.data.id)}
-        />
+      <InfiniteItemCards
+        items={postData.data}
+        likedData={{ post: new Set(postData?.liked || []) }}
+        layoutVersion={sortBy}
+        tab={"board"}
+        key={boardData.data.name}
+        headerElements={[
+          (ref) => (
+            <div ref={ref} className="max-w-4xl mx-auto px-4 py-8">
+              {/* Board Header */}
+              <BoardHeader
+                board={boardData.data}
+                isSubscribed={subscribedIds.has(boardData.data.id)}
+              />
 
-        {/* Create Post Section */}
-        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 mb-6">
-          {!showCreatePost ? (
-            <div className="flex items-center gap-3 p-4">
-              {/* Avatar */}
-              <div
-                onClick={onShowCreatePost}
-                className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white flex-shrink-0"
-              >
-                <p className="w-11 h-11 flex items-center justify-center rounded-full">
-                  {getInitials(isAuthenticated ? profileData?.name : "User")}
-                </p>
-              </div>
+              {/* Create Post Section */}
+              <div className="bg-white rounded-lg border border-neutral-200 mb-6">
+                {!showCreatePost ? (
+                  <div className="flex items-center gap-3 p-4">
+                    {/* Avatar */}
+                    <div
+                      onClick={onShowCreatePost}
+                      className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white flex-shrink-0"
+                    >
+                      <p className="w-11 h-11 flex items-center justify-center rounded-full">
+                        {getInitials(
+                          isAuthenticated ? profileData?.name : "User"
+                        )}
+                      </p>
+                    </div>
 
-              {/* Placeholder Text */}
-              <div
-                onClick={onShowCreatePost}
-                className="flex-1 px-4 py-2 text-sm text-neutral-500 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer border border-transparent hover:border-neutral-200"
-              >
-                What is on your mind, {profileData?.username || "User"}?
-              </div>
+                    {/* Placeholder Text */}
+                    <div
+                      onClick={onShowCreatePost}
+                      className="flex-1 px-4 py-2 text-sm text-neutral-500 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer border border-transparent hover:border-neutral-200"
+                    >
+                      What is on your mind, {profileData?.username || "User"}?
+                    </div>
 
-              {/* Attachment Icon */}
-              <button
-                onClick={onShowCreatePost}
-                className="p-2 text-neutral-500 hover:text-primary-blue hover:bg-primary-blue/10 rounded-lg transition-colors cursor-pointer"
-                aria-label="Attach file"
-              >
-                <IoMdAttach className="w-5 h-5" />
-              </button>
-            </div>
-          ) : isAuthenticated ? (
-            <CreatePost
-              boardId={boardId}
-              onCancel={() => setShowCreatePost(false)}
-              onError={(errorMessage) => {
-                setToast({
-                  message: errorMessage,
-                  type: "error",
-                });
-              }}
-            />
-          ) : null}
-        </div>
-
-        {/* Sorting/Filtering Controls */}
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-neutral-900">Posts</h2>
-          <SortByComponent />
-        </div>
-
-        {/* Posts Feed */}
-        <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
-          {postData.data.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 px-4">
-              <div className="bg-neutral-100 rounded-full p-6 mb-4">
-                <FaRegFileAlt className="text-4xl text-neutral-700" />
-              </div>
-              <h3 className="text-lg font-medium text-neutral-900 mb-2">
-                {emptyStateMessages.title}
-              </h3>
-              <p className="text-neutral-600 text-sm text-center max-w-sm">
-                {emptyStateMessages.message}
-              </p>
-            </div>
-          ) : (
-            <div>
-              {postData.data.map((post, i) => {
-                const isFirst = i === 0;
-                const isLast = i === postData.data.length - 1;
-                return (
-                  <PostCard
-                    key={post.id}
-                    item={post}
-                    isFirst={isFirst}
-                    isLast={isLast}
-                    itemType="post"
-                    communityType="board"
-                    communityUrl="b/"
-                    onError={(
-                      message = "Something happened!"
-                    ) => {
+                    {/* Attachment Icon */}
+                    <button
+                      onClick={onShowCreatePost}
+                      className="p-2 text-neutral-500 hover:text-primary-blue hover:bg-primary-blue/10 rounded-lg transition-colors cursor-pointer"
+                      aria-label="Attach file"
+                    >
+                      <IoMdAttach className="w-5 h-5" />
+                    </button>
+                  </div>
+                ) : isAuthenticated ? (
+                  <CreatePost
+                    boardId={boardId}
+                    onCancel={() => setShowCreatePost(false)}
+                    onError={(errorMessage) => {
                       setToast({
-                        message,
+                        message: errorMessage,
                         type: "error",
                       });
                     }}
                   />
-                );
-              })}
+                ) : null}
+              </div>
+
+              {/* Sorting/Filtering Controls */}
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-neutral-900">
+                  Posts
+                </h2>
+                <SortByComponent />
+              </div>
+
+              {/* Posts Feed */}
+              <div className="bg-white rounded-lg border border-neutral-200">
+                {postData.data.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-16 px-4">
+                    <div className="bg-neutral-100 rounded-full p-6 mb-4">
+                      <FaRegFileAlt className="text-4xl text-neutral-700" />
+                    </div>
+                    <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                      {emptyStateMessages.title}
+                    </h3>
+                    <p className="text-neutral-600 text-sm text-center max-w-sm">
+                      {emptyStateMessages.message}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
             </div>
-          )}
-        </div>
-      </div>
+          ),
+        ]}
+      />
 
       {/* Toast Notification */}
       {toast && (

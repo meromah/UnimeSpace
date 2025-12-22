@@ -16,6 +16,7 @@ import DescHeader from "./components/DescHeader";
 import { IoAdd } from "react-icons/io5";
 import { SORT_BY } from "../../utils";
 import { setDescName, setIsPopUp } from "../../app/createTestSlice";
+import InfiniteItemCards from "./components/Virtualized/InfiniteItemCards";
 
 // Helper function to extract error message from API error response
 const extractErrorMessage = (error) => {
@@ -119,78 +120,73 @@ const DescPage = () => {
   }));
   return (
     <div className="min-h-screen bg-primary-bg">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Desc Header */}
-        <DescHeader
-          desc={descData?.data}
-          isSubscribed={subscribedIds.has(descData?.data.id)}
-        />
+      <InfiniteItemCards
+        items={testData.data}
+        likedData={{ post: new Set(testData?.liked || []) }}
+        layoutVersion={sortBy}
+        tab={"desc"}
+        key={descData?.data.name}
+        headerElements={[
+          (ref) => (
+            <div ref={ref} className="max-w-4xl mx-auto px-4 py-8">
+              {/* Desc Header */}
+              <DescHeader
+                desc={descData?.data}
+                isSubscribed={subscribedIds.has(descData?.data.id)}
+              />
 
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold text-neutral-900">Tests</h2>
-          <div className="flex items-center gap-3">
-            <SortByComponent />
-            {!showCreateTest && isAuthenticated && (
-              <button
-                onClick={onShowCreateTest}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-blue hover:bg-primary-blue/10 hover:text-primary-blue rounded-lg transition-colors shadow-sm"
-                aria-label="Create test"
-              >
-                <IoAdd className="w-5 h-5" />
-                Create Test
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Create Test Form */}
-        {isAuthenticated && showCreateTest && (
-          <CreateTest
-            onCancel={() => setShowCreateTest(false)}
-            onError={(errorMessage) => {
-              setToast({
-                message: errorMessage,
-                type: "error",
-              });
-            }}
-          />
-        )}
-
-        {/* Tests Feed */}
-        <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
-          {transformedTests.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 px-4">
-              <div className="bg-neutral-100 rounded-full p-6 mb-4">
-                <FaRegFileAlt className="text-4xl text-neutral-700" />
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-semibold text-neutral-900">
+                  Tests
+                </h2>
+                <div className="flex items-center gap-3">
+                  <SortByComponent />
+                  {!showCreateTest && isAuthenticated && (
+                    <button
+                      onClick={onShowCreateTest}
+                      className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-blue hover:bg-primary-blue/10 hover:text-primary-blue rounded-lg transition-colors shadow-sm"
+                      aria-label="Create test"
+                    >
+                      <IoAdd className="w-5 h-5" />
+                      Create Test
+                    </button>
+                  )}
+                </div>
               </div>
-              <h3 className="text-lg font-medium text-neutral-900 mb-2">
-                No tests yet
-              </h3>
-              <p className="text-neutral-600 text-sm text-center max-w-sm">
-                Be the first to create a test in this desc!
-              </p>
+
+              {/* Create Test Form */}
+              {isAuthenticated && showCreateTest && (
+                <CreateTest
+                  onCancel={() => setShowCreateTest(false)}
+                  onError={(errorMessage) => {
+                    setToast({
+                      message: errorMessage,
+                      type: "error",
+                    });
+                  }}
+                />
+              )}
+
+              {/* Tests Feed */}
+              <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+                {transformedTests.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-16 px-4">
+                    <div className="bg-neutral-100 rounded-full p-6 mb-4">
+                      <FaRegFileAlt className="text-4xl text-neutral-700" />
+                    </div>
+                    <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                      No tests yet
+                    </h3>
+                    <p className="text-neutral-600 text-sm text-center max-w-sm">
+                      Be the first to create a test in this desc!
+                    </p>
+                  </div>
+                ) : null}
+              </div>
             </div>
-          ) : (
-            <div>
-              {transformedTests.map((test, i) => {
-                const isFirst = i === 0;
-                const isLast = i === transformedTests.length - 1;
-                return (
-                  <PostCard
-                    key={test.id}
-                    item={test}
-                    isFirst={isFirst}
-                    isLast={isLast}
-                    itemType="test"
-                    communityType="desc"
-                    communityUrl="d/"
-                  />
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </div>
+          ),
+        ]}
+      />
 
       {/* Toast Notification */}
       {toast && (
