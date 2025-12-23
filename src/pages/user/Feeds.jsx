@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { FaInbox } from "react-icons/fa";
 import ErrorDisplay from "../../components/ErrorDisplay.jsx";
 import NotFound from "../../components/NotFound.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useSortBy from "../../hooks/useSortBy.jsx";
 import HomeHeader from "./components/home/HomeHeader.jsx";
 import HomeSortBy from "./components/home/HomeSortBy.jsx";
@@ -13,6 +13,8 @@ import Toast from "../../components/Toast.jsx";
 import InfiniteItemCards from "./components/Virtualized/InfiniteItemCards.jsx";
 import FeedsSkeleton from "./components/Skeleton/FeedsSkeleton.jsx";
 import LoginWarning from "../../components/LoginWarning.jsx";
+import { setHasFetchRequest } from "../../app/homeFeedSlice.js";
+
 const tabFilters = new TabFilters();
 const firstTab = tabFilters.firstValue();
 const secondTab = tabFilters.secondValue();
@@ -20,7 +22,11 @@ const Feeds = () => {
   const [tab, setTab] = useState(firstTab);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [toast, setToast] = useState(null);
+  const dispatch = useDispatch();
   const { profileData } = useSelector((state) => state.myProfile);
+  const { hasFetchRequest } = useSelector((s) => s.homeFeed);
+
+  const hasFetchRequestRef = useRef(hasFetchRequest);
   const username = useMemo(() => profileData?.username || null, [profileData]);
   const { isAuthenticated } = useSelector((state) => state.auth);
   // Custom hook for sorting
@@ -48,6 +54,10 @@ const Feeds = () => {
   const handleTabChange = (newTab) => {
     setTab(newTab);
   };
+
+  useEffect(() => {
+    hasFetchRequestRef.current = hasFetchRequest;
+  }, [hasFetchRequest]);
   useEffect(() => {
     resetSortBy();
     resetSortByType();
@@ -57,6 +67,12 @@ const Feeds = () => {
       setIsFirstLoading(false);
     }
   }, [data, isFirstLoading]);
+  const fetchRequest = useCallback(() => {
+    if (!hasFetchRequestRef.current[tab]) {
+      dispatch(setHasFetchRequest({ state: true, tab }));
+    }
+  }, [dispatch]);
+
   return (
     <>
       <div>
@@ -96,6 +112,7 @@ const Feeds = () => {
                       />
                     ),
                   ]}
+                  onNearBottom={fetchRequest}
                 />
               ) : tab === secondTab ? (
                 <InfiniteItemCards
@@ -105,6 +122,7 @@ const Feeds = () => {
                   likedData={likedData}
                   tab={tab}
                   error={error[secondTab]}
+                  layoutVersion={`${tab}-${sortByType}-${sortBy}`}
                   layoutSchemaVersion={"feeds-itemCards"}
                   headerElements={[
                     (ref) => (
@@ -130,6 +148,7 @@ const Feeds = () => {
                       </div>
                     ),
                   ]}
+                  onNearBottom={fetchRequest}
                 />
               ) : (
                 <>
