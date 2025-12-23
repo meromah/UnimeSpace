@@ -114,6 +114,10 @@ const PublicTestsApi = baseApi.injectEndpoints({
     getTestLikes: builder.query({
       query: ({ desc, test }) => `/descs/${desc}/tests/${test}/likes`,
     }),
+    getTestsBySearch: builder.query({
+      query: (queryParams) => `/tests/search${toQueryString(queryParams)}`,
+      providesTags: [{ type: "Test", id: "getTestsBySearch" }]
+    }),
   }),
   overrideExisting: true,
 });
@@ -135,4 +139,4 @@ export const {
   useGetTestResultQuery,
 } = PrivateTestsApi;
 
-export const { useGetTestLikesQuery } = PublicTestsApi;
+export const { useGetTestLikesQuery, useGetTestsBySearchQuery } = PublicTestsApi;

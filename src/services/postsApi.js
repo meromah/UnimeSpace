@@ -83,6 +83,10 @@ const PublicPostApi = baseApi.injectEndpoints({
       query: ({ queryParams }) => `/posts${toQueryString(queryParams)}`,
       providesTags: [{ type: "Post", id: "getPostsByFilter" }]
     }),
+    getPostsBySearch: builder.query({
+      query: (queryParams) => `/posts/search${toQueryString(queryParams)}`,
+      providesTags: [{ type: "Post", id: "getPostsBySearch" }]
+    }),
   }),
   overrideExisting: true,
 });
@@ -100,4 +104,5 @@ export const {
   useGetPostsForBoardQuery,
   useGetPostFromBoardByPostIdQuery,
   useGetPostsByFilterQuery,
+  useGetPostsBySearchQuery
 } = PublicPostApi;
