@@ -85,7 +85,7 @@ const CommunitySelection = ({
         communitySearchQuery.trim().length === 0 || communityType !== "desc",
     }
   );
-  const communityData = communityType === "board" ? boardsData : descsData;
+  const communityData = communityType === "board" ? boardsData?.data : descsData?.data;
   const isCommunityLoading =
     communityType === "board" ? isBoardsLoading : isDescsLoading;
   // My board subscriptions
