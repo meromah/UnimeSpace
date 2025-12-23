@@ -182,6 +182,7 @@ export default function InfiniteItemCards({
   },
   layoutVersion,
   layoutSchemaVersion,
+  onNearBottom
 }) {
   const INITIAL_MEASURE_COUNT = useMemo(
     () => Math.max(1, Math.min(20, items.length)),
@@ -191,15 +192,7 @@ export default function InfiniteItemCards({
   const layoutKey = useMemo(
     () => `${tab}:${layoutSchemaVersion}`,
     [tab, layoutSchemaVersion]
-  );
-
-  const { hasFetchRequest } = useSelector((s) => s.homeFeed);
-  const dispatch = useDispatch();
-  const hasFetchRequestRef = useRef(hasFetchRequest);
-  
-  useEffect(() => {
-    hasFetchRequestRef.current = hasFetchRequest;
-  }, [hasFetchRequest]);
+  ); 
 
   const containerRef = useRef(null);
   const headerRef = useRef([]);
@@ -406,12 +399,12 @@ export default function InfiniteItemCards({
     
     const isNearBottom = checkNearBottom();
     
-    if (isNearBottom && !hasFetchRequestRef.current[tab] && items.length > 0) {
-      dispatch(setHasFetchRequest({ state: true, tab }));
+    if (onNearBottom && isNearBottom && items.length > 0) {
+      onNearBottom()
     }
     
     recomputeRange();
-  }, [prefixSums, checkNearBottom, dispatch, recomputeRange, tab, items.length]);
+  }, [prefixSums, checkNearBottom, onNearBottom, recomputeRange, tab, items.length]);
 
   // Throttled scroll with cleanup
   const throttledHandleScroll = useMemo(() => {
