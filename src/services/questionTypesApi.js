@@ -8,6 +8,7 @@ const questionTypesApi = baseApi.injectEndpoints({
       transformResponse: (response) => {
         const result = {
           data: [],
+          ids_obj: {}
         };
 
         response.data.forEach((item) => {
@@ -18,6 +19,7 @@ const questionTypesApi = baseApi.injectEndpoints({
           };
           if (item.name === "mcq" || item.name === "code") {
             result.data.push({ type: item.name, label: item.description });
+            result.ids_obj[item.id] = { type: item.name, label: item.description }
           }
         });
         return result;
