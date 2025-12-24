@@ -109,7 +109,7 @@ const PostCard = ({
   const onStartTest = (e) => {
     preventNavigation(e);
     navigate(
-      `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}/start`
+      `/${communityUrl}${item[communityType].name}/${itemType}s/${item.id}/start`
     );
   };
   return (
