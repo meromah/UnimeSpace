@@ -63,9 +63,16 @@ const testSessionSlice = createSlice({
           break;
       }
     },
+    removeOption: (state, action) => {
+      const id = action.payload.question_id;
+      const optionId = action.payload.option_id;
+      if(Array.isArray(state.submission[id])&& state.submission[id].length >0){
+        state.submission[id] = state.submission[id].filter(itemId=> itemId !== optionId)
+      }
+    },
   },
 });
 
-export const { initializeSession, startSession, setSubmission } =
+export const { initializeSession, startSession, setSubmission, removeOption } =
   testSessionSlice.actions;
 export default testSessionSlice.reducer;
