@@ -76,8 +76,7 @@ const Feeds = () => {
   return (
     <>
       <div>
-        {/* Filter bar */}
-        <div className="relative">
+        <div>
           {/* Content */}
           {isFirstLoading ? (
             <FeedsSkeleton />
@@ -108,7 +107,7 @@ const Feeds = () => {
                         SortByTypeComponent={SortByTypeComponent}
                         labelByTime={labelByTime}
                         labelByType={labelByType}
-                        className="virtual-item-padding"
+                        className="virtual-item-padding-x"
                       />
                     ),
                   ]}
