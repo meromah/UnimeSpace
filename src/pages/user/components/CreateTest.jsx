@@ -67,7 +67,7 @@ const CreateTest = ({ onCancel = undefined }) => {
     { skip: !descName }
   );
   useEffect(() => {
-    if (isPopUp) return;
+    if (!isPopUp) return;
     document.body.style.overflow = "hidden";
 
     return () => {
