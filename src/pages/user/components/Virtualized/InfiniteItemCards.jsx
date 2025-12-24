@@ -470,7 +470,7 @@ export default function InfiniteItemCards({
   // Render measuring phase
   if (measuringPhase && items.length > 0 && !error.hasError) {
     return (
-      <div className="relative" style={{ overflow: "auto", height: "100vh" }}>
+      <div className="flex flex-col gap-4" style={{ overflow: "auto", height: "100vh" }}>
         {(() => {
           headerRef.current.length = 0;
           return headerElements.map((element, idx) =>
@@ -506,9 +506,8 @@ export default function InfiniteItemCards({
   const bottomSpacerHeight = prefixSums && items.length > 0 && range.end <= items.length
     ? prefixSums[items.length] - prefixSums[range.end]
     : 0;
-
   return (
-    <div ref={containerRef} style={{ overflow: "auto", height: "100vh" }}>
+    <div ref={containerRef} style={{ overflow: "auto", height: "100vh" }} className="flex flex-col gap-4">
       {(() => {
         headerRef.current.length = 0;
         return headerElements.map((element, idx) =>
@@ -516,37 +515,39 @@ export default function InfiniteItemCards({
         );
       })()}
 
-      {topSpacerHeight > 0 && (
-        <div
-          style={{ height: topSpacerHeight }}
-          aria-hidden="true"
-        />
-      )}
-      
-      {items.length > 0 && !error.hasError
-        ? items.slice(range.start, range.end).map((item, idx) => {
-            const globalIndex = range.start + idx;
-            return (
-              <VirtualItem
-                key={getKey(item, layoutKey)}
-                itemKey={getKey(item, layoutKey)}
-                item={item}
-                index={globalIndex}
-                onResize={handleResize}
-                likedData={likedData}
-                heightStore={heightStore}
-                tab={tab}
-              />
-            );
-          })
-        : null}
-      
-      {bottomSpacerHeight > 0 && (
-        <div
-          style={{ height: bottomSpacerHeight }}
-          aria-hidden="true"
-        />
-      )}
+      <div>
+        {topSpacerHeight > 0 && (
+          <div
+            style={{ height: topSpacerHeight }}
+            aria-hidden="true"
+          />
+        )}
+        
+        {items.length > 0 && !error.hasError
+          ? items.slice(range.start, range.end).map((item, idx) => {
+              const globalIndex = range.start + idx;
+              return (
+                <VirtualItem
+                  key={getKey(item, layoutKey)}
+                  itemKey={getKey(item, layoutKey)}
+                  item={item}
+                  index={globalIndex}
+                  onResize={handleResize}
+                  likedData={likedData}
+                  heightStore={heightStore}
+                  tab={tab}
+                />
+              );
+            })
+          : null}
+        
+        {bottomSpacerHeight > 0 && (
+          <div
+            style={{ height: bottomSpacerHeight }}
+            aria-hidden="true"
+          />
+        )}
+      </div>
     </div>
   );
 }
