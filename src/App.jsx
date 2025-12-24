@@ -25,6 +25,8 @@ import DescMembers from "./pages/user/DescMembers";
 import DescPage from "./pages/user/DescPage";
 import TestDrafts from "./pages/user/TestDrafts";
 import Playground from "./pages/user/Playground";
+import SearchPage from "./pages/user/SearchPage";
+import { TestPage } from "./pages/user/test/TestPage";
 
 const App = () => {
   return (
@@ -57,7 +59,9 @@ const App = () => {
         <Route path="d/:descId/members" element={<DescMembers />} />
         <Route path="b/:boardId/edit" element={<EditBoard />} />
         <Route path="d/:descId" element={<DescPage />} />
+        <Route path="/search" element={<SearchPage />} />
       </Route>
+      <Route path="d/:descId/tests/:testId/start" element={<TestPage />} />
       <Route path="/admin/*" element={<AdminPage />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/playground" element={<Playground />} />
