@@ -214,6 +214,8 @@ const CreateTest = ({ onCancel = undefined }) => {
       }).unwrap();
       if (onCancel) {
         onCancel();
+      } else if(!isPopUp && !onCancel){
+        navigate("/home");
       }
     } catch (err) {
       console.error(err);
