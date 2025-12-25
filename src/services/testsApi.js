@@ -24,7 +24,7 @@ const PrivateTestsApi = baseApi.injectEndpoints({
     }),
     getTestsByFilter: builder.query({
       query: ({ queryParams }) => `/tests${toQueryString(queryParams)}`,
-      // providesTags: [{ type: "Post", id: "GlobalPostSearch" }]
+      providesTags: [{ type: "Test", id: "getTestsByFilter" }],
       transformResponse: (response) => ({ ...response, type: "test" }),
     }),
     // GET /descs/{desc}/tests/{test}
@@ -51,6 +51,8 @@ const PrivateTestsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, { desc }) => [
         { type: "Desc", id: `draft-tests-${desc}` },
+        { type: "Desc", id: `tests-for-${desc}` },
+        { type: "Test", id: "getTestsByFilter" },
       ],
     }),
 
@@ -84,16 +86,6 @@ const PrivateTestsApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
-
-    // POST /descs/{desc}/tests/{test}/submit
-    submitTest: builder.mutation({
-      query: ({ desc, test, bodyData }) => ({
-        url: `/descs/${desc}/tests/${test}/submit`,
-        method: "POST",
-        body: bodyData,
-      }),
-    }),
-
     // GET /descs/{desc}/tests/{test}/result
     getTestResult: builder.query({
       query: ({ desc, test }) => `/descs/${desc}/tests/${test}/result`,
@@ -103,6 +95,20 @@ const PrivateTestsApi = baseApi.injectEndpoints({
         url: `feeds/tests${toQueryString(queryParams)}`,
       }),
     }),
+    postTestStart: builder.mutation({
+      query: ({ desc, test }) => ({url: `/descs/${desc}/tests/${test}/start`, method: "POST"}),
+    }),
+    postTestSubmit: builder.mutation({
+      query: ({ desc, test, bodyData }) => ({
+        url: `/descs/${desc}/tests/${test}/submit`,
+        method: "POST",
+        body: bodyData,
+      }),
+    }),
+    getTestResult: builder.query({
+      query: ({ desc, test }) => `/descs/${desc}/tests/${test}/result`,
+    }),
+
   }),
   overrideExisting: true,
 });
@@ -137,6 +143,8 @@ export const {
   useToggleTestLikeMutation,
   useSubmitTestMutation,
   useGetTestResultQuery,
+  usePostTestStartMutation,
+  usePostTestSubmitMutation
 } = PrivateTestsApi;
 
 export const { useGetTestLikesQuery, useGetTestsBySearchQuery } = PublicTestsApi;
