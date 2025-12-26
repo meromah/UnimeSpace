@@ -115,7 +115,7 @@ const BoardPage = () => {
         key={boardData.data.name}
         headerElements={[
           (ref) => (
-            <div ref={ref} className="max-w-4xl mx-auto px-4 py-8">
+            <div ref={ref} className="w-full mx-auto px-4 py-8">
               {/* Board Header */}
               <BoardHeader
                 board={boardData.data}

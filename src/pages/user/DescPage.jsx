@@ -128,7 +128,7 @@ const DescPage = () => {
         key={descData?.data.name}
         headerElements={[
           (ref) => (
-            <div ref={ref} className="max-w-4xl mx-auto px-4 py-8">
+            <div ref={ref} className="w-full mx-auto px-4 py-8">
               {/* Desc Header */}
               <DescHeader
                 desc={descData?.data}
