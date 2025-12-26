@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   status: "idle",
   test: {
+    title: null,
     id: null,
     duration: null,
   },
@@ -28,7 +29,9 @@ const testSessionSlice = createSlice({
   name: "testSession",
   initialState,
   reducers: {
+    resetSession: ()=> initialState,
     initializeSession: (state, action) => {
+      state.test.title = action.payload.test.title;
       state.test.id = action.payload.test.id;
       state.test.duration = action.payload.test?.duration ?? null;
       state.currentIndex = 0;
@@ -63,16 +66,63 @@ const testSessionSlice = createSlice({
           break;
       }
     },
+    setOriginalSubmission: (state, action)=>{
+      const {id, data} = action.payload
+      state.submission[id] = data
+    },
     removeOption: (state, action) => {
       const id = action.payload.question_id;
       const optionId = action.payload.option_id;
-      if(Array.isArray(state.submission[id])&& state.submission[id].length >0){
-        state.submission[id] = state.submission[id].filter(itemId=> itemId !== optionId)
+      if (
+        Array.isArray(state.submission[id]) &&
+        state.submission[id].length > 0
+      ) {
+        state.submission[id] = state.submission[id].filter(
+          (itemId) => itemId !== optionId
+        );
       }
     },
+    goToNextQuestion: (state) => {
+      const totalQuestions = state.questions.length;
+      const currentIndex = state.currentIndex;
+      if (totalQuestions > currentIndex + 1) {
+        state.currentIndex = currentIndex + 1;
+      }
+    },
+    goToPreviousQuestion: (state) => {
+      const currentIndex = state.currentIndex;
+      if (0 < currentIndex) {
+        state.currentIndex = currentIndex - 1;
+      }
+    },
+    enterReview: (state) => {
+      state.status = "review";
+    },
+    jumpToQuestion: (state, action)=> {
+      const questionIdx = action.payload.questionIndex
+      const newStatus = action.payload.newStatus
+      state.status = newStatus;
+      state.currentIndex = questionIdx
+    },
+    completeTest: (state)=>{
+      state.status = 'completed'
+      state.currentIndex = null
+
+    }
   },
 });
 
-export const { initializeSession, startSession, setSubmission, removeOption } =
-  testSessionSlice.actions;
+export const {
+  initializeSession,
+  startSession,
+  setSubmission,
+  removeOption,
+  goToNextQuestion,
+  goToPreviousQuestion,
+  enterReview,
+  jumpToQuestion,
+  resetSession,
+  setOriginalSubmission,
+  completeTest
+} = testSessionSlice.actions;
 export default testSessionSlice.reducer;
