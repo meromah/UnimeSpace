@@ -3,7 +3,7 @@ import { FaRegComment, FaRegHeart, FaHeart } from "react-icons/fa";
 import { FiShare2 } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useTogglePostLikeMutation } from "../../../services/postsApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import RelativeTime from "../../../components/RelativeTime";
 import { getFileUrl, getInitials } from "../../../utils";
 import PostImages from "./PostImages";
@@ -14,6 +14,7 @@ import EditPostModal from "./EditPostModal";
 import ReportModal from "./ReportModal";
 import DeletePostModal from "./DeletePostModal";
 import { useToggleTestLikeMutation } from "../../../services/testsApi";
+import { resetSession } from "../../../app/testSessionSlice";
 const preventNavigation = (e) => {
   e.preventDefault();
   e.stopPropagation();
@@ -29,6 +30,7 @@ const PostCard = ({
   isLiked = false,
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [liked, setLiked] = useState(isLiked);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -108,6 +110,7 @@ const PostCard = ({
   };
   const onStartTest = (e) => {
     preventNavigation(e);
+    dispatch(resetSession())
     navigate(
       `/${communityUrl}${item[communityType].name}/${itemType}s/${item.id}/start`
     );
