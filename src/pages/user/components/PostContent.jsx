@@ -7,7 +7,7 @@ const PostContent = ({ item, itemType, images, files }) => {
   const onStartTest = (e)=>{
     e.stopPropagation()
     navigate(
-      `/d/${item.data.desc.name}/test/${item.id}/start`
+      `/d/${item.data.desc.name}/tests/${item.data.id}/start`
     )
   }
   return (
@@ -40,4 +40,7 @@ const PostContent = ({ item, itemType, images, files }) => {
 };
 
 export default PostContent;
+
+
+
 
