@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import UserSidebar from "../../components/UserSidebar";
 import AsidePanel from "../../components/AsidePanel";
 import { useGetMeQuery } from "../../services/userApi";
@@ -15,6 +15,7 @@ import { setIsAuthenticated } from "../../app/authSlice.js";
 const UserPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { data: loginStatus } = useAmILoggedInQuery();
   const { data, error, isLoading } = useGetMeQuery(undefined, {
@@ -46,14 +47,16 @@ const UserPage = () => {
       </aside>
 
       {/* Main Section */}
-      <main className="col-span-12 md:col-span-8 lg:col-span-9 xl:col-span-6">
+      <main className={`col-span-12 md:col-span-8 lg:col-span-9 ${location.pathname === "/explore/"? "xl:col-span-9":"xl:col-span-6"}`}>
         <Outlet />
       </main>
 
       {/* Right Sidebar */}
-      <aside className="hidden xl:block xl:col-span-3 border-l border-neutral-200">
-        <AsidePanel />
-      </aside>
+      {location.pathname !== "/explore/" ? (
+        <aside className="hidden xl:block xl:col-span-3 border-l border-neutral-200">
+          <AsidePanel />
+        </aside>
+      ) : null}
     </div>
   );
 };
