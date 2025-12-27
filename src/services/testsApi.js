@@ -64,7 +64,10 @@ const PrivateTestsApi = baseApi.injectEndpoints({
         body: bodyData,
       }),
       invalidatesTags: (result, error, { desc }) => [
+        { type: "Desc", id: `draft-tests-${desc}` },
         { type: "Desc", id: `tests-for-${desc}` },
+        { type: "Test", id: "getTestsByFilter" },
+        ,
       ],
     }),
 
@@ -76,6 +79,8 @@ const PrivateTestsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, { desc }) => [
         { type: "Desc", id: `draft-tests-${desc}` },
+        { type: "Desc", id: `tests-for-${desc}` },
+        { type: "Test", id: "getTestsByFilter" },
       ],
     }),
 
@@ -91,12 +96,21 @@ const PrivateTestsApi = baseApi.injectEndpoints({
       query: ({ desc, test }) => `/descs/${desc}/tests/${test}/result`,
     }),
     getUserFollowingFeedTests: builder.query({
-      query: ({queryParams}) => ({
+      query: ({ queryParams }) => ({
         url: `feeds/tests${toQueryString(queryParams)}`,
       }),
     }),
     postTestStart: builder.mutation({
-      query: ({ desc, test }) => ({url: `/descs/${desc}/tests/${test}/start`, method: "POST"}),
+      query: ({ desc, test }) => ({
+        url: `/descs/${desc}/tests/${test}/start`,
+        method: "POST",
+      }),
+    }),
+    postTestQuit: builder.mutation({
+      query: ({ desc, test }) => ({
+        url: `/descs/${desc}/tests/${test}/quit`,
+        method: "POST",
+      }),
     }),
     postTestSubmit: builder.mutation({
       query: ({ desc, test, bodyData }) => ({
@@ -108,7 +122,6 @@ const PrivateTestsApi = baseApi.injectEndpoints({
     getTestResult: builder.query({
       query: ({ desc, test }) => `/descs/${desc}/tests/${test}/result`,
     }),
-
   }),
   overrideExisting: true,
 });
@@ -122,7 +135,7 @@ const PublicTestsApi = baseApi.injectEndpoints({
     }),
     getTestsBySearch: builder.query({
       query: (queryParams) => `/tests/search${toQueryString(queryParams)}`,
-      providesTags: [{ type: "Test", id: "getTestsBySearch" }]
+      providesTags: [{ type: "Test", id: "getTestsBySearch" }],
     }),
   }),
   overrideExisting: true,
@@ -141,10 +154,11 @@ export const {
   useUpdateTestMutation,
   useDeleteTestMutation,
   useToggleTestLikeMutation,
-  useSubmitTestMutation,
   useGetTestResultQuery,
   usePostTestStartMutation,
-  usePostTestSubmitMutation
+  usePostTestQuitMutation,
+  usePostTestSubmitMutation,
 } = PrivateTestsApi;
 
-export const { useGetTestLikesQuery, useGetTestsBySearchQuery } = PublicTestsApi;
+export const { useGetTestLikesQuery, useGetTestsBySearchQuery } =
+  PublicTestsApi;
