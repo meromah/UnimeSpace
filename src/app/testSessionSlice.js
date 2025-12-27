@@ -18,7 +18,9 @@ const initialState = {
     // submittedAt: null,
     // timeRemaining: null
   },
-
+  results: { data: {}, score: 0, num_correct_answers: 0 },
+  questionIdToIndex: {},
+  questionTypes: {},
   ui: {
     // isRestoring: boolean
     error: null,
@@ -29,18 +31,25 @@ const testSessionSlice = createSlice({
   name: "testSession",
   initialState,
   reducers: {
-    resetSession: ()=> initialState,
+    resetSession: () => initialState,
     initializeSession: (state, action) => {
       state.test.title = action.payload.test.title;
       state.test.id = action.payload.test.id;
       state.test.duration = action.payload.test?.duration ?? null;
       state.currentIndex = 0;
       state.submission = {};
-      state.questions = action.payload.questions;
-      state.meta.totalQuestions = action.payload.questions.length;
+      const questions = action.payload.questions;
+      state.questions = questions;
+      state.questionTypes = action.payload.questionTypes;
+      state.meta.totalQuestions = questions.length;
       state.meta.answeredCount = 0;
       state.meta.startedAt = null;
-
+      const idToIndex = {};
+      for (let i = 0; i < questions.length; i++) {
+        const question = questions[i];
+        idToIndex[question.id] = i;
+      }
+      state.questionIdToIndex = idToIndex;
       // state.meta.submittedAt = null
       state.status = "ready";
     },
@@ -48,6 +57,18 @@ const testSessionSlice = createSlice({
       state.meta.startedAt = Date.now();
       state.currentIndex = 0;
       state.status = "in_progress";
+    },
+    initializeSubmission: (state, action) => {
+      const id = action.payload.question_id;
+      const questionType = action.payload.question_type;
+      switch (questionType) {
+        case "mcq":
+          state.submission[id] = action.payload?.value??[]
+          break;
+        case "code":
+          state.submission[id] = action.payload?.value ?? "";
+          break;
+      }
     },
     setSubmission: (state, action) => {
       const id = action.payload.question_id;
@@ -66,9 +87,9 @@ const testSessionSlice = createSlice({
           break;
       }
     },
-    setOriginalSubmission: (state, action)=>{
-      const {id, data} = action.payload
-      state.submission[id] = data
+    setOriginalSubmission: (state, action) => {
+      const { id, data } = action.payload;
+      state.submission[id] = data;
     },
     removeOption: (state, action) => {
       const id = action.payload.question_id;
@@ -98,23 +119,24 @@ const testSessionSlice = createSlice({
     enterReview: (state) => {
       state.status = "review";
     },
-    jumpToQuestion: (state, action)=> {
-      const questionIdx = action.payload.questionIndex
-      const newStatus = action.payload.newStatus
+    jumpToQuestion: (state, action) => {
+      const questionIdx = action.payload.questionIndex;
+      const newStatus = action.payload.newStatus;
       state.status = newStatus;
-      state.currentIndex = questionIdx
+      state.currentIndex = questionIdx;
     },
-    completeTest: (state)=>{
-      state.status = 'completed'
-      state.currentIndex = null
-
-    }
+    completeTest: (state, action) => {
+      const { data, score, num_correct_answers } = action.payload.results;
+      state.status = "completed";
+      state.results = { data, score, num_correct_answers };
+    },
   },
 });
 
 export const {
   initializeSession,
   startSession,
+  initializeSubmission,
   setSubmission,
   removeOption,
   goToNextQuestion,
@@ -123,6 +145,6 @@ export const {
   jumpToQuestion,
   resetSession,
   setOriginalSubmission,
-  completeTest
+  completeTest,
 } = testSessionSlice.actions;
 export default testSessionSlice.reducer;
