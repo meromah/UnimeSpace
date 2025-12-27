@@ -4,7 +4,6 @@ import LandingPage from "./pages/main/LandingPage";
 import UserPage from "./pages/user/UserPage";
 import AdminPage from "./pages/admin/AdminPage";
 import AboutUs from "./pages/main/AboutUs";
-import Explore from "./pages/main/Explore";
 import Libraries from "./pages/main/Libraries";
 import Quizzes from "./pages/main/Quizzes";
 import Boards from "./pages/main/Boards";
@@ -27,6 +26,8 @@ import TestDrafts from "./pages/user/TestDrafts";
 import Playground from "./pages/user/Playground";
 import SearchPage from "./pages/user/SearchPage";
 import { TestPage } from "./pages/user/test/TestPage";
+import AsidePanel from "./components/AsidePanel";
+import Terms from "./pages/user/Terms";
 
 const App = () => {
   return (
@@ -60,7 +61,9 @@ const App = () => {
         <Route path="b/:boardId/edit" element={<EditBoard />} />
         <Route path="d/:descId" element={<DescPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/explore" element={<AsidePanel />} />
       </Route>
+      <Route path="/terms" element={<Terms />} />
       <Route path="d/:descId/tests/:testId/start" element={<TestPage />} />
       <Route path="/admin/*" element={<AdminPage />} />
       <Route path="/about" element={<AboutUs />} />
