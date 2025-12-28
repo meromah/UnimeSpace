@@ -38,6 +38,7 @@ const DeletePostModal = ({
       isDeleting={isDeleting}
       itemType="post"
       onSuccess={onSuccess}
+      itemId={itemId}
     />
   );
 };
