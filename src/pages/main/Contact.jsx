@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Toast from "../../components/Toast";
 import { useContactUsMutation } from "../../services/contactApi";
-import AutoResizeTextarea from '../user/components/AutoResizeTextarea'
+import AutoResizeTextarea from "../user/components/AutoResizeTextarea";
+import { FiChevronLeft } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 const Contact = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -159,28 +162,30 @@ const Contact = () => {
               {isLoading ? "Sending Message..." : "Send Message"}
             </button>
           </div>
-
-          {submitted && (
-            <Toast
-              message={
-                <span>
-                  Thank you! Your message has been sent successfully. We’ll get
-                  back to you soon.
-                </span>
-              }
-              type="success"
-              onClose={() => setSubmitted(false)}
-            />
-          )}
-          {error.hasError && (
-            <Toast
-              message={error.message}
-              type="error"
-              onClose={() => setError({ hasError: false, message: null })}
-            />
-          )}
         </form>
       </div>
+      <button className="absolute top-4 left-4 cursor-pointer" onClick={()=> navigate(-1)}>
+        <FiChevronLeft className="w-7 h-7 text-neutral-800 hover:text-neutral-600"/>
+      </button>
+      {submitted && (
+        <Toast
+          message={
+            <span>
+              Thank you! Your message has been sent successfully. We’ll get back
+              to you soon.
+            </span>
+          }
+          type="success"
+          onClose={() => setSubmitted(false)}
+        />
+      )}
+      {error.hasError && (
+        <Toast
+          message={error.message}
+          type="error"
+          onClose={() => setError({ hasError: false, message: null })}
+        />
+      )}
     </main>
   );
 };
