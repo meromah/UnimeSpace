@@ -7,8 +7,6 @@ import React, {
   useMemo,
 } from "react";
 import PostCard from "../PostCard";
-import { useDispatch, useSelector } from "react-redux";
-import { setHasFetchRequest } from "../../../../app/homeFeedSlice";
 
 const getKey = (item, layoutKey) => {
   return `${layoutKey}-${item.id}`;
