@@ -293,7 +293,7 @@ const ImageUploadManager = ({
                       }
                       className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors z-50"
                     >
-                      <IoReload className="w-3 h-3" />
+                      <RotateCw className="w-3 h-3" />
                     </button>
                   ) : (
                     <button
@@ -372,7 +372,7 @@ const ImageUploadManager = ({
                 }
                 className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors z-50"
               >
-                <IoReload className="w-4 h-4" />
+                <RotateCw className="w-4 h-4" />
               </button>
             )}
             {currentAvatarUrl && !avatarImage?.error && (
@@ -381,7 +381,7 @@ const ImageUploadManager = ({
                 onClick={removeAvatar}
                 className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors z-50 opacity-0 group-hover:opacity-100"
               >
-                <FiX className="w-3 h-3" />
+                <X className="w-3 h-3" />
               </button>
             )}
           </div>
@@ -460,7 +460,7 @@ const ImageUploadManager = ({
                   }}
                   className="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center gap-3"
                 >
-                  <FiX className="w-5 h-5" />
+                  <X className="w-5 h-5" />
                   <span className="font-medium">Remove image</span>
                 </button>
               )}
