@@ -151,7 +151,7 @@ const PostCard = ({
             {/* User + Community */}
             <div className="max-w-52 sm:max-w-full flex flex-col gap-0.5">
               <button
-                className="w-full text-primary-blue text-base cursor-pointer hover:underline truncate focus:outline-none"
+                className="w-full text-primary-blue text-base text-start cursor-pointer hover:underline truncate focus:outline-none"
                 onClick={(e) =>
                   handleBoardClick(
                     e,
