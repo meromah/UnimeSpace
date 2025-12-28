@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import ErrorDisplay from "../../../components/ErrorDisplay";
-
+import { useDispatch } from 'react-redux'
+import { removeItem } from "../../../app/homeFeedSlice";
 const DeleteModal = ({
   isOpen,
   onClose,
@@ -10,7 +11,9 @@ const DeleteModal = ({
   itemType = "item",
   onSuccess,
   errorTitle,
+  itemId
 }) => {
+  const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
@@ -48,7 +51,10 @@ const DeleteModal = ({
       }
       setTimeout(() => {
         onClose(e);
-      }, 3000);
+      }, 500);
+      if (itemType === "post" || itemType ==="test") {
+        dispatch(removeItem({itemType, itemId}))
+      }
     } catch (err) {
       console.error(`Failed to delete ${itemType}:`, err);
       setError(err);
