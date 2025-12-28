@@ -19,6 +19,7 @@ import { useGetMyBoardSubscriptionsQuery } from "../services/boardSubscriptionsA
 import { getFileUrl } from "../utils/helpers";
 import { RiDraftLine } from "react-icons/ri";
 import { FaInfoCircle } from "react-icons/fa";
+import { MdSearch } from "react-icons/md";
 const MenuLink = ({ to, label, icon: Icon, onClick }) => {
   return (
     <Link
@@ -57,11 +58,6 @@ const resourcesSection = {
       id: "contact",
       path: "/contact",
       name: "Contact Us",
-    },
-    {
-      id: "terms",
-      path: "/terms",
-      name: "Terms & Conditions",
     },
   ],
 };
@@ -201,7 +197,7 @@ const UserSidebar = () => {
   }, []);
   return (
     <div className="md:flex md:justify-between md:items-center">
-      <div className="md:hidden flex sticky top-0 justify-between items-center border-b border-neutral-200 bg-white z-30">
+      <div className="md:hidden flex sticky top-0 justify-between items-center border-b border-neutral-200 bg-white z-[90]">
         {/* Logo Header - For Mobile devices */}
         <Link to="/home" className="flex-shrink-0 px-4 py-4">
           <div className="flex items-center gap-2">
@@ -216,7 +212,7 @@ const UserSidebar = () => {
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
           <div
-            className="fixed inset-0 bg-neutral-900/50 z-40 lg:hidden animate-fade-in"
+            className="fixed inset-0 bg-neutral-900/50 z-[95] lg:hidden animate-fade-in"
             onClick={closeMobileMenu}
             aria-hidden="true"
           />
@@ -224,7 +220,7 @@ const UserSidebar = () => {
 
         {/* Mobile Menu Toggle Button */}
         <button
-          className="lg:hidden z-50 p-2 rounded-lg hover:bg-primary-blue/10 transition-colors duration-200"
+          className="lg:hidden z-[100] p-2 rounded-lg hover:bg-primary-blue/10 transition-colors duration-200"
           onClick={toggleMobileMenu}
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={isMobileMenuOpen}
@@ -238,7 +234,7 @@ const UserSidebar = () => {
         </button>
       </div>
       <div
-        className={`fixed top-0 left-0 md:relative h-screen w-72 md:w-full flex flex-col bg-white border-r border-neutral-200 z-40 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 md:relative h-screen w-72 md:w-full flex flex-col bg-white border-r border-neutral-200 z-[95] transform transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
@@ -323,10 +319,14 @@ const UserSidebar = () => {
             closeMobileMenu={closeMobileMenu}
           />
           <div className="h-px bg-neutral-200" />
-          <div>
-            <p className="w-full flex text-left mt-2 px-3 py-1.5 text-sm text-neutral-600  transition-all truncate">
-              Explore
-            </p>
+          <div className="py-1">
+            <MenuLink
+                icon={MdSearch}
+                label={"Explore"}
+                onClick={toggleMobileMenu}
+                to={"/explore/"}
+                key={"explore"}
+              />
 
             {exploreData.map((data) => (
               <MenuLink
@@ -338,7 +338,7 @@ const UserSidebar = () => {
               />
             ))}
           </div>
-          <div className="my-2 h-px bg-neutral-200" />
+          <div className="h-px bg-neutral-200" />
           <div>
             <ExpandableSection
               section={resourcesSection}
@@ -414,7 +414,7 @@ const UserSidebar = () => {
             </button>
             {/* User Dropdown Menu */}
             {userMenuOpen && (
-              <div className="absolute bottom-full left-2 right-2 mb-2 bg-white border border-neutral-200 rounded-xl shadow-lg overflow-hidden z-50">
+              <div className="absolute bottom-full left-2 right-2 mb-2 bg-white border border-neutral-200 rounded-xl shadow-lg overflow-hidden z-[100]">
                 <div className="px-4 pt-3 pb-2 text-xs text-neutral-500 truncate border-b border-neutral-200">
                   {profileData?.email || "no email"}
                 </div>
