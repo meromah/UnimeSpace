@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { ChevronDown } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 const MAX_ITEMS_NUM = 5
 const ExpandableSection = ({
@@ -25,7 +25,7 @@ const ExpandableSection = ({
       >
         {Icon && <Icon className="w-4 h-4 text-neutral-400" />}
         <span className="flex-1 text-left">{section.title}</span>
-        <FiChevronDown
+        <ChevronDown
           className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${
             isExpanded ? "rotate-180" : ""
           }`}

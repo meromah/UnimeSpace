@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { HiDotsVertical } from "react-icons/hi";
+import { MoreVertical } from "lucide-react";
 
 const PreviewActionsMenu = ({
   onPreview,
@@ -65,7 +65,7 @@ const PreviewActionsMenu = ({
         aria-label="Comment options"
         aria-expanded={isOpen}
       >
-        <HiDotsVertical className="w-5 h-5" />
+        <MoreVertical className="w-5 h-5" />
       </button>
 
       {isOpen && (

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { MdFullscreen, MdFullscreenExit } from "react-icons/md";
+import { Maximize, Minimize } from "lucide-react";
 import { useCheckOldDsaQuestionApiMutation } from "../../../services/solutionsApi";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -23,7 +23,10 @@ const RenderCodeQuestion = ({ onError }) => {
   const [pythonOutput, setPythonOutput] = useState([]);
   const [isRunningCode, setIsRunningCode] = useState(false);
   const [playPython] = useCheckOldDsaQuestionApiMutation();
-
+  const [error, setError] = useState({
+    hasError: false,
+    message: null,
+  });
   useEffect(() => {
     if (isExpanded) {
       document.body.style.overflow = "hidden";
@@ -33,7 +36,7 @@ const RenderCodeQuestion = ({ onError }) => {
     };
   }, [isExpanded]);
   useEffect(() => {
-    if(submission[question.id]) return
+    if (submission[question.id]) return;
     dispatch(
       initializeSubmission({
         question_id: question.id,
@@ -67,6 +70,7 @@ const RenderCodeQuestion = ({ onError }) => {
   }, [question, submission]);
   useEffect(() => {
     setPythonOutput([]);
+    setError({hasError: false, message: null})
   }, [question]);
 
   const handleRunCode = async () => {
@@ -94,12 +98,12 @@ const RenderCodeQuestion = ({ onError }) => {
         result.push({ ...element.stdout, testcase });
       }
       setPythonOutput(result || []);
+      setError({hasError: false, message: null})
     } catch (err) {
-      onError({
+      setError({
         hasError: true,
         message: err.message || "Error running code",
       });
-      console.error(err);
     } finally {
       setIsRunningCode(false);
     }
@@ -146,7 +150,7 @@ const RenderCodeQuestion = ({ onError }) => {
             onClick={() => setIsExpanded(false)}
             className="text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
           >
-            <MdFullscreenExit className="text-2xl" />
+            <Minimize className="text-2xl" />
           </button>
         ) : (
           <button
@@ -154,7 +158,7 @@ const RenderCodeQuestion = ({ onError }) => {
             onClick={() => setIsExpanded(true)}
             className="text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
           >
-            <MdFullscreen className="text-2xl" />
+            <Maximize className="text-2xl" />
           </button>
         )}
       </div>
@@ -254,6 +258,14 @@ const RenderCodeQuestion = ({ onError }) => {
             >
               {isRunningCode ? "Running..." : "Run Code"}
             </button>
+            {error.hasError ? (
+              <div
+                className="flex flex-col gap-2 p-3 border rounded-lg bg-red-50 border-red-300 text-red-600"
+              >
+                <h1 className="text-sm font-semibold">Syntax Error</h1>
+                <p>{error.message}</p>
+              </div>
+            ) : null}
             {pythonOutput.length > 0 ? (
               <section className="space-y-2">
                 <h2 className="font-medium text-neutral-800 text-lg">

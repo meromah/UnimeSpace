@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { HiDotsVertical } from "react-icons/hi";
+import { MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = ({ isMyProfile, onReport }) => {
@@ -68,7 +68,7 @@ const ProfileMenu = ({ isMyProfile, onReport }) => {
         aria-label="Profile options"
         aria-expanded={isOpen}
       >
-        <HiDotsVertical className="w-5 h-5" />
+        <MoreVertical className="w-5 h-5" />
       </button>
 
       {isOpen && (

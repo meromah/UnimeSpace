@@ -4,7 +4,7 @@ import {
   useGetTestAllDraftsQuery,
   useLazyGetTestFromDescByIdQuery,
 } from "../../services/testsApi";
-import { BiChevronLeft } from "react-icons/bi";
+import { ChevronLeft } from "lucide-react";
 import RelativeTime from "../../components/RelativeTime";
 import { useDispatch } from "react-redux";
 import { useLazyGetQuestionsForTestQuery } from "../../services/questionsApi";
@@ -70,7 +70,7 @@ const TestDrafts = () => {
           className="flex items-center gap-2 text-neutral-700 hover:text-neutral-900 focus:outline-none w-fit transition-colors"
           onClick={()=>navigate(-1)}
         >
-          <BiChevronLeft className="text-2xl cursor-pointer" />
+          <ChevronLeft className="text-2xl cursor-pointer" />
           <span className="cursor-pointer">Back</span>
         </button>
 

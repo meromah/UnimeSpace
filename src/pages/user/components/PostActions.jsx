@@ -1,5 +1,4 @@
-import { FiShare2 } from "react-icons/fi";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Share2, Heart } from "lucide-react";
 
 const PostActions = ({
   isPostLiked,
@@ -17,11 +16,7 @@ const PostActions = ({
           title={isPostLiked ? "Unlike" : "Like"}
           aria-label={`${likesCount} likes`}
         >
-          {isPostLiked ? (
-            <FaHeart className="text-red-500" />
-          ) : (
-            <FaRegHeart />
-          )}
+          <Heart className={isPostLiked ? "text-red-500 fill-red-500" : ""} />
           <span
             ref={postLikesCountRef}
             className={isPostLiked ? "text-red-500" : ""}
@@ -37,7 +32,7 @@ const PostActions = ({
           className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer"
           title="Share"
         >
-          <FiShare2 />
+          <Share2 />
         </button>
       </div>
     </div>
@@ -45,4 +40,5 @@ const PostActions = ({
 };
 
 export default PostActions;
+
 

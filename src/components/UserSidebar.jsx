@@ -1,15 +1,16 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import {
-  FiChevronDown as ChevronDown,
-  FiChevronRight as ChevronRight,
-  FiFileText as FileText,
-  FiGrid as Grid,
-  FiBook as Book,
-  FiLayers as Layers,
-  FiSettings as Settings,
-  FiLogOut as LogOut,
-} from "react-icons/fi";
-import { HiMenuAlt3, HiX } from "react-icons/hi";
+  ChevronDown,
+  ChevronRight,
+  FileText,
+  Grid3x3 as Grid,
+  Book,
+  Layers,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ExpandableSection from "../pages/user/components/ExpandableSection";
@@ -17,9 +18,9 @@ import { useLogoutMutation } from "../services/authApi.js";
 import { useGetMyDescSubscriptionsQuery } from "../services/descSubscriptionsApi.js";
 import { useGetMyBoardSubscriptionsQuery } from "../services/boardSubscriptionsApi.js";
 import { getFileUrl } from "../utils/helpers";
-import { RiDraftLine } from "react-icons/ri";
-import { FaInfoCircle } from "react-icons/fa";
-import { MdSearch } from "react-icons/md";
+import { FileEdit } from "lucide-react";
+import { Info } from "lucide-react";
+import { Search } from "lucide-react";
 const MenuLink = ({ to, label, icon: Icon, onClick }) => {
   return (
     <Link
@@ -37,7 +38,7 @@ const resourcesSection = {
   id: "resources",
   title: "Resources",
   path: "",
-  icon: FaInfoCircle,
+  icon: Info,
   items: [
     {
       id: "playground",
@@ -79,7 +80,7 @@ const exploreData = [
 const createActionArr = [
   { label: "Community", path: "/create/community", icon: Grid },
   { label: "Post", path: "/create/post", icon: FileText },
-  { label: "Test", path: "/create/test", icon: RiDraftLine },
+  { label: "Test", path: "/create/test", icon: FileEdit },
   { label: "Drafts", path: "/test/drafts", icon: Layers },
 ];
 
@@ -205,7 +206,7 @@ const UserSidebar = () => {
               <span className="text-white font-bold text-lg">S</span>
             </div>
             <span className="text-lg font-semibold text-neutral-900">
-              StudyHub
+              UnimeSpace
             </span>
           </div>
         </Link>
@@ -227,9 +228,9 @@ const UserSidebar = () => {
           aria-controls="mobile-menu"
         >
           {isMobileMenuOpen ? (
-            <HiX className="text-2xl text-neutral-900" />
+            <X className="text-2xl text-neutral-900" />
           ) : (
-            <HiMenuAlt3 className="text-2xl text-neutral-900" />
+            <Menu className="text-2xl text-neutral-900" />
           )}
         </button>
       </div>
@@ -248,7 +249,7 @@ const UserSidebar = () => {
               <span className="text-white font-bold text-lg">S</span>
             </div>
             <span className="text-lg font-semibold text-neutral-900">
-              StudyHub
+              UnimeSpace
             </span>
           </div>
         </Link>
@@ -321,7 +322,7 @@ const UserSidebar = () => {
           <div className="h-px bg-neutral-200" />
           <div className="py-1">
             <MenuLink
-                icon={MdSearch}
+                icon={Search}
                 label={"Explore"}
                 onClick={toggleMobileMenu}
                 to={"/explore/"}

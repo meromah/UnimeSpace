@@ -1,8 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaFileAlt, FaImage } from "react-icons/fa";
-import { FiX } from "react-icons/fi";
-import { IoMdAttach } from "react-icons/io";
-import { IoReload } from "react-icons/io5";
+import { FileText, Image, X, Paperclip, RotateCw } from "lucide-react";
 import { getFile, getImage } from "../../../utils";
 import { useUploadPostFilesMutation } from "../../../services/fileApi";
 import { useCreatePostMutation } from "../../../services/postsApi";
@@ -258,7 +255,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
           onClick={() => imageInputRef.current?.click()}
           className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors"
         >
-          <FaImage className="w-4 h-4" />
+          <Image className="w-4 h-4" />
           <span>Image</span>
         </button>
         <input
@@ -275,7 +272,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
           onClick={() => fileInputRef.current?.click()}
           className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors"
         >
-          <IoMdAttach className="w-4 h-4" />
+          <Paperclip className="w-4 h-4" />
           <span>File</span>
         </button>
         <input
@@ -308,7 +305,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
                   onClick={() => handleReUpload(image, i, setUploadedImages)}
                   className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full"
                 >
-                  <IoReload className="w-7 h-7" />
+                  <RotateCw className="w-7 h-7" />
                 </button>
               ) : (
                 <button
@@ -316,7 +313,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
                   onClick={() => removeImage(image.id)}
                   className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full md:opacity-0 md:group-hover:opacity-100 transition-opacity"
                 >
-                  <FiX className="w-4 h-4" />
+                  <X className="w-4 h-4" />
                 </button>
               )}
               <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2 truncate">
@@ -338,7 +335,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
               } ${file.error && "ring-2 ring-red-500"}`}
             >
               <div className="flex items-center gap-2 flex-1 min-w-0">
-                <FaFileAlt className="w-4 h-4 text-neutral-400 flex-shrink-0" />
+                <FileText className="w-4 h-4 text-neutral-400 flex-shrink-0" />
                 <span className="text-sm text-neutral-700 truncate">
                   {file.name}
                 </span>
@@ -360,7 +357,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
                   onClick={() => removeFile(file.id)}
                   className="p-1 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
                 >
-                  <FiX className="w-4 h-4" />
+                  <X className="w-4 h-4" />
                 </button>
               )}
             </div>

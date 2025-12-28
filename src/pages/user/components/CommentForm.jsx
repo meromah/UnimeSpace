@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FiSend } from "react-icons/fi";
+import { Send } from "lucide-react";
 import { useSelector } from "react-redux";
 
 const CommentForm = ({ onSubmit, isLoading }) => {
@@ -52,7 +52,7 @@ const CommentForm = ({ onSubmit, isLoading }) => {
           disabled={!newComment.trim() || isLoading}
           className="px-4 h-10 bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center text-sm font-medium flex-shrink-0"
         >
-          <FiSend className="w-4 h-4" />
+          <Send className="w-4 h-4" />
         </button>
       </div>
     </div>

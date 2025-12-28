@@ -1,4 +1,4 @@
-import { FaRegComment } from "react-icons/fa";
+import { MessageCircle } from "lucide-react";
 import Loading from "../../../components/Loading";
 import CommentCard from "./CommentCard";
 
@@ -20,7 +20,7 @@ const CommentsList = ({
   return (
     <>
       <h4 className="font-semibold text-neutral-900 flex items-center gap-2 text-base">
-        <FaRegComment className="text-neutral-600" />
+        <MessageCircle className="text-neutral-600" />
         <span>
           Comments (
           <span ref={commentCountRef}>{commentsCount || 0}</span>)
@@ -51,7 +51,7 @@ const CommentsList = ({
             ))
           ) : (
             <div className="flex flex-col items-center gap-3 py-8 text-neutral-500">
-              <FaRegComment className="text-3xl opacity-50" />
+              <MessageCircle className="text-3xl opacity-50" />
               <p className="text-sm">
                 No comments yet. Be the first to comment!
               </p>
@@ -64,4 +64,5 @@ const CommentsList = ({
 };
 
 export default CommentsList;
+
 

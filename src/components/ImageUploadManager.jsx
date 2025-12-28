@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { FaImage, FaCamera } from "react-icons/fa";
-import { FiX } from "react-icons/fi";
-import { IoReload } from "react-icons/io5";
+import { Image, Camera, X, RotateCw } from "lucide-react";
 import { getFileUrl, getImage } from "../utils/helpers";
 
 /**
@@ -196,7 +194,7 @@ const ImageUploadManager = ({
                   }
                   className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
                 >
-                  <IoReload className="w-5 h-5" />
+                  <RotateCw className="w-5 h-5" />
                 </button>
               ) : (
                 <>
@@ -212,7 +210,7 @@ const ImageUploadManager = ({
                     onClick={removeBanner}
                     className="hidden md:block absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
                   >
-                    <FiX className="w-4 h-4" />
+                    <X className="w-4 h-4" />
                   </button>
                 </>
               )}
@@ -224,7 +222,7 @@ const ImageUploadManager = ({
                 >
                   <div className="flex items-center justify-center h-full">
                     <div className="flex items-center gap-2 text-white">
-                      <FaImage className="w-5 h-5" />
+                      <Image className="w-5 h-5" />
                       <span className="text-sm font-medium">Change Banner</span>
                     </div>
                   </div>
@@ -249,7 +247,7 @@ const ImageUploadManager = ({
                 className="md:hidden absolute inset-0 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex items-center justify-center active:brightness-90 transition-all"
               >
                 <div className="flex items-center gap-2 text-white">
-                  <FaImage className="w-5 h-5" />
+                  <Image className="w-5 h-5" />
                   <span className="text-xs font-medium">Upload Banner</span>
                 </div>
               </button>
@@ -260,7 +258,7 @@ const ImageUploadManager = ({
               >
                 <div className="flex items-center justify-center h-full">
                   <div className="flex items-center gap-2 text-white">
-                    <FaImage className="w-6 h-6" />
+                    <Image className="w-6 h-6" />
                     <span className="text-sm font-medium">Upload Banner</span>
                   </div>
                 </div>
@@ -316,7 +314,7 @@ const ImageUploadManager = ({
                   onClick={() => setMobileMenu("avatar")}
                   className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 active:brightness-90 transition-all"
                 >
-                  <FaCamera className="w-5 h-5 text-white" />
+                  <Camera className="w-5 h-5 text-white" />
                 </button>
               )}
             </div>
@@ -346,7 +344,7 @@ const ImageUploadManager = ({
                       onClick={() => avatarInputRef.current?.click()}
                       className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                     >
-                      <FaCamera className="w-5 h-5 text-white" />
+                      <Camera className="w-5 h-5 text-white" />
                     </button>
                   )}
 
@@ -362,7 +360,7 @@ const ImageUploadManager = ({
                   onClick={() => avatarInputRef.current?.click()}
                   className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all"
                 >
-                  <FaCamera className="w-6 h-6 text-white" />
+                  <Camera className="w-6 h-6 text-white" />
                 </button>
               )}
             </div>
@@ -438,7 +436,7 @@ const ImageUploadManager = ({
                 }}
                 className="w-full px-4 py-3 text-left text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors flex items-center gap-3"
               >
-                <FaImage className="w-5 h-5 text-primary-blue" />
+                <Image className="w-5 h-5 text-primary-blue" />
                 <span className="font-medium">
                   {(mobileMenu === "banner" && currentBannerUrl) ||
                   (mobileMenu === "avatar" && currentAvatarUrl)

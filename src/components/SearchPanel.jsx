@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { FiSearch, FiX, FiChevronDown } from "react-icons/fi";
+import { Search, X, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSearchBoardsQuery } from "../services/boardsApi";
 import { useSearchDescsQuery } from "../services/descsApi";
@@ -40,7 +40,7 @@ const SearchResult = ({
         className="w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-neutral-900 hover:bg-neutral-50 rounded-lg transition"
       >
         <span className="flex-1 text-left">{title}</span>
-        <FiChevronDown
+        <ChevronDown
           className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${
             isExpanded ? "rotate-180" : ""
           }`}
@@ -166,7 +166,7 @@ const SearchPanel = ({ className }) => {
     <section ref={panelRef} className="relative w-full">
       <div className={className}>
         <div className="relative">
-          <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
 
           <input
             ref={inputRef}
@@ -188,7 +188,7 @@ const SearchPanel = ({ className }) => {
               onClick={clearSearch}
               className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-neutral-100 transition"
             >
-              <FiX />
+              <X />
             </button>
           )}
         </div>
@@ -202,7 +202,7 @@ const SearchPanel = ({ className }) => {
               className="flex items-center gap-2 px-4 py-4 text-sm text-neutral-500 cursor-pointer select-none hover:text-neutral-800"
             >
               <span className="text-lg text-neutral-900">
-                <FiSearch />
+                <Search />
               </span>
               <span>{debouncedQuery}</span>
             </p>

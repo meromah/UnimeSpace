@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FaUser, FaEdit, FaComment, FaQuestionCircle } from "react-icons/fa";
+import { User, Edit, MessageCircle, HelpCircle } from "lucide-react";
 import Loading from "../../components/Loading.jsx";
 import ErrorDisplay from "../../components/ErrorDisplay.jsx";
 import NotFound from "../../components/NotFound.jsx";
@@ -71,10 +71,10 @@ const Profile = ({ isMyProfile = false }) => {
 
   const tabs = useMemo(
     () => [
-      { id: "overview", label: "Overview", icon: FaUser },
-      { id: "posts", label: "Posts", icon: FaEdit },
-      { id: "tests", label: "Tests", icon: FaQuestionCircle },
-      { id: "comments", label: "Comments", icon: FaComment },
+      { id: "overview", label: "Overview", icon: User },
+      { id: "posts", label: "Posts", icon: Edit },
+      { id: "tests", label: "Tests", icon: HelpCircle },
+      { id: "comments", label: "Comments", icon: MessageCircle },
     ],
     []
   );

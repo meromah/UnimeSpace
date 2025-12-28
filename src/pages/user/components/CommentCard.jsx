@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiSend, FiPlus, FiMinus } from "react-icons/fi";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Send, Plus, Minus, Heart } from "lucide-react";
 import { useSelector } from "react-redux";
 import RelativeTime from "../../../components/RelativeTime";
 import { getInitials, extractErrorMessage } from "../../../utils";
@@ -241,11 +240,7 @@ const CommentCard = ({
                   onClick={onToggleCommentLike}
                   className="flex items-center gap-1 hover:bg-gray-100 px-1 py-0.5 rounded transition-colors"
                 >
-                  {isLiked ? (
-                    <FaHeart className="text-red-500" />
-                  ) : (
-                    <FaRegHeart />
-                  )}
+                  <Heart className={isLiked ? "text-red-500 fill-red-500" : ""} />
                   <span
                     ref={commentLikeCountRef}
                     className={isLiked ? "text-red-500" : ""}
@@ -296,7 +291,7 @@ const CommentCard = ({
                 disabled={!replyText.trim()}
                 className="px-4 h-10 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center text-sm flex-shrink-0"
               >
-                <FiSend className="w-4 h-4" />
+                <Send className="w-4 h-4" />
               </button>
             </div>
           )}
@@ -333,7 +328,7 @@ const CommentCard = ({
                   className="border rounded-full p-0.5 text-xs cursor-pointer hover:text-neutral-600"
                   onClick={() => setIsRepliesShown((prev) => !prev)}
                 >
-                  {isRepliesShown ? <FiMinus /> : <FiPlus />}
+                  {isRepliesShown ? <Minus /> : <Plus />}
                 </div>
                 {!isRepliesShown && (
                   <p className="flex items-center gap-1 text-xs text-blue-600 font-bold cursor-pointer hover:underline">

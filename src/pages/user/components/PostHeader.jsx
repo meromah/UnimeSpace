@@ -1,4 +1,4 @@
-import { FiChevronLeft } from "react-icons/fi";
+import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import RelativeTime from "../../../components/RelativeTime";
 import { getFileUrl, getInitials } from "../../../utils";
@@ -25,7 +25,7 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
             onClick={() => navigate(-1)}
             className="flex items-center text-neutral-600 hover:text-neutral-900 transition-colors font-medium cursor-pointer"
           >
-            <FiChevronLeft className="text-2xl" />
+            <ChevronLeft className="text-2xl" />
           </button>
           {/* Author */}
           <div className="flex items-center gap-3">
@@ -109,3 +109,4 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
 };
 
 export default PostHeader;
+

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
 import { useUpdatePostMutation } from "../../../services/postsApi";
 
 const EditPostModal = ({ isOpen, onClose, post, boardName }) => {

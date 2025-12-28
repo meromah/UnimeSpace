@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { ChevronDown } from "lucide-react";
 
 const HomeSortBy = ({
   labelByType,
@@ -50,7 +50,7 @@ const HomeSortBy = ({
           className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 border border-neutral-200 rounded-lg hover:bg-neutral-50"
         >
           <span>{labelByTime}</span>
-          <FiChevronDown
+          <ChevronDown
             className={`w-4 h-4 transition-transform ${
               showSortDropdown ? "rotate-180" : ""
             }`}

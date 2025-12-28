@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import { FaInbox } from "react-icons/fa";
+import { Inbox } from "lucide-react";
 import ErrorDisplay from "../../components/ErrorDisplay.jsx";
 import NotFound from "../../components/NotFound.jsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -162,7 +162,7 @@ const Feeds = () => {
                   />
                   <div className="flex flex-col items-center justify-center py-16 px-4">
                     <div className="bg-neutral-100 rounded-full p-6 mb-4">
-                      <FaInbox className="text-4xl text-neutral-400" />
+                      <Inbox className="text-4xl text-neutral-400" />
                     </div>
                     <h3 className="text-lg font-medium text-neutral-900 mb-2">
                       No posts yet. Be a first one to post

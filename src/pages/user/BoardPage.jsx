@@ -11,8 +11,7 @@ import NotFound from "../../components/NotFound";
 import ErrorDisplay from "../../components/ErrorDisplay";
 import Toast from "../../components/Toast";
 import { useGetBoardQuery } from "../../services/boardsApi";
-import { FaRegFileAlt } from "react-icons/fa";
-import { IoMdAttach } from "react-icons/io";
+import { FileText, Paperclip } from "lucide-react";
 import useSortBy from "../../hooks/useSortBy";
 import CreatePost from "./components/CreatePost";
 import { SORT_BY } from "../../utils";
@@ -152,7 +151,7 @@ const BoardPage = () => {
                       className="p-2 text-neutral-500 hover:text-primary-blue hover:bg-primary-blue/10 rounded-lg transition-colors cursor-pointer"
                       aria-label="Attach file"
                     >
-                      <IoMdAttach className="w-5 h-5" />
+                      <Paperclip className="w-5 h-5" />
                     </button>
                   </div>
                 ) : isAuthenticated ? (
@@ -182,7 +181,7 @@ const BoardPage = () => {
                 {postData.data.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-16 px-4">
                     <div className="bg-neutral-100 rounded-full p-6 mb-4">
-                      <FaRegFileAlt className="text-4xl text-neutral-700" />
+                      <FileText className="text-4xl text-neutral-700" />
                     </div>
                     <h3 className="text-lg font-medium text-neutral-900 mb-2">
                       {emptyStateMessages.title}

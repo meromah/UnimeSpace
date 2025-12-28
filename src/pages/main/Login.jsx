@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLoginMutation } from "../../services/authApi";
 import SuccessModal from "./components/SuccessModal";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setIsAuthenticated } from "../../app/authSlice";
 
@@ -33,7 +33,7 @@ const Login = () => {
       {showSuccessModal && (
         <SuccessModal
           onClose={() => setShowSuccessModal(false)}
-          header={"Welcome to UniHub!"}
+          header={"Welcome to UnimeSpace!"}
           message={
             "Your logged in to your account successfully. Redirecting you to home..."
           }
@@ -83,7 +83,7 @@ const Login = () => {
           >
             <span>{isLoading ? "Logging in..." : "Log In"}</span>
             {isLoading && (
-              <AiOutlineLoading3Quarters className="animate-spin text-white text-lg" />
+              <Loader2 className="animate-spin text-white text-lg" />
             )}
           </button>
         </div>

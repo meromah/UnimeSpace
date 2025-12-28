@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { HiMenuAlt3, HiX } from 'react-icons/hi';
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -107,9 +107,9 @@ const Navbar = () => {
         aria-controls="mobile-menu"
       >
         {isMobileMenuOpen ? (
-          <HiX className="text-2xl text-neutral-900" />
+          <X className="text-2xl text-neutral-900" />
         ) : (
-          <HiMenuAlt3 className="text-2xl text-neutral-900" />
+          <Menu className="text-2xl text-neutral-900" />
         )}
       </button>
 

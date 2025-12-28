@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
 
 const REPORT_REASONS = [
   "Spam",
@@ -100,7 +100,7 @@ const ReportPostModal = ({ isOpen, onClose, post }) => {
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full p-1 cursor-pointer disabled:opacity-50"
           aria-label="Close modal"
         >
-          <FaTimes className="w-5 h-5" />
+          <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}

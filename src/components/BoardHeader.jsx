@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { FaUsers, FaFileAlt, FaHeart } from "react-icons/fa";
-import { FiChevronDown } from "react-icons/fi";
-import { LiaCrownSolid } from "react-icons/lia";
+import { Users, FileText, Heart, ChevronDown, Crown } from "lucide-react";
 import RelativeTime from "./RelativeTime";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -234,7 +232,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
         {/* Stats */}
         <div className="flex items-center gap-6 mb-4 pb-4 border-b border-neutral-200">
           <div className="flex items-center gap-2 text-sm">
-            <FaUsers className="text-blue-600 text-base" />
+            <Users className="text-blue-600 text-base" />
             <span className="text-neutral-700 font-medium">
               {board.subscribers_count.toLocaleString()}
             </span>
@@ -243,7 +241,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <FaFileAlt className="text-blue-600 text-base" />
+            <FileText className="text-blue-600 text-base" />
             <span className="text-neutral-700 font-medium">
               {board.posts_count.toLocaleString()}
             </span>
@@ -260,7 +258,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
             className="w-full flex items-center justify-between py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 transition-colors group"
           >
             <span>About this board</span>
-            <FiChevronDown
+            <ChevronDown
               className={`text-lg transition-transform duration-200 text-neutral-400 group-hover:text-blue-600 ${
                 isExpanded ? "rotate-180" : ""
               }`}

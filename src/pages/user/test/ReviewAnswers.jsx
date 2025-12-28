@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useGetQuestionTypesQuery } from "../../../services/questionTypesApi";
 import { Button } from "./Button";
 import Loading from "../../../components/Loading";
-import { FiCheckCircle, FiEdit3 } from "react-icons/fi";
+import { CheckCircle, Edit3 } from "lucide-react";
 import { completeTest, jumpToQuestion } from "../../../app/testSessionSlice";
 import { usePostTestSubmitMutation } from "../../../services/testsApi";
 import { useParams } from "react-router-dom";
@@ -38,7 +38,7 @@ export const ReviewAnswers = () => {
       <header className="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3">
           <div className="flex items-center justify-center w-10 h-10 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-            <FiEdit3 className="w-5 h-5" />
+            <Edit3 className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-lg font-semibold">Review Your Answers</h1>
@@ -53,7 +53,7 @@ export const ReviewAnswers = () => {
       <main className="flex-1 w-full max-w-3xl mx-auto p-4 sm:p-6">
         {/* Banner */}
         <div className="mb-6 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 p-4 flex items-start gap-3">
-          <FiCheckCircle className="w-5 h-5 text-slate-500 dark:text-slate-400 mt-0.5" />
+          <CheckCircle className="w-5 h-5 text-slate-500 dark:text-slate-400 mt-0.5" />
           <div className="text-sm">
             <p className="font-medium mb-1">Review before submitting</p>
             <p className="text-slate-600 dark:text-slate-400">
@@ -90,7 +90,7 @@ export const ReviewAnswers = () => {
                     onClick={() => handleEdit(question.id, index)}
                     className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 border-b border-b-transparent hover:border-b-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition cursor-pointer"
                   >
-                    <FiEdit3 className="w-4 h-4" />
+                    <Edit3 className="w-4 h-4" />
                     <span>Edit</span>
                   </button>
                 </div>

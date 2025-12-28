@@ -9,11 +9,11 @@ import NotFound from "../../components/NotFound";
 import ErrorDisplay from "../../components/ErrorDisplay";
 import Toast from "../../components/Toast";
 import { useGetDescQuery } from "../../services/descsApi";
-import { FaRegFileAlt } from "react-icons/fa";
+import { FileText } from "lucide-react";
 import useSortBy from "../../hooks/useSortBy";
 import CreateTest from "./components/CreateTest";
 import DescHeader from "./components/DescHeader";
-import { IoAdd } from "react-icons/io5";
+import { Plus } from "lucide-react";
 import { SORT_BY } from "../../utils";
 import { setDescName, setIsPopUp } from "../../app/createTestSlice";
 import InfiniteItemCards from "./components/Virtualized/InfiniteItemCards";
@@ -147,7 +147,7 @@ const DescPage = () => {
                       className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-blue hover:bg-primary-blue/10 hover:text-primary-blue rounded-lg transition-colors shadow-sm"
                       aria-label="Create test"
                     >
-                      <IoAdd className="w-5 h-5" />
+                      <Plus className="w-5 h-5" />
                       Create Test
                     </button>
                   )}
@@ -172,7 +172,7 @@ const DescPage = () => {
                 {transformedTests.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-16 px-4">
                     <div className="bg-neutral-100 rounded-full p-6 mb-4">
-                      <FaRegFileAlt className="text-4xl text-neutral-700" />
+                      <FileText className="text-4xl text-neutral-700" />
                     </div>
                     <h3 className="text-lg font-medium text-neutral-900 mb-2">
                       No tests yet

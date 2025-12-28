@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { FaUsers, FaFileAlt } from "react-icons/fa";
-import { FiChevronDown } from "react-icons/fi";
+import { Users, FileText, ChevronDown } from "lucide-react";
 import RelativeTime from "../../../components/RelativeTime";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -236,7 +235,7 @@ const DescHeader = ({ desc, isSubscribed = false }) => {
         {/* Stats */}
         <div className="flex items-center gap-6 mb-4 pb-4 border-b border-neutral-200">
           <div className="flex items-center gap-2 text-sm">
-            <FaUsers className="text-purple-600 text-base" />
+            <Users className="text-purple-600 text-base" />
             <span className="text-neutral-700 font-medium">
               {desc.subscribers_count?.toLocaleString() || 0}
             </span>
@@ -245,7 +244,7 @@ const DescHeader = ({ desc, isSubscribed = false }) => {
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <FaFileAlt className="text-purple-600 text-base" />
+            <FileText className="text-purple-600 text-base" />
             <span className="text-neutral-700 font-medium">
               {desc.tests_count?.toLocaleString() || 0}
             </span>
@@ -262,7 +261,7 @@ const DescHeader = ({ desc, isSubscribed = false }) => {
             className="w-full flex items-center justify-between py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 transition-colors group"
           >
             <span>About this desc</span>
-            <FiChevronDown
+            <ChevronDown
               className={`text-lg transition-transform duration-200 text-neutral-400 group-hover:text-purple-600 ${
                 isExpanded ? "rotate-180" : ""
               }`}

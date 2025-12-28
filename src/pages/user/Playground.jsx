@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
-  FiPlay,
-  FiDownload,
-  FiUpload,
-  FiTrash2,
-  FiMaximize2,
-  FiMinimize2,
-  FiTerminal,
-  FiCode,
-  FiClock,
-  FiChevronLeft,
-} from "react-icons/fi";
+  Play,
+  Download,
+  Upload,
+  Trash2,
+  Maximize2,
+  Minimize2,
+  Terminal,
+  Code,
+  Clock,
+  ChevronLeft,
+} from "lucide-react";
 import { usePlayPythonApiMutation } from "../../services/solutionsApi";
 import { Link } from "react-router-dom";
 
@@ -112,7 +112,7 @@ const Playground = () => {
       <div className=" bg-neutral-800 border-b border-neutral-700 flex md:items-center justify-between px-4 flex-shrink-0">
           <div className="flex items-center gap-2 py-2 justify-between md:justify-baseline">
             <Link to={"/"} className="flex gap-0.5 items-center cursor-pointer">
-              <FiChevronLeft />
+              <ChevronLeft />
               <span>Home</span>
             </Link>
             <h1 className="text-base font-semibold text-white border-l border-l-neutral-600 px-3">
@@ -126,7 +126,7 @@ const Playground = () => {
             className="p-2 text-neutral-400 hover:text-white hover:bg-neutral-700 rounded transition"
             title="Clear code"
           >
-            <FiTrash2 className="w-4 h-4" />
+            <Trash2 className="w-4 h-4" />
           </button>
 
           {/* Run Button */}
@@ -146,7 +146,7 @@ const Playground = () => {
               </>
             ) : (
               <>
-                <FiPlay className="w-4 h-4" />
+                <Play className="w-4 h-4" />
                 <span>Run</span>
               </>
             )}
@@ -160,7 +160,7 @@ const Playground = () => {
           }`}
           onClick={() => setActiveTab("code")}
         >
-          <FiCode className="w-3.5 h-3.5 text-blue-400" />
+          <Code className="w-3.5 h-3.5 text-blue-400" />
           <span className="text-neutral-400 font-medium">Editor</span>
         </div>
         <div
@@ -169,7 +169,7 @@ const Playground = () => {
           }`}
           onClick={() => setActiveTab("console")}
         >
-          <FiTerminal className="w-3.5 h-3.5 text-green-400" />
+          <Terminal className="w-3.5 h-3.5 text-green-400" />
           <span className="text-neutral-400 font-medium">Console</span>
         </div>
       </div>
@@ -184,7 +184,7 @@ const Playground = () => {
           {/* Editor Header */}
           <div className="hidden h-10 bg-neutral-800 border-b border-neutral-700 md:flex items-center px-4">
             <div className="flex items-center gap-2 text-xs">
-              <FiCode className="w-3.5 h-3.5 text-blue-400" />
+              <Code className="w-3.5 h-3.5 text-blue-400" />
               <span className="text-neutral-400 font-medium">Editor</span>
             </div>
           </div>
@@ -228,7 +228,7 @@ const Playground = () => {
           {/* Output Header */}
           <div className=" hidden h-10 bg-neutral-800 border-b border-neutral-700 md:flex items-center justify-between px-4">
             <div className="flex items-center gap-2 text-xs">
-              <FiTerminal className="w-3.5 h-3.5 text-green-400" />
+              <Terminal className="w-3.5 h-3.5 text-green-400" />
               <span className="text-neutral-400 font-medium">Console</span>
             </div>
           </div>

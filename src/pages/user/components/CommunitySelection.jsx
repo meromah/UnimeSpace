@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { FiSearch } from "react-icons/fi";
+import { Search } from "lucide-react";
 import { useSearchBoardsQuery } from "../../../services/boardsApi";
 import { useGetMyBoardSubscriptionsQuery } from "../../../services/boardSubscriptionsApi";
 import { useSearchDescsQuery } from "../../../services/descsApi";
@@ -217,7 +217,7 @@ const CommunitySelection = ({
       </label>
       <div className="relative">
         <div className="relative">
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
           <input
             ref={communitySearchRef}
             type="text"

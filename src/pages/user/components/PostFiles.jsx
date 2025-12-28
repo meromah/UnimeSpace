@@ -1,11 +1,8 @@
 import React, { useRef } from "react";
 import {
-  FaFile,
-  FaFilePdf,
-  FaFileWord,
-  FaFileExcel,
-  FaFileArchive,
-} from "react-icons/fa";
+  File,
+  FileText,
+} from "lucide-react";
 import { handleDownload } from "../../../utils";
 
 const PostFiles = ({ files }) => {
@@ -14,19 +11,19 @@ const PostFiles = ({ files }) => {
 
   const getFileIcon = (mimetype) => {
     if (mimetype.includes("pdf")) {
-      return <FaFilePdf className="w-5 h-5 text-red-500" />;
+      return <FileText className="w-5 h-5 text-red-500" />;
     } else if (mimetype.includes("word") || mimetype.includes("document")) {
-      return <FaFileWord className="w-5 h-5 text-blue-500" />;
+      return <FileText className="w-5 h-5 text-blue-500" />;
     } else if (mimetype.includes("excel") || mimetype.includes("spreadsheet")) {
-      return <FaFileExcel className="w-5 h-5 text-green-500" />;
+      return <FileText className="w-5 h-5 text-green-500" />;
     } else if (
       mimetype.includes("zip") ||
       mimetype.includes("archive") ||
       mimetype.includes("compressed")
     ) {
-      return <FaFileArchive className="w-5 h-5 text-yellow-500" />;
+      return <FileText className="w-5 h-5 text-yellow-500" />;
     }
-    return <FaFile className="w-5 h-5 text-gray-500" />;
+    return <File className="w-5 h-5 text-gray-500" />;
   };
 
   const formatFileSize = (bytes) => {
@@ -56,7 +53,7 @@ const PostFiles = ({ files }) => {
             <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
           </div>
           <div className="flex-shrink-0">
-            <FaFile className="w-4 h-4 text-gray-400" />
+            <File className="w-4 h-4 text-gray-400" />
           </div>
         </button>
       ))}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Toast from "../../components/Toast";
 import { useContactUsMutation } from "../../services/contactApi";
 import AutoResizeTextarea from "../user/components/AutoResizeTextarea";
-import { FiChevronLeft } from "react-icons/fi";
+import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 const Contact = () => {
   const navigate = useNavigate();
@@ -165,7 +165,7 @@ const Contact = () => {
         </form>
       </div>
       <button className="absolute top-4 left-4 cursor-pointer" onClick={()=> navigate(-1)}>
-        <FiChevronLeft className="w-7 h-7 text-neutral-800 hover:text-neutral-600"/>
+        <ChevronLeft className="w-7 h-7 text-neutral-800 hover:text-neutral-600"/>
       </button>
       {submitted && (
         <Toast

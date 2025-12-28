@@ -14,7 +14,7 @@ import EditMcqQuestion from "./testMcqType/EditMcqQuestion";
 import CreateMcqQuestion from "./testMcqType/CreateMcqQuestion";
 import TestDraftsSection from "./TestDraftsSection";
 import { useNavigate } from "react-router-dom";
-import { BiChevronLeft } from "react-icons/bi";
+import { ChevronLeft } from "lucide-react";
 
 const CreateTest = ({ onCancel = undefined }) => {
   const navigate = useNavigate();
@@ -313,7 +313,7 @@ const CreateTest = ({ onCancel = undefined }) => {
                     className="flex items-center gap-2 text-neutral-700 hover:text-neutral-900 focus:outline-none w-fit transition-colors"
                     onClick={() => navigate(-1)}
                   >
-                    <BiChevronLeft className="text-2xl cursor-pointer" />
+                    <ChevronLeft className="text-2xl cursor-pointer" />
                     <span className="cursor-pointer">Back</span>
                   </button>
                 )}

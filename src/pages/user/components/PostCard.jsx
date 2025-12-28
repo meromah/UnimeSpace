@@ -1,6 +1,5 @@
 import React, { useRef, useState, useMemo } from "react";
-import { FaRegComment, FaRegHeart, FaHeart } from "react-icons/fa";
-import { FiShare2 } from "react-icons/fi";
+import { MessageCircle, Heart, Share2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTogglePostLikeMutation } from "../../../services/postsApi";
 import { useDispatch, useSelector } from "react-redux";
@@ -228,7 +227,7 @@ const PostCard = ({
             title="Comments"
             aria-label={`${item.comments_count} comments`}
           >
-            <FaRegComment /> {item.comments_count}
+            <MessageCircle  size={18} /> {item.comments_count}
           </button>
 
           <button
@@ -241,7 +240,7 @@ const PostCard = ({
             } this item`}
             title={liked ? "Unlike" : "Like"}
           >
-            {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
+            <Heart  size={18} className={liked ? "text-red-500 fill-red-500" : ""} />
             <span
               ref={postLikesCountRef}
               className={liked ? "text-red-500" : ""}
@@ -258,7 +257,7 @@ const PostCard = ({
               setIsShareModalOpen(true);
             }}
           >
-            <FiShare2 />
+            <Share2 size={18}/>
           </button>
         </div>
       </Link>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import CommunitySelection from "./CommunitySelection";
 import { useCreateTestMutation, useUpdateTestMutation } from "../../../services/testsApi";
-import { HiPencil } from "react-icons/hi";
+import { Pencil } from "lucide-react";
 
 const CreateTestHeader = ({
   descId,
@@ -201,7 +201,7 @@ const CreateTestHeader = ({
               className="flex-shrink-0 p-1.5 text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-blue/20"
               aria-label="Edit test details"
             >
-              <HiPencil className="w-4 h-4" />
+              <Pencil className="w-4 h-4" />
             </button>
           </div>
           

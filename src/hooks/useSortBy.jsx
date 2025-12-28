@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { ChevronDown } from "lucide-react";
 
 const useSortBy = ({
   isAuthenticated,
@@ -96,7 +96,7 @@ const useSortBy = ({
         className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors"
       >
         <span>{currentSortOption.label}</span>
-        <FiChevronDown
+        <ChevronDown
           className={`w-4 h-4 transition-transform ${
             showSortDropdown ? "rotate-180" : ""
           }`}

@@ -1,5 +1,5 @@
 import React from "react";
-import { FiAlertCircle } from "react-icons/fi";
+import { AlertCircle } from "lucide-react";
 
 function extractErrorParts(error) {
   if (!error) return { status: undefined, message: undefined };
@@ -24,7 +24,7 @@ const ErrorDisplay = ({ error, title = "Something went wrong" }) => {
     <div className="flex min-h-[40vh] items-center justify-center">
       <div className="mx-4 w-full max-w-xl rounded-lg border border-rose-100 bg-rose-50 p-5">
         <div className="flex items-start gap-3">
-          <FiAlertCircle
+          <AlertCircle
             className="mt-0.5 h-6 w-6 shrink-0 text-rose-600"
             aria-hidden="true"
           />
@@ -44,3 +44,4 @@ const ErrorDisplay = ({ error, title = "Something went wrong" }) => {
 };
 
 export default ErrorDisplay;
+

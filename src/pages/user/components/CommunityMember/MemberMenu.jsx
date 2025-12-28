@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { HiDotsVertical } from "react-icons/hi";
+import { MoreVertical } from "lucide-react";
 
 const MemberMenu = ({ member, onBlockUser, isUserBlocked = false }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +61,7 @@ const MemberMenu = ({ member, onBlockUser, isUserBlocked = false }) => {
         aria-label="Member options"
         aria-expanded={isOpen}
       >
-        <HiDotsVertical className="w-4 h-4" />
+        <MoreVertical className="w-4 h-4" />
       </button>
 
       {isOpen && (

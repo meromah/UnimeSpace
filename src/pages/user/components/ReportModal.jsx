@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
 
 const REPORT_REASONS = [
   "Spam",

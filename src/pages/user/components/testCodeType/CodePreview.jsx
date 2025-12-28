@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCheckOldDsaQuestionApiMutation } from "../../../../services/solutionsApi";
-import { FiX } from "react-icons/fi";
+import { X } from "lucide-react";
 import Toast from "../../../../components/Toast";
 import PreviewActionsMenu from "../PreviewActionsMenu";
 
@@ -127,7 +127,7 @@ const CodePreview = ({
                 onClick={() => setShowCodePreview(false)}
                 className="p-2 text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
               >
-                <FiX className="w-5 h-5" />
+                <X className="w-5 h-5" />
               </button>
             </div>
             {/* Content - Two Pane Layout */}

@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
-  FaTimes,
-  FaDownload,
-  FaChevronLeft,
-  FaChevronRight,
-} from "react-icons/fa";
+  X,
+  Download,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { getFileUrl, handleDownload } from "../../../utils";
 const ImageModal = ({ image, images, isOpen, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -80,7 +80,7 @@ const downloadRef = useRef(null)
           className="absolute top-4 right-4 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white cursor-pointer"
           aria-label="Close modal"
         >
-          <FaTimes className="w-5 h-5" />
+          <X className="w-5 h-5" />
         </button>
 
         {/* Download button */}
@@ -90,7 +90,7 @@ const downloadRef = useRef(null)
           aria-label="Download image"
           ref={downloadRef}
         >
-          <FaDownload className="w-5 h-5" />
+          <Download className="w-5 h-5" />
         </button>
 
         {/* Navigation buttons */}
@@ -101,14 +101,14 @@ const downloadRef = useRef(null)
               className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none hover:ring-2 hover:ring-white cursor-pointer"
               aria-label="Previous image"
             >
-              <FaChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={(e) => handleNext(e)}
               className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none hover:ring-2 hover:ring-white  cursor-pointer"
               aria-label="Next image"
             >
-              <FaChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-5 h-5" />
             </button>
             {/* Image counter */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiAlertTriangle } from 'react-icons/fi';
+import { AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const NotFound = () => {
@@ -10,7 +10,7 @@ const NotFound = () => {
       </div>
 
       <div className="flex flex-col items-center text-center max-w-md">
-        <FiAlertTriangle
+        <AlertTriangle
           className="mb-4 h-12 w-12 text-rose-500"
           aria-hidden="true"
         />
@@ -35,4 +35,5 @@ const NotFound = () => {
 };
 
 export default NotFound;
+
 

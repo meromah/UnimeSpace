@@ -1,6 +1,5 @@
-import React, { use, useEffect, useState } from "react";
-import { FaCheck } from "react-icons/fa";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import React, { useEffect, useState } from "react";
+import { Check, Loader2 } from "lucide-react";
 import {
   useEmailVerificationMutation,
   useOtpVerificationMutation,
@@ -9,7 +8,6 @@ import {
 } from "../../services/authApi";
 import Toast from "../../components/Toast";
 import SuccessModal from "./components/SuccessModal";
-import { useDispatch } from "react-redux";
 import NameAvailabilityInput from "../../components/NameAvailabilityInput";
 
 // Default form values
@@ -42,20 +40,8 @@ const Register = () => {
   // useEffect to handle API errors and show toast
   useEffect(() => {
     if (!apiError) return;
-
     showToast(apiError, "error");
   }, [apiError]);
-
-  // useEffect to handle OTP sent info and show toast
-  useEffect(() => {
-    if (step !== 2) return;
-    showToast(
-      <>
-        An OTP has been sent to <strong>{email}</strong>
-      </>,
-      "info"
-    );
-  }, [step]);
 
   // Function to show toast notifications
   const showToast = (message, type = "success") => {
@@ -82,8 +68,7 @@ const Register = () => {
 
     try {
       const res = await emailVerification(email).unwrap();
-      // This console log is to get OTP verification code and can be removed in production
-      console.log(res);
+      setToast({ message: res.message, type: 'info' });
       setStep(2);
     } catch (err) {
       const errorMessage =
@@ -196,6 +181,7 @@ const Register = () => {
           message={toast.message}
           type={toast.type}
           onClose={() => setToast(null)}
+          time={20000}
         />
       )}
 
@@ -217,7 +203,7 @@ const Register = () => {
       {showSuccessModal && (
         <SuccessModal
           onClose={() => setShowSuccessModal(false)}
-          header={"Welcome to UniHub!"}
+          header={"Welcome to UnimeSpace!"}
           message={
             "Your account has been created successfully. Redirecting you to home..."
           }
@@ -228,7 +214,7 @@ const Register = () => {
       <main className="px-4 py-16 max-w-md mx-auto">
         <header className="text-center mb-8">
           <h1 className="text-4xl font-black text-neutral-900 mb-2">
-            Join UniHub
+            Join UnimeSpace
           </h1>
           <p className="text-neutral-700">
             Create your account and start learning, sharing, and vibing.
@@ -256,7 +242,7 @@ const Register = () => {
                     : "bg-gray-200 text-gray-500"
                 }`}
               >
-                {step > 1 ? <FaCheck className="w-5 h-5" /> : "1"}
+                {step > 1 ? <Check className="w-5 h-5" /> : "1"}
               </div>
               <span
                 className={`text-xs mt-2 font-medium transition-colors ${
@@ -276,7 +262,7 @@ const Register = () => {
                     : "bg-gray-200 text-gray-500"
                 }`}
               >
-                {step > 2 ? <FaCheck className="w-5 h-5" /> : "2"}
+                {step > 2 ? <Check className="w-5 h-5" /> : "2"}
               </div>
               <span
                 className={`text-xs mt-2 font-medium transition-colors ${
@@ -347,7 +333,7 @@ const Register = () => {
                 className="btn-cta bg-primary-yellow text-neutral-900 font-semibold hover:bg-primary-yellow/90 w-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all"
               >
                 {isVerifyingEmail && (
-                  <AiOutlineLoading3Quarters className="animate-spin h-5 w-5" />
+                  <Loader2 className="animate-spin h-5 w-5" />
                 )}
                 {isVerifyingEmail ? "Sending Code..." : "Verify Email"}
               </button>
@@ -404,7 +390,7 @@ const Register = () => {
                   className="btn-cta bg-primary-yellow text-neutral-900 font-semibold hover:bg-primary-yellow/90 w-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all"
                 >
                   {isVerifyingOtp && (
-                    <AiOutlineLoading3Quarters className="animate-spin h-5 w-5" />
+                    <Loader2 className="animate-spin h-5 w-5" />
                   )}
                   {isVerifyingOtp ? "Verifying..." : "Verify Code"}
                 </button>
@@ -548,7 +534,7 @@ const Register = () => {
                   className="btn-cta bg-primary-yellow text-neutral-900 font-semibold hover:bg-primary-yellow/90 w-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all"
                 >
                   {isRegistering && (
-                    <AiOutlineLoading3Quarters className="animate-spin h-5 w-5" />
+                    <Loader2 className="animate-spin h-5 w-5" />
                   )}
                   {isRegistering ? "Creating Account..." : "Create Account"}
                 </button>

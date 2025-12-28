@@ -3,7 +3,7 @@ import { Button } from "./Button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetTestFromDescByIdQuery, usePostTestStartMutation } from "../../../services/testsApi";
 import Loading from "../../../components/Loading";
-import { FiClock, FiFileText, FiUser, FiUsers } from "react-icons/fi";
+import { Clock, FileText, User, Users } from "lucide-react";
 import { useGetQuestionsForTestQuery } from "../../../services/questionsApi";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeSession, startSession } from "../../../app/testSessionSlice";
@@ -82,12 +82,12 @@ export const TestInstructions = () => {
           {/* Author and Community Info */}
           <div className="flex items-center gap-4 text-sm text-indigo-100">
             <div className="flex items-center gap-1.5">
-              <FiUser className="w-4 h-4" />
+              <User className="w-4 h-4" />
               <span>{testInfo.data.author.username}</span>
             </div>
             <div className="w-1 h-1 rounded-full bg-indigo-300"></div>
             <div className="flex items-center gap-1.5">
-              <FiUsers className="w-4 h-4" />
+              <Users className="w-4 h-4" />
               <span>{testInfo.data.desc.name}</span>
             </div>
           </div>
@@ -115,7 +115,7 @@ export const TestInstructions = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-200 dark:border-slate-800">
               <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
-                <FiClock className="w-5 h-5" />
+                <Clock className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -131,7 +131,7 @@ export const TestInstructions = () => {
 
             <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-200 dark:border-slate-800">
               <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
-                <FiFileText className="w-5 h-5" />
+                <FileText className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
