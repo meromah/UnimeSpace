@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   mergeSorted,
   nextPage,
-  resetFeed,
+  resetTab,
   setItems,
 } from "../app/homeFeedSlice";
 const tabFilters = new TabFilters();
@@ -195,10 +195,9 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
 
   //Reset feed data for one of the dependencies changes
   useEffect(() => {
-    dispatch(resetFeed({ sortBy, itemType: sortByType, tab }));
+    dispatch(resetTab({ sortBy, itemType: sortByType, tab }));
   }, [sortBy, sortByType, dispatch, tab]);
 
-  
   //Save data to Redux if for the 'for-you' tab
   useEffect(() => {
     // Determine active data source
