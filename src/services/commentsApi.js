@@ -9,12 +9,10 @@ const commentsApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    endpoints: (builder) => ({
-      getAllMyComments: builder.query({
-        query: (queryParams) => ({
-          url: `/comments/my${toQueryString(queryParams)}`,
-          method: "GET",
-        }),
+    getAllMyComments: builder.query({
+      query: (queryParams) => ({
+        url: `/comments/my${toQueryString(queryParams)}`,
+        method: "GET",
       }),
     }),
     getCommentsByBoardPost: builder.query({
@@ -63,6 +61,52 @@ const commentsApi = baseApi.injectEndpoints({
         { type: "Comments", id: `${board}-${post}` },
       ],
     }),
+    getCommentsByDescTest: builder.query({
+      query: ({ desc, test, queryParams }) => ({
+        url: `/descs/${desc}/tests/${test}/comments${toQueryString(
+          queryParams
+        )}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, { desc, test }) => [
+        { type: "Comments", id: `${desc}-${test}` },
+      ],
+    }),
+    getCommentByDescTestCommentId: builder.query({
+      query: ({ desc, test, comment }) => ({
+        url: `/descs/${desc}/tests/${test}/comments/${comment}`,
+        method: "GET",
+      }),
+    }),
+    createCommentByDescTest: builder.mutation({
+      query: ({ desc, test, bodyData }) => ({
+        url: `/descs/${desc}/tests/${test}/comments`,
+        method: "POST",
+        body: bodyData,
+      }),
+      invalidatesTags: (result, error, { desc, test }) => [
+        { type: "Comments", id: `${desc}-${test}` },
+      ],
+    }),
+    updateCommentByDescTest: builder.mutation({
+      query: ({ desc, test, comment, bodyData }) => ({
+        url: `/descs/${desc}/tests/${test}/comments/${comment}`,
+        method: "PUT",
+        body: bodyData,
+      }),
+      invalidatesTags: (result, error, { desc, test }) => [
+        { type: "Comments", id: `${desc}-${test}` },
+      ],
+    }),
+    deleteCommentByDescTest: builder.mutation({
+      query: ({ desc, test, comment }) => ({
+        url: `/descs/${desc}/tests/${test}/comments/${comment}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, { desc, test }) => [
+        { type: "Comments", id: `${desc}-${test}` },
+      ],
+    }),
     getCommentLikesByCommentId: builder.query({
       query: ({ comment }) => ({
         url: `/comments/${comment}/likes`,
@@ -80,6 +124,11 @@ const commentsApi = baseApi.injectEndpoints({
 export const {
   useGetCommentsByBoardPostQuery,
   useGetCommentByBoardPostCommentIdQuery,
+  useGetCommentsByDescTestQuery,
+  useGetCommentByDescTestCommentIdQuery,
+  useCreateCommentByDescTestMutation,
+  useDeleteCommentByDescTestMutation,
+  useUpdateCommentByDescTestMutation,
   useCreateCommentByBoardPostMutation,
   useUpdateCommentByBoardPostMutation,
   useDeleteCommentByBoardPostMutation,
