@@ -104,15 +104,19 @@ const SearchPanel = ({ className }) => {
   const debouncedQuery = useDebouncedValue(searchQuery.trim(), 300);
   const skip = debouncedQuery.length === 0;
 
-  const { data: boardsData = [], isLoading: isBoardsLoading } =
-    useSearchBoardsQuery(skip ? undefined : { search: debouncedQuery }, {
-      skip,
-    });
+  const {
+    data: boardsData = { data: [], subscribed: [] },
+    isLoading: isBoardsLoading,
+  } = useSearchBoardsQuery(skip ? undefined : { search: debouncedQuery }, {
+    skip,
+  });
 
-  const { data: descsData = [], isLoading: isDescsLoading } =
-    useSearchDescsQuery(skip ? undefined : { search: debouncedQuery }, {
-      skip,
-    });
+  const {
+    data: descsData = { data: [], subscribed: [] },
+    isLoading: isDescsLoading,
+  } = useSearchDescsQuery(skip ? undefined : { search: debouncedQuery }, {
+    skip,
+  });
 
   /* -------- outside click -------- */
   useEffect(() => {
@@ -133,7 +137,7 @@ const SearchPanel = ({ className }) => {
 
       if (e.key === "Enter") {
         e.preventDefault();
-        handleSearch()
+        handleSearch();
       }
       if (e.key === "Escape") {
         // setOpen(false);
@@ -154,10 +158,10 @@ const SearchPanel = ({ className }) => {
     setShowDropdown(false);
     inputRef.current?.focus();
   };
-  const handleSearch = ()=>{
-    const searchQuery = toQueryString({query: debouncedQuery})
-    navigate(`/search${searchQuery}`)
-  }
+  const handleSearch = () => {
+    const searchQuery = toQueryString({ query: debouncedQuery });
+    navigate(`/search${searchQuery}`);
+  };
   return (
     <section ref={panelRef} className="relative w-full">
       <div className={className}>
@@ -193,12 +197,17 @@ const SearchPanel = ({ className }) => {
       {showDropdown && debouncedQuery && (
         <div className="absolute z-50 w-full mt-2 bg-white border border-neutral-200 rounded-xl shadow-lg">
           <div className="max-h-[60vh] overflow-y-auto grid gap-2 py-2">
-            <p onClick={()=> handleSearch()} className="flex items-center gap-2 px-4 py-4 text-sm text-neutral-500 cursor-pointer select-none hover:text-neutral-800">
-              <span className="text-lg text-neutral-900"><FiSearch/></span>
+            <p
+              onClick={() => handleSearch()}
+              className="flex items-center gap-2 px-4 py-4 text-sm text-neutral-500 cursor-pointer select-none hover:text-neutral-800"
+            >
+              <span className="text-lg text-neutral-900">
+                <FiSearch />
+              </span>
               <span>{debouncedQuery}</span>
             </p>
-            {boardsData?.length > 0 &&
-            descsData?.length > 0 &&
+            {boardsData?.data.length > 0 &&
+            descsData?.data.length > 0 &&
             !isBoardsLoading &&
             !isDescsLoading ? (
               <>
@@ -206,7 +215,7 @@ const SearchPanel = ({ className }) => {
                   id="boards"
                   title="Boards"
                   itemUrl="b/"
-                  result={boardsData}
+                  result={boardsData?.data}
                   isLoading={isBoardsLoading}
                   emptyStateMessage={`No boards found for "${debouncedQuery}"`}
                   isExpanded={expandedSections.boards}
@@ -218,7 +227,7 @@ const SearchPanel = ({ className }) => {
                   id="descs"
                   title="Descs"
                   itemUrl="d/"
-                  result={descsData}
+                  result={descsData.data}
                   isLoading={isDescsLoading}
                   emptyStateMessage={`No descs found for "${debouncedQuery}"`}
                   isExpanded={expandedSections.descs}
