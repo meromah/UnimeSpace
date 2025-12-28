@@ -3,14 +3,19 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   useCreateCommentByBoardPostMutation,
+  useCreateCommentByDescTestMutation,
   useGetCommentsByBoardPostQuery,
+  useGetCommentsByDescTestQuery,
 } from "../services/commentsApi";
 import {
   useGetPostFromBoardByPostIdQuery,
   useTogglePostLikeMutation,
 } from "../services/postsApi";
 import { extractErrorMessage } from "../utils";
-import { useGetTestFromDescByIdQuery, useToggleTestLikeMutation } from "../services/testsApi";
+import {
+  useGetTestFromDescByIdQuery,
+  useToggleTestLikeMutation,
+} from "../services/testsApi";
 
 const useHandlePostPage = ({ community, itemId, itemType }) => {
   const navigate = useNavigate();
@@ -38,8 +43,14 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
   const postLikesCountRef = useRef(null);
 
   // API hooks
-  const [postComment, { error: postCommentError, isLoading }] =
-    useCreateCommentByBoardPostMutation();
+  const [
+    submitPostComment,
+    { error: submitPostCommentError, isSubmitPostCommentLoading },
+  ] = useCreateCommentByBoardPostMutation();
+  const [
+    submitTestComment,
+    { error: submitTestCommentError, isLoading: isSubmitTestCommentLoading },
+  ] = useCreateCommentByDescTestMutation();
 
   const [togglePostLike, { error: togglePostLikeError }] =
     useTogglePostLikeMutation();
@@ -66,14 +77,29 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
   );
 
   const {
-    data: commentsData,
-    isLoading: isCommentsLoading,
-    isError: isCommentsError,
-    error: commentsError,
-  } = useGetCommentsByBoardPostQuery({
-    board: community,
-    postId: itemId,
-  });
+    data: postComments,
+    isLoading: isPostCommentsLoading,
+    isError: isPostCommentsError,
+    error: postCommentsError,
+  } = useGetCommentsByBoardPostQuery(
+    {
+      board: community,
+      postId: itemId,
+    },
+    { skip: itemType === "test" }
+  );
+  const {
+    data: testComments,
+    isLoading: isTestCommentsLoading,
+    isError: isTestCommentsError,
+    error: testCommentsError,
+  } = useGetCommentsByDescTestQuery(
+    {
+      desc: community,
+      test: itemId,
+    },
+    { skip: itemType === "post" }
+  );
 
   // Memoized file separation
   const { images, files } = useMemo(() => {
@@ -93,13 +119,19 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
 
   // Error toast handlers
   useEffect(() => {
-    if (postCommentError) {
+    if (submitPostCommentError) {
       setToast({
-        message: extractErrorMessage(postCommentError),
+        message: extractErrorMessage(submitPostCommentError),
         type: "error",
       });
     }
-  }, [postCommentError]);
+    if (submitTestCommentError) {
+      setToast({
+        message: extractErrorMessage(submitTestCommentError),
+        type: "error",
+      });
+    }
+  }, [submitPostCommentError, submitTestCommentError]);
 
   useEffect(() => {
     if (togglePostLikeError) {
@@ -117,11 +149,19 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
     if (!body.trim()) return;
 
     try {
-      await postComment({
-        board: community,
-        post: itemId,
-        bodyData: { parent_id, body },
-      }).unwrap();
+      if (itemType === "post") {
+        await submitPostComment({
+          board: community,
+          post: itemId,
+          bodyData: { parent_id, body },
+        }).unwrap();
+      } else if (itemType === "test") {
+        await submitTestComment({
+          desc: community,
+          test: itemId,
+          bodyData: { parent_id, body },
+        }).unwrap();
+      }
 
       if (commentCountRef.current) {
         commentCountRef.current.textContent =
@@ -137,13 +177,13 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
     if (!isAuthenticated) return navigate("/login");
 
     try {
-      const toggleLike = itemType === "post"? togglePostLike: toggleTestLike
-      const communityType = itemType === "post"? "board" : "desc"
-      const res = await toggleLike ({
+      const toggleLike = itemType === "post" ? togglePostLike : toggleTestLike;
+      const communityType = itemType === "post" ? "board" : "desc";
+      const res = await toggleLike({
         [communityType]: community,
         [itemType]: itemId,
       }).unwrap();
-      console.log(res)
+      console.log(res);
       setIsPostLiked(res.toggle);
 
       if (postLikesCountRef.current) {
@@ -201,17 +241,19 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
   return {
     // main data
     itemData: itemType === "post" ? postData : testData,
-    commentsData,
+    commentsData: itemType === "post" ? postComments : testComments,
     images,
     files,
 
     // status
     isItemLoading: itemType === "post" ? isPostLoading : isTestLoading,
-    isCommentsLoading,
+    isCommentsLoading:
+      itemType === "post" ? isPostCommentsLoading : isTestCommentsLoading,
     isItemError: itemType === "post" ? isPostError : isTestError,
-    isCommentsError,
+    isCommentsError:
+      itemType === "post" ? isPostCommentsError : isTestCommentsError,
     itemError: itemType === "post" ? postError : testError,
-    commentsError,
+    commentsError: itemType === "post" ? postCommentsError : testCommentsError,
 
     // likes
     isPostLiked,
@@ -220,7 +262,7 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
 
     // comment submit
     handleCommentSubmit,
-    isLoading,
+    isLoading: itemType === "post"? isSubmitPostCommentLoading: isSubmitTestCommentLoading,
     commentCountRef,
 
     // UI states
