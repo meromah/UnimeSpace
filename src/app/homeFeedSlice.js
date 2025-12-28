@@ -10,6 +10,10 @@ const initialState = {
     [firstTab]: [],
     [secondTab]: [],
   },
+  firstPageItems: {
+    [firstTab]: [],
+    [secondTab]: [],
+  },
   page: {
     [firstTab]: 1,
     [secondTab]: 1,
@@ -26,6 +30,7 @@ const homeFeedSlice = createSlice({
   name: "homeFeed",
   initialState,
   reducers: {
+    resetHomeFeed: () => initialState,
     mergeSorted: (state, action) => {
       const data1 = action.payload?.data1 || [];
       const data2 = action.payload?.data2 || [];
@@ -36,26 +41,35 @@ const homeFeedSlice = createSlice({
         const sortBy = action.payload.sortBy;
         const itemType = action.payload.itemType;
         const sortedItems = mergeSortedBy(data1, data2, sortBy);
-        if (sortBy === state.sortBy && itemType === state.itemType) {
-          if (!hasTabChanged) {
-            state.items[tab].push(...sortedItems);
-            state.page[tab] = action.payload.page;
-          }
+        if (state.page[tab] === 1 && sortedItems.length > 0) {
+          state.firstPageItems[tab] = sortedItems;
+        }
+        if (
+          sortBy === state.sortBy &&
+          itemType === state.itemType &&
+          state.page[tab] !== 1 &&
+          !hasTabChanged
+        ) {
+          state.items[tab].push(...sortedItems);
+          state.page[tab] = action.payload.page;
         } else {
           state.items[tab] = sortedItems;
           state.page[tab] = 1;
           state.sortBy = sortBy;
           state.itemType = itemType;
         }
-      } 
+      }
       if (tab === secondTab) {
         const sortedItems = mergeSortedBy(data1, data2, "latest=1");
+        if (state.page[tab] === 1 && sortedItems.length > 0) {
+          state.firstPageItems[tab] = sortedItems;
+        }
         if (!hasTabChanged) {
           state.items[tab].push(...sortedItems);
           state.page[tab] = action.payload.page;
         }
         if (hasTabChanged && state.page[tab] === 1) {
-          state.items[tab] = sortedItems
+          state.items[tab] = sortedItems;
         }
       }
       state.activeTab = tab;
@@ -65,7 +79,9 @@ const homeFeedSlice = createSlice({
       const sortBy = action.payload.sortBy;
       const itemType = action.payload.itemType;
       const tab = action.payload.tab;
-
+      if (state.page[tab] === 1 && data.length > 0) {
+        state.firstPageItems[tab] = data;
+      }
       if (tab === firstTab) {
         if (sortBy === state.sortBy && itemType === state.itemType) {
           state.items[tab].push(...data);
@@ -94,29 +110,48 @@ const homeFeedSlice = createSlice({
       state.activeTab = tab;
     },
     setHasFetchRequest: (state, action) => {
-      const tab = action.payload.tab
-      state.hasFetchRequest[tab] = action.payload.state;
-      state.activeTab = tab
-    },
-    resetFeed: (state, action) => {
       const tab = action.payload.tab;
-      state.items[tab] = [];
+      state.hasFetchRequest[tab] = action.payload.state;
+      state.activeTab = tab;
+    },
+    resetTab: (state, action) => {
+      const tab = action.payload.tab;
+      const firstPageItem = state.firstPageItems;
+      state.items[tab] = state.firstPageItems[tab];
       state.page[tab] = 1;
       if (tab === firstTab) {
         state.itemType = action.payload.itemType;
         state.sortBy = action.payload.sortBy;
       }
-      state.hasFetchRequest[tab] = false
+      state.hasFetchRequest[tab] = false;
       state.activeTab = tab;
+    },
+    removeItem: (state, action) => {
+      const { itemId, itemType } = action.payload;
+      state.items[firstTab] = state.items[firstTab].filter((item) => {
+        const iType = Object.prototype.hasOwnProperty.call(item, "board")
+          ? "post"
+          : "test";
+        return !(item.id === itemId && iType === itemType);
+      });
+
+      state.items[secondTab] = state.items[secondTab].filter((item) => {
+        const iType = Object.prototype.hasOwnProperty.call(item, "board")
+          ? "post"
+          : "test";
+        return !(item.id === itemId && iType === itemType);
+      });
     },
   },
 });
 
 export const {
+  resetHomeFeed,
   mergeSorted,
   setItems,
   nextPage,
-  resetFeed,
+  resetTab,
   setHasFetchRequest,
+  removeItem,
 } = homeFeedSlice.actions;
 export default homeFeedSlice.reducer;
