@@ -34,12 +34,6 @@ const App = () => {
     <Routes>
       <Route element={<LandingPage />}>
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/explore" element={<Explore />} />
-        {/* I can think about this routes later */}
-        {/* <Route path="/explore/libraries" element={<Libraries />} />
-        <Route path="/explore/quizzes" element={<Quizzes />} />
-        <Route path="/explore/boards" element={<Boards />} /> */}
-        <Route path="/contact" element={<Contact />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -66,6 +60,7 @@ const App = () => {
       <Route path="/terms" element={<Terms />} />
       <Route path="d/:descId/tests/:testId/start" element={<TestPage />} />
       <Route path="/admin/*" element={<AdminPage />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/playground" element={<Playground />} />
     </Routes>
