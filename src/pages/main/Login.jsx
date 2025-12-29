@@ -4,16 +4,14 @@ import SuccessModal from "./components/SuccessModal";
 import { Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setIsAuthenticated } from "../../app/authSlice";
+import Toast from '../../components/Toast'
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [error, setError] = useState({hasError: false, message: null})
   const [login, { isLoading }] = useLoginMutation();
-  /*
-  I have to implement error handling for login failures, such as incorrect credentials or server issues.
- */
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -25,7 +23,7 @@ const Login = () => {
       setEmail("");
       setPassword("");
     } catch (err) {
-      console.error("Login failed:", err);
+      setError({hasError: true, message: err.data.message})
     }
   };
   return (
@@ -95,6 +93,7 @@ const Login = () => {
           Create an account
         </a>
       </p>
+      {error.hasError && <Toast message={error.message} onClose={()=> setError({hasError: false, message: null})} time={10000} type="error" key={"login-error"}/>}
     </main>
   );
 };
