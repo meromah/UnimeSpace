@@ -1,12 +1,8 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import LandingPage from "./pages/main/LandingPage";
 import UserPage from "./pages/user/UserPage";
 import AdminPage from "./pages/admin/AdminPage";
 import AboutUs from "./pages/main/AboutUs";
-import Libraries from "./pages/main/Libraries";
-import Quizzes from "./pages/main/Quizzes";
-import Boards from "./pages/main/Boards";
 import Contact from "./pages/main/Contact";
 import Login from "./pages/main/Login";
 import Register from "./pages/main/Register";
@@ -28,14 +24,14 @@ import SearchPage from "./pages/user/SearchPage";
 import { TestPage } from "./pages/user/test/TestPage";
 import AsidePanel from "./components/AsidePanel";
 import Terms from "./pages/user/Terms";
+import ResetPassword from "./pages/main/ResetPassword";
 
 const App = () => {
   return (
     <Routes>
-      <Route element={<LandingPage />}>
         <Route path="/about" element={<AboutUs />} />
-      </Route>
       <Route path="/login" element={<Login />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/register" element={<Register />} />
       <Route element={<UserPage />}>
         <Route path="profile" element={<Profile isMyProfile={true} />} />
