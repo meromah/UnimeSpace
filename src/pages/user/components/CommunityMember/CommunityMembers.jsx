@@ -81,7 +81,7 @@ const CommunityMembers = ({
   const handleConfirmBlock = async (member) => {
     setIsProcessing(true);
     try {
-      await blockUser({ community: communityId, user: member.id }).unwrap();
+      await blockUser({ [communityType]: communityId, user: member.id }).unwrap();
       if (blockedUsers.has(member.id)) {
         blockedUsers.delete(member.id);
       } else {
