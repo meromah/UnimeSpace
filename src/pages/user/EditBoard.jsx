@@ -133,9 +133,10 @@ const EditBoard = () => {
         message: "Board updated successfully!",
         type: "success",
       });
+      navigate(`/b/${boardName}/edit`, { replace: true });
       // Navigate back to board page after a short delay
       setTimeout(() => {
-        navigate(`/b/${boardId}`);
+        navigate(`/b/${boardName}`, {replace: true});
       }, 1500);
     } catch (error) {
       const errorMessage = extractErrorMessage(error);
