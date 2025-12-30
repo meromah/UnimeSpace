@@ -4,14 +4,15 @@ import SuccessModal from "./components/SuccessModal";
 import { Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setIsAuthenticated } from "../../app/authSlice";
-import Toast from '../../components/Toast'
+import Toast from "../../components/Toast";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [error, setError] = useState({hasError: false, message: null})
-  const [login, { isLoading }] = useLoginMutation();
+  const [error, setError] = useState({ hasError: false, message: null });
+  const [login, { isLoading, isError }] = useLoginMutation();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -23,7 +24,7 @@ const Login = () => {
       setEmail("");
       setPassword("");
     } catch (err) {
-      setError({hasError: true, message: err.data.message})
+      setError({ hasError: true, message: err.data.message });
     }
   };
   return (
@@ -63,17 +64,25 @@ const Login = () => {
               required
             />
           </label>
-          <label className="flex flex-col gap-2">
-            <span className="font-medium text-neutral-800">Password</span>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 focus:outline-primary-yellow`}
-              required
-            />
-          </label>
+          <div className="space-y-2">
+            <label className="flex flex-col gap-2">
+              <span className="font-medium text-neutral-800">Password</span>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 focus:outline-primary-yellow`}
+                required
+              />
+            </label>
+            {isError&&<p className="flex items-center gap-2 text-neutral-700 text-xs">
+              <span>Forgot your password?</span>
+              <Link to="/reset-password" className="text-primary-blue underline">
+                Reset
+              </Link>
+            </p>}
+          </div>
           <button
             type="submit"
             disabled={isLoading}
@@ -89,11 +98,19 @@ const Login = () => {
 
       <p className="flex items-center gap-2 justify-center text-center text-neutral-700 mt-4">
         <span>New here?</span>
-        <a href="/register" className="text-primary-blue underline">
+        <Link to="/register" className="text-primary-blue underline">
           Create an account
-        </a>
+        </Link>
       </p>
-      {error.hasError && <Toast message={error.message} onClose={()=> setError({hasError: false, message: null})} time={10000} type="error" key={"login-error"}/>}
+      {error.hasError && (
+        <Toast
+          message={error.message}
+          onClose={() => setError({ hasError: false, message: null })}
+          time={10000}
+          type="error"
+          key={"login-error"}
+        />
+      )}
     </main>
   );
 };
