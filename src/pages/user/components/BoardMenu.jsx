@@ -72,7 +72,7 @@ const BoardMenu = ({
     e.preventDefault();
     e.stopPropagation();
     setIsOpen(false);
-    navigate(`/b/${board.name}/edit`);
+    navigate(`/b/${board.name}/edit`, {replace: true});
   };
 
   return (
