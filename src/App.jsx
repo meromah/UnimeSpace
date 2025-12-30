@@ -25,6 +25,7 @@ import { TestPage } from "./pages/user/test/TestPage";
 import AsidePanel from "./components/AsidePanel";
 import Terms from "./pages/user/Terms";
 import ResetPassword from "./pages/main/ResetPassword";
+import EditDesc from "./pages/user/EditDesc";
 
 const App = () => {
   return (
@@ -49,6 +50,7 @@ const App = () => {
         <Route path="b/:boardId/members" element={<BoardMembers />} />
         <Route path="d/:descId/members" element={<DescMembers />} />
         <Route path="b/:boardId/edit" element={<EditBoard />} />
+        <Route path="d/:descId/edit" element={<EditDesc />} />
         <Route path="d/:descId" element={<DescPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/explore" element={<AsidePanel />} />
