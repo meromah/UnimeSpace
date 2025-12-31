@@ -15,7 +15,7 @@ const AboutUs = () => {
       <section className="mb-12 bg-white rounded-2xl p-6 sm:p-10">
         <h2 className="text-2xl font-bold text-neutral-900 mb-3">Our Story</h2>
         <p className="text-neutral-700">
-          UniHub started with two UniMe students who wanted an easier way to prepare for coding exams. Instead of isolated studying and scattered notes, they built a platform to centralize everything — tests, quizzes, and a social space where anyone could post, share, or ask for help without judgment.
+          UnimeSpace started with two UniMe students who wanted an easier way to prepare for coding exams. Instead of isolated studying and scattered notes, they built a platform to centralize everything — tests, quizzes, and a social space where anyone could post, share, or ask for help without judgment.
         </p>
       </section>
 
