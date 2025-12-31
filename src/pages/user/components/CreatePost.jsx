@@ -349,7 +349,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
                   onClick={() => handleReUpload(file, i, setUploadedFiles)}
                   className="p-1 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
                 >
-                  <IoReload className="w-4 h-4" />
+                  <RotateCw className="w-4 h-4" />
                 </button>
               ) : (
                 <button

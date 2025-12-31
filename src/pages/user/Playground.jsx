@@ -260,7 +260,7 @@ const Playground = () => {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-neutral-500">
-                <FiTerminal className="w-12 h-12 mb-3 opacity-30" />
+                <Terminal className="w-12 h-12 mb-3 opacity-30" />
                 <p className="text-sm font-medium">No output yet</p>
                 <p className="text-xs text-neutral-600 mt-1">
                   Run your code to see results
