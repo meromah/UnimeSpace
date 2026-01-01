@@ -32,7 +32,7 @@ const Toast = ({ message, type = "success", onClose, time = 4000 }) => {
   const style = types[type] || types.success;
   return (
     <>
-      <div className="fixed top-4 right-4 z-50 animate-slide-in">
+      <div className="fixed top-4 right-4 z-[90] animate-slide-in">
         <div
           className={`${style.bg} border-l-4 rounded-lg shadow-lg p-4 max-w-md flex items-start gap-3`}
         >
