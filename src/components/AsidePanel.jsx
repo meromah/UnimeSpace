@@ -1,5 +1,5 @@
 import SearchPanel from "./SearchPanel";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGetAnnouncementsQuery } from "../services/announcementApi";
 import { useGetRecommendedCommunitiesQuery } from "../services/recommendedCommunitiesApi";
 import { useSelector } from "react-redux";
@@ -11,10 +11,12 @@ import {
   useSubscribeToDescMutation,
   useUnsubscribeFromDescMutation,
 } from "../services/descSubscriptionsApi";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import RecommendedCommunitySkeleton from "../pages/user/components/Skeleton/RecommendedCommunitySkeleton";
 import { AnnouncementsSkeleton } from "../pages/user/components/Skeleton/AnnouncementsSkeleton";
-const CommunityElement = ({ community, subscribed }) => {
+import Toast from "./Toast";
+const CommunityElement = ({ community, subscribed, setError }) => {
+  const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [subscribeToBoard, { isLoading: isBoardSubscribing }] =
     useSubscribeToBoardMutation();
@@ -52,7 +54,7 @@ const CommunityElement = ({ community, subscribed }) => {
         subscribed.descs.add(id);
       }
     } catch (err) {
-      console.error("Failed to subscribe:", err);
+      setError({hasError: true, message: err.data.message})
     }
   };
   const onUnsubscribe = async (e, isBoard, communityName, id) => {
@@ -71,7 +73,7 @@ const CommunityElement = ({ community, subscribed }) => {
         subscribed.descs.delete(id);
       }
     } catch (err) {
-      console.error("Failed to subscribe:", err);
+      setError({hasError: true, message: err.data.message})
     }
   };
 
@@ -125,6 +127,7 @@ const CommunityElement = ({ community, subscribed }) => {
 };
 const AsidePanel = () => {
   const location = useLocation();
+  const [error, setError] = useState({ hasError: false, message: null });
   const {
     data: announcements,
     isSuccess,
@@ -220,6 +223,7 @@ const AsidePanel = () => {
                 community={community}
                 subscribed={subscribed}
                 key={community.name}
+                setError={setError}
               />
             ))}
           </div>
@@ -275,6 +279,15 @@ const AsidePanel = () => {
           © {new Date().getFullYear()} UnimeSpace
         </li>
       </ul>
+      {error.hasError && (
+        <Toast
+          message={error.message}
+          onClose={() => setError({ hasError: false, message: null })}
+          key={"AsidePanel-error"}
+          time={10000}
+          type="error"
+        />
+      )}
     </aside>
   );
 };
