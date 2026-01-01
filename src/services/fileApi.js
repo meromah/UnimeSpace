@@ -138,6 +138,24 @@ const FileApi = baseApi.injectEndpoints({
         };
       },
     }),
+    uploadDescAvatarFiles: builder.mutation({
+      query: ({ desc, files }) => {
+        if (!Array.isArray(files)) {
+          throw new Error("uploadDescAvatarFiles expects an array of File objects");
+        }
+
+        const formData = new FormData();
+        for (const file of files) {
+          if (file) formData.append("files[]", file);
+        }
+
+        return {
+          url: `/files/descs/${desc}/avatar`,
+          method: "POST",
+          body: formData, // fetch will set the correct multipart boundary automatically
+        };
+      },
+    }),
     uploadUserAvatarFiles: builder.mutation({
       query: (files) => {
         if (!Array.isArray(files)) {
@@ -186,6 +204,7 @@ export const {
   useUploadBoardBannerFilesMutation,
   useUploadBoardAvatarFilesMutation,
   useUploadDescBannerFilesMutation,
+  useUploadDescAvatarFilesMutation,
   useUploadUserAvatarFilesMutation,
   useUploadUserBannerFilesMutation,
 } = FileApi;
