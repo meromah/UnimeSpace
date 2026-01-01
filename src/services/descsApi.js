@@ -74,27 +74,27 @@ const DescsApi = baseApi.injectEndpoints({
       }),
     }),
     // banner
-    updateDescBanner: builder.query({
+    updateDescBanner: builder.mutation({
       query: ({ desc, descData }) => ({
         url: `/descs/${desc}/banner`,
         body: descData,
         method: "POST",
       }),
     }),
-    deleteDescBanner: builder.query({
+    deleteDescBanner: builder.mutation({
       query: (desc) => ({
         url: `/descs/${desc}/banner`,
         method: "DELETE",
       }),
     }),
-    updateDescAvatar: builder.query({
+    updateDescAvatar: builder.mutation({
       query: ({ desc, descData }) => ({
         url: `/descs/${desc}/avatar`,
         body: descData,
         method: "POST",
       }),
     }),
-    deleteDescAvatar: builder.query({
+    deleteDescAvatar: builder.mutation({
       query: (desc) => ({
         url: `/descs/${desc}/avatar`,
         method: "DELETE",
