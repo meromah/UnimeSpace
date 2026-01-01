@@ -80,7 +80,7 @@ const CommunityElement = ({ community, subscribed }) => {
       key={community.id}
       className={
         location.pathname === "/explore/"
-          ? "flex flex-col gap-3 flex-1 bg-white w-full md:min-w-[30%] md:max-w-2/5 p-4 border  border-neutral-100  rounded-lg shadow"
+          ? "flex flex-col sm:flex-row sm:items-start lg:flex-col lg:items-stretch gap-3 flex-1 bg-white w-full lg:min-w-[30%] lg:max-w-2/5 p-4 border  border-neutral-100  rounded-lg shadow"
           : "flex items-start justify-between gap-3 p-2 hover:bg-neutral-50 rounded-lg transition-colors"
       }
     >
@@ -211,7 +211,7 @@ const AsidePanel = () => {
           <div
             className={
               location.pathname === "/explore/"
-                ? "flex flex-col sm:flex-row items-center gap-2 p-4 overflow-x-scroll"
+                ? "flex flex-col lg:flex-row items-center gap-2 p-4 overflow-x-scroll"
                 : "space-y-3"
             }
           >
