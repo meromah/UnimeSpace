@@ -9,7 +9,7 @@ import {
   goToPreviousQuestion,
   resetSession,
 } from "../../../app/testSessionSlice";
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
 import { usePostTestQuitMutation } from "../../../services/testsApi";
 
 export const QuestionRunner = () => {
@@ -67,7 +67,7 @@ export const QuestionRunner = () => {
     : "text-slate-700 bg-white border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700";
   return (
     <>
-      <div className="min-h-screen flex flex-col transition-colors duration-300">
+      <div className="min-h-screen flex flex-col transition-colors duration-300 bg-white">
         <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
           <div className="max-w-4xl mx-auto flex items-center justify-between px-4 py-3">
             <div className="flex flex-col">
@@ -141,7 +141,7 @@ export const QuestionRunner = () => {
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full p-1 cursor-pointer disabled:opacity-50"
               aria-label="Close modal"
             >
-              <FaTimes className="w-5 h-5" />
+              <X className="w-5 h-5" />
             </button>
             
               <div className="p-6">
