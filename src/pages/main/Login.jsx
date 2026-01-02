@@ -8,6 +8,7 @@ import Toast from "../../components/Toast";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -20,6 +21,7 @@ const Login = () => {
         email,
         password,
       }).unwrap();
+      dispatch(setIsAuthenticated(true))
       setShowSuccessModal(true);
       setEmail("");
       setPassword("");
@@ -34,9 +36,9 @@ const Login = () => {
           onClose={() => setShowSuccessModal(false)}
           header={"Welcome to UnimeSpace!"}
           message={
-            "Your logged in to your account successfully. Redirecting you to home..."
+            "Your logged in to your account successfully. Redirecting..."
           }
-          path={"/home"}
+          path={sessionStorage.getItem("last-visit") || "/home"}
         />
       )}
       <header className="text-center mb-8">
