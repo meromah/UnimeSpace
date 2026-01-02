@@ -43,14 +43,14 @@ const RenderMultiSelectMcqQuestion = () => {
   return (
     <div className="space-y-8">
       <div className="space-y-2">
-        <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-slate-50 leading-snug">
+        <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-50 leading-snug">
           {question.body}
         </h2>
+      </div>
+      <main className="grid gap-3">
         <p className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
           Select all that apply
         </p>
-      </div>
-      <main className="grid gap-3">
         {question.options?.map((opt) => {
           const isSelected = selectedArray.has(opt.id);
           return (
@@ -60,7 +60,7 @@ const RenderMultiSelectMcqQuestion = () => {
                     ${
                       isSelected
                         ? "border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 dark:border-indigo-500"
-                        : "border-slate-200 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800"
+                        : "border-neutral-200 dark:border-neutral-700 hover:border-indigo-200 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                     }`}
             >
               <div
@@ -68,7 +68,7 @@ const RenderMultiSelectMcqQuestion = () => {
                       ${
                         isSelected
                           ? "bg-indigo-600 border-indigo-600 dark:bg-indigo-500 dark:border-indigo-500"
-                          : "border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"
+                          : "border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900"
                       }`}
               >
                 {isSelected && (
@@ -103,7 +103,7 @@ const RenderMultiSelectMcqQuestion = () => {
                 className={`ml-4 text-base select-none ${
                   isSelected
                     ? "text-indigo-900 dark:text-indigo-100 font-medium"
-                    : "text-slate-700 dark:text-slate-300"
+                    : "text-neutral-800 dark:text-neutral-200"
                 }`}
               >
                 {opt.body}
