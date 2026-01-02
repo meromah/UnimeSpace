@@ -1,13 +1,39 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import ImageModal from "./ImageModal";
 import { getFileUrl } from "../../../utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const PostImages = ({ images }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const currentImage =
+    Array.isArray(images) && images.length > 0 ? images[currentIndex] : image;
+  const hasMultipleImages = Array.isArray(images) && images.length > 1;
+
+  const handlePrevious = useCallback(
+    (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (hasMultipleImages && images) {
+        setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+      }
+    },
+    [hasMultipleImages, images]
+  );
+
+  const handleNext = useCallback(
+    (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (hasMultipleImages && images) {
+        setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+      }
+    },
+    [hasMultipleImages, images]
+  );
 
   if (!images || images.length === 0) return null;
-
   const handleImageClick = (image, e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -22,98 +48,46 @@ const PostImages = ({ images }) => {
     setSelectedImage(null);
   };
 
-  // Get first 4 images for display
-  const displayImages = images.slice(0, 4);
-  const remainingCount = images.length - 4;
-
-  // Determine grid layout based on number of images
-  const getGridClass = () => {
-    switch (displayImages.length) {
-      case 1:
-        return "grid-cols-1";
-      case 2:
-        return "grid-cols-2";
-      case 3:
-        return "grid-cols-2";
-      case 4:
-        return "grid-cols-2";
-      default:
-        return "grid-cols-2";
-    }
-  };
-
-  const getImageClass = (index) => {
-    if (displayImages.length === 1) {
-      return "col-span-1";
-    } else if (displayImages.length === 3 && index === 0) {
-      return "row-span-2";
-    }
-    return "";
-  };
-
   return (
     <>
-      <div
-        className={`grid ${getGridClass()} gap-1 rounded-lg overflow-hidden mt-3 max-h-[500px]`}
-      >
-        {displayImages.map((image, index) => {
-          const isLastWithOverlay = index === 3 && remainingCount > 0;
-
-          return (
-            <div
-              key={image.hash}
-              className={`relative cursor-pointer overflow-hidden ${getImageClass(
-                index
-              )}`}
-              onClick={(e) => handleImageClick(image, e)}
-            >
-              <div
-                className={`relative w-full group flex items-center justify-center ${
-                  displayImages.length === 1
-                    ? "h-[500px]"
-                    : displayImages.length === 3 && index === 0
-                    ? "h-full"
-                    : "aspect-square"
-                }`}
+      <div className="flex items-center justify-center bg-black/55 backdrop-blur-sm cursor-default">
+        <div className="relative w-full h-full mx-4">
+          {/* Navigation buttons */}
+          {hasMultipleImages && (
+            <>
+              <button
+                onClick={(e) => handlePrevious(e)}
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none hover:ring-2 hover:ring-white cursor-pointer"
+                aria-label="Previous image"
               >
-                {/* Blurred background of the same image */}
-                <img
-                  src={getFileUrl(image.hash)}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover blur-3xl scale-110 opacity-60"
-                  loading="lazy"
-                />
-
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-black/35 group-hover:bg-black/70 transition-colors duration-400 ease-in-out" />
-
-                {/* Main image */}
-                <img
-                  src={getFileUrl(image.hash)}
-                  alt={`Post image ${index + 1}`}
-                  className="relative z-10 max-w-full max-h-full object-contain transition-transform duration-300 ease-out"
-                  loading="lazy"
-                />
-
-                {isLastWithOverlay && (
-                  <div className="absolute inset-0 z-20">
-                    {/* Extra dark overlay for +N */}
-                    <div className="absolute inset-0 bg-black/50" />
-
-                    {/* Counter */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-white text-5xl font-bold drop-shadow-2xl">
-                        +{remainingCount}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={(e) => handleNext(e)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none hover:ring-2 hover:ring-white  cursor-pointer"
+                aria-label="Next image"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+              {/* Image counter */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                {currentIndex + 1} / {images.length}
               </div>
-            </div>
-          );
-        })}
-      </div>
+            </>
+          )}
 
+          {/* Image */}
+          <div className="flex items-center justify-center h-full">
+            <img
+              src={getFileUrl(currentImage.hash)}
+              alt={`Post image ${currentIndex + 1}`}
+              className="max-w-full w-full object-contain"
+              onClick={(e) => handleImageClick(currentImage, e)}
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
       {/* Image Modal */}
       <ImageModal
         image={selectedImage}
