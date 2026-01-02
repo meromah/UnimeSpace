@@ -70,14 +70,14 @@ const downloadRef = useRef(null)
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm cursor-default"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm cursor-default"
       onClick={onClose}
     >
       <div className="relative w-full h-full mx-4">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white cursor-pointer"
+          className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white cursor-pointer"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
@@ -86,7 +86,7 @@ const downloadRef = useRef(null)
         {/* Download button */}
         <button
           onClick={(e)=> handleDownload(image, e, downloadRef.current)}
-          className="absolute top-4 left-4 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50 cursor-pointer" 
+          className="absolute top-4 left-4 z-10 bg-black/50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50 cursor-pointer" 
           aria-label="Download image"
           ref={downloadRef}
         >
@@ -98,20 +98,20 @@ const downloadRef = useRef(null)
           <>
             <button
               onClick={(e) => handlePrevious(e)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none hover:ring-2 hover:ring-white cursor-pointer"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none hover:ring-2 hover:ring-white cursor-pointer"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={(e) => handleNext(e)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none hover:ring-2 hover:ring-white  cursor-pointer"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200 focus:outline-none hover:ring-2 hover:ring-white  cursor-pointer"
               aria-label="Next image"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
             {/* Image counter */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
               {currentIndex + 1} / {images.length}
             </div>
           </>

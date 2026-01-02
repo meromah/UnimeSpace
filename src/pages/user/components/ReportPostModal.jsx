@@ -86,7 +86,7 @@ const ReportPostModal = ({ isOpen, onClose, post }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm cursor-default"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm cursor-default"
       onClick={handleClose}
     >
       <div
