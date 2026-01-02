@@ -3,40 +3,25 @@ import { Check, Loader2 } from "lucide-react";
 import Toast from "../../components/Toast";
 import SuccessModal from "./components/SuccessModal";
 import { Link } from "react-router-dom";
-import { useEmailVerificationMutation, useOtpVerificationMutation } from "../../services/authApi";
-
-// Default form values
-const DEFAULT_FORM_VAL = {
-  name: "",
-  username: "",
-  password: "",
-  password_confirmation: "",
-};
+import {
+  useEmailVerificationForResetMutation,
+  useOtpWithPasswordForResetMutation,
+} from "../../services/authApi";
 
 const ResetPassword = () => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [form, setForm] = useState(DEFAULT_FORM_VAL);
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
   const [errors, setErrors] = useState({});
-  const [apiError, setApiError] = useState("");
   const [isPasswordMatch, setIsPasswordMatch] = useState(true);
-  const [isUsernameValid, setIsUsernameValid] = useState(false);
-  const [hasSpecialChar, setHasSpecialChar] = useState(false);
   const [toast, setToast] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [emailVerification, { isLoading: isVerifyingEmail }] =
-    useEmailVerificationMutation();
-  const [otpVerification, { isLoading: isVerifyingOtp }] =
-    useOtpVerificationMutation();
-  // const [registerUser, { isLoading: isRegistering }] =
-  //   useRegisterUserMutation();
-
-  // useEffect to handle API errors and show toast
-  useEffect(() => {
-    if (!apiError) return;
-    showToast(apiError, "error");
-  }, [apiError]);
+    useEmailVerificationForResetMutation();
+  const [resetPassword, { isLoading: isResetting }] =
+    useOtpWithPasswordForResetMutation();
 
   // Function to show toast notifications
   const showToast = (message, type = "success") => {
@@ -53,7 +38,6 @@ const ResetPassword = () => {
   };
   // Handlers for each step
   const handleEmailVerification = async () => {
-    setApiError("");
     setErrors({});
 
     if (!validateEmail(email)) {
@@ -63,111 +47,85 @@ const ResetPassword = () => {
 
     try {
       const res = await emailVerification(email).unwrap();
-      setToast({ message: res.message, type: 'info' });
+      showToast(res.message, "info");
       setStep(2);
     } catch (err) {
       const errorMessage =
         err?.data?.message ||
         err?.message ||
         "Failed to send verification code. Please try again.";
-      setApiError(errorMessage);
-      console.error("Email verification failed:", err);
+      showToast(errorMessage, "error");
     }
   };
+  const handleRegistration = async () => {
+    const newErrors = {};
 
-  const handleOtpVerification = async () => {
-    setApiError("");
-    setErrors({});
-
+    if (!validatePassword(newPassword)) {
+      newErrors.newPassword = "Password must be at least 8 characters";
+    }
+    if (!isPasswordMatch) {
+      newErrors.newPasswordConfirmation = "Passwords do not match";
+    }
     if (otp.length < 6) {
       setErrors({ otp: "Please enter a valid OTP code" });
       return;
     }
-
-    try {
-      await otpVerification({ otp, email }).unwrap();
-      setStep(3);
-    } catch (err) {
-      const errorMessage =
-        err?.data?.message ||
-        err?.message ||
-        "Invalid verification code. Please try again.";
-      setApiError(errorMessage);
-      console.error("OTP verification failed:", err);
-    }
-  };
-
-  const handleRegistration = async () => {
-    setApiError("");
-    const newErrors = {};
-
-    if (form.name.length < 2) {
-      newErrors.name = "Name must be at least 2 characters";
-    }
-    if (!isUsernameValid) {
-      newErrors.username = "Please enter a valid and available username";
-    }
-    if (!validatePassword(form.password)) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-    if (!isPasswordMatch) {
-      newErrors.password_confirmation = "Passwords do not match";
-    }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
     try {
-      const userData = { ...form, email };
-      // await registerUser(
-      //   userData
-      // ).unwrap();
-      // setShowSuccessModal(true);
+      await resetPassword({
+        new_password: newPassword,
+        new_password_confirmation: newPasswordConfirmation,
+        email,
+        otp,
+      }).unwrap();
+      setShowSuccessModal(true);
     } catch (err) {
       const errorMessage =
         err?.data?.message ||
         err?.message ||
-        "Registration failed. Please try again.";
-      setApiError(errorMessage);
-      console.error("Registration failed:", err);
+        "Reset process failed. Please try again.";
+      showToast(errorMessage, "error");
     }
   };
 
   const handlePasswordVerificationChange = (e) => {
     const value = e.target.value;
-    setIsPasswordMatch(value === form.password);
-    setForm({ ...form, password_confirmation: value });
-    if (errors.password_confirmation) {
-      setErrors({ ...errors, password_confirmation: "" });
+    setIsPasswordMatch(value === newPassword);
+    setNewPasswordConfirmation(value);
+    if (errors.newPasswordConfirmation) {
+      setErrors({ ...errors, newPasswordConfirmation: "" });
     }
   };
 
   const handleBack = () => {
-    setApiError("");
     setErrors({});
     if (step === 2) {
       setOtp("");
+      setNewPassword("");
+      setNewPasswordConfirmation("");
       setStep(1);
-    } else if (step === 3) {
-      setForm(DEFAULT_FORM_VAL);
-      setStep(2);
     }
   };
 
   const handleResendCode = async () => {
-    setApiError("");
     try {
       await emailVerification(email).unwrap();
       showToast("Verification code resent successfully!", "info");
     } catch (err) {
       const errorMessage =
         err?.data?.message || "Failed to resend code. Please try again.";
-      setApiError(errorMessage);
+      showToast(errorMessage, "error");
     }
   };
-
+  useEffect(() => {
+    if (newPasswordConfirmation) {
+      setIsPasswordMatch(newPasswordConfirmation === newPassword);
+    }
+  }, [newPassword, newPasswordConfirmation]);
   return (
     <>
       {/* Toast Notification */}
@@ -186,9 +144,9 @@ const ResetPassword = () => {
           onClose={() => setShowSuccessModal(false)}
           header={"Welcome to UnimeSpace!"}
           message={
-            "Your account has been created successfully. Redirecting you to home..."
+            "Your password has been reset successfully. Redirecting you to login..."
           }
-          path={"/home"}
+          path={"/login"}
         />
       )}
 
@@ -243,27 +201,7 @@ const ResetPassword = () => {
                     : "bg-gray-200 text-gray-500"
                 }`}
               >
-                {step > 2 ? <Check className="w-5 h-5" /> : "2"}
-              </div>
-              <span
-                className={`text-xs mt-2 font-medium transition-colors ${
-                  step === 2 ? "text-neutral-900" : "text-gray-500"
-                }`}
-              >
-                Enter Code
-              </span>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex flex-col items-center flex-1">
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
-                  step >= 3
-                    ? "bg-primary-yellow text-neutral-900 shadow-md"
-                    : "bg-gray-200 text-gray-500"
-                }`}
-              >
-                3
+                2
               </div>
               <span
                 className={`text-xs mt-2 font-medium transition-colors ${
@@ -322,24 +260,35 @@ const ResetPassword = () => {
           </form>
         )}
 
-        {/* Step 2: OTP Verification */}
+        {/* Step 2: Reset Password */}
         {step === 2 && (
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              handleOtpVerification();
+              handleRegistration();
             }}
             className="bg-white rounded-2xl p-6 sm:p-8 shadow"
           >
             <div className="grid gap-6">
-              <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800">
-                  Verification Code
-                </span>
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <label htmlFor="otp" className="font-medium text-neutral-800">
+                    Verification Code
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleResendCode}
+                    disabled={isVerifyingEmail}
+                    className="text-sm text-primary-blue underline hover:no-underline disabled:opacity-50 cursor-pointer"
+                  >
+                    {isVerifyingEmail ? "Sending..." : "Resend Code"}
+                  </button>
+                </div>
                 <input
                   type="text"
                   placeholder="Enter 6-digit code"
                   value={otp}
+                  id="otp"
                   onChange={(e) => {
                     setOtp(e.target.value);
                     if (errors.otp) setErrors({ ...errors, otp: "" });
@@ -355,71 +304,29 @@ const ResetPassword = () => {
                 {errors.otp && (
                   <span className="text-red-500 text-sm">{errors.otp}</span>
                 )}
-              </label>
-
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className="px-4 py-2.5 rounded-lg border border-gray-300 text-neutral-700 hover:bg-gray-50 transition-all"
-                >
-                  Back
-                </button>
-                <button
-                  type="submit"
-                  disabled={isVerifyingOtp}
-                  className="btn-cta bg-primary-yellow text-neutral-900 font-semibold hover:bg-primary-yellow/90 w-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all"
-                >
-                  {isVerifyingOtp && (
-                    <Loader2 className="animate-spin h-5 w-5" />
-                  )}
-                  {isVerifyingOtp ? "Verifying..." : "Verify Code"}
-                </button>
               </div>
-
-              <button
-                type="button"
-                onClick={handleResendCode}
-                disabled={isVerifyingEmail}
-                className="text-sm text-primary-blue underline hover:no-underline disabled:opacity-50"
-              >
-                {isVerifyingEmail ? "Sending..." : "Resend Code"}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* Step 3: Registration Form */}
-        {step === 3 && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleRegistration();
-            }}
-            className="bg-white rounded-2xl p-6 sm:p-8 shadow"
-          >
-            <div className="grid gap-6">
 
               <label className="flex flex-col gap-2">
                 <span className="font-medium text-neutral-800">Password</span>
                 <input
                   type="password"
                   placeholder="••••••••"
-                  value={form.password}
+                  value={newPassword}
                   onChange={(e) => {
-                    setForm({ ...form, password: e.target.value });
-                    if (errors.password) setErrors({ ...errors, password: "" });
+                    setNewPassword(e.target.value);
+                    if (errors.newPassword)
+                      setErrors({ ...errors, newPassword: "" });
                   }}
                   className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border ${
-                    errors.password
+                    errors.newPassword
                       ? "border-red-300 focus:outline-red-500"
                       : "border-gray-200 focus:outline-primary-yellow"
                   }`}
                   required
                 />
-                {errors.password && (
+                {errors.newPassword && (
                   <span className="text-red-500 text-sm">
-                    {errors.password}
+                    {errors.newPassword}
                   </span>
                 )}
               </label>
@@ -431,10 +338,10 @@ const ResetPassword = () => {
                 <input
                   type="password"
                   placeholder="••••••••"
-                  value={form.password_confirmation}
+                  value={newPasswordConfirmation}
                   onChange={handlePasswordVerificationChange}
                   className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border ${
-                    !isPasswordMatch || errors.password_confirmation
+                    !isPasswordMatch || errors.newPasswordConfirmation
                       ? "border-red-300 focus:outline-red-500"
                       : "border-gray-200 focus:outline-primary-yellow"
                   }`}
@@ -445,9 +352,9 @@ const ResetPassword = () => {
                     Passwords do not match
                   </span>
                 )}
-                {errors.password_confirmation && (
+                {errors.newPasswordConfirmation && (
                   <span className="text-red-500 text-sm">
-                    {errors.password_confirmation}
+                    {errors.newPasswordConfirmation}
                   </span>
                 )}
               </label>
@@ -462,26 +369,23 @@ const ResetPassword = () => {
                 </button>
                 <button
                   type="submit"
-                  // disabled={isRegistering || !isPasswordMatch}
+                  disabled={isResetting || !isPasswordMatch}
                   className="btn-cta bg-primary-yellow text-neutral-900 font-semibold hover:bg-primary-yellow/90 w-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all"
                 >
-                  {/* {isRegistering && (
-                    <Loader2 className="animate-spin h-5 w-5" />
-                  )}
-                  {isRegistering ? "Creating Account..." : "Create Account"} */}
-                  Reset Password
+                  {isResetting && <Loader2 className="animate-spin h-5 w-5" />}
+                  {isResetting ? "Resetting Password..." : "Reset Password"}
                 </button>
               </div>
             </div>
           </form>
         )}
 
-    <p className="flex items-center gap-2 justify-center text-center text-neutral-700 mt-4">
-        <span>New here?</span>
-        <Link to="/register" className="text-primary-blue underline">
-          Create an account
-        </Link>
-      </p>
+        <p className="flex items-center gap-2 justify-center text-center text-neutral-700 mt-4">
+          <span>New here?</span>
+          <Link to="/register" className="text-primary-blue underline">
+            Create an account
+          </Link>
+        </p>
       </main>
     </>
   );

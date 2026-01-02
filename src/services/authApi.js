@@ -11,12 +11,26 @@ export const authApi = baseApi.injectEndpoints({
         body: { email },
       }),
     }),
+    emailVerificationForReset: builder.mutation({
+      query: (email) => ({
+        url: "/auth/reset-password/submit-email",
+        method: "POST",
+        body: { email },
+      }),
+    }),
 
     otpVerification: builder.mutation({
       query: ({ otp, email }) => ({
         url: "/auth/otp-verification",
         method: "POST",
         body: { otp, email },
+      }),
+    }),
+    otpWithPasswordForReset: builder.mutation({
+      query: ({ otp, email, new_password, new_password_confirmation }) => ({
+        url: "/auth/reset-password/validate-otp",
+        method: "POST",
+        body: { otp, email, new_password, new_password_confirmation },
       }),
     }),
     checkIsUsernameAvailable: builder.query({
@@ -76,7 +90,9 @@ export const authApi = baseApi.injectEndpoints({
 });
 export const {
   useEmailVerificationMutation,
+  useEmailVerificationForResetMutation,
   useOtpVerificationMutation,
+  useOtpWithPasswordForResetMutation,
   useRegisterUserMutation,
   useLoginMutation,
   useLogoutMutation,
