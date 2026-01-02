@@ -7,8 +7,9 @@ const SuccessModal = ({ onClose, header, message, path }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
+      sessionStorage.clear();
       // Redirect to PATH after modal closes
-      navigate(path);
+      navigate(path, {replace: true});
     }, 2000);
 
     return () => clearTimeout(timer);
