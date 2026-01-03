@@ -18,6 +18,7 @@ import ProfilePosts from "./components/profile/ProfilePosts.jsx";
 import ProfileOverview from "./components/profile/ProfileOverview.jsx";
 import ProfileComments from "./components/profile/ProfileComments.jsx";
 import ProfileTests from "./components/profile/ProfileTests.jsx";
+import { useGetTestsByFilterQuery } from "../../services/testsApi.js";
 
 const Profile = ({ isMyProfile = false }) => {
   const { username } = useParams();
@@ -58,6 +59,15 @@ const Profile = ({ isMyProfile = false }) => {
     isLoading: isPostsLoading,
     isSuccess: isPostsSuccess,
   } = useGetPostsByFilterQuery(
+    { queryParams: `author=${currentUsername}` },
+    { skip: !currentUsername }
+  );
+  // Fetch posts
+  const {
+    data: testsData,
+    isLoading: isTestsLoading,
+    isSuccess: isTestsSuccess,
+  } = useGetTestsByFilterQuery(
     { queryParams: `author=${currentUsername}` },
     { skip: !currentUsername }
   );
@@ -121,7 +131,7 @@ const Profile = ({ isMyProfile = false }) => {
           />
         );
       case "tests":
-        return <ProfileTests isLoading={false} tests={[]} />;
+        return <ProfileTests isLoading={isTestsLoading} tests={testsData?.data} />;
       case "comments":
         return (
           <ProfileComments
