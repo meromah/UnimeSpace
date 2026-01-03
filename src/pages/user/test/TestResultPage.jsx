@@ -1,12 +1,14 @@
 import React from "react";
 import { Button } from "./Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import McqResult from "./McqResult";
 import CodeResult from "./CodeResult";
 import { useNavigate } from "react-router-dom";
+import { resetSession } from "../../../app/testSessionSlice";
 
 export const TestResultPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { results, questionIdToIndex, questions, questionTypes, submission } =
     useSelector((state) => state.testSession);
   const gradeColor = (percentage) =>
@@ -15,7 +17,10 @@ export const TestResultPage = () => {
       : percentage >= 60
       ? "text-amber-600 dark:text-amber-400"
       : "text-red-600 dark:text-red-400";
-
+  const onReturnHome = () => {
+    dispatch(resetSession())
+    navigate("/home");
+  };
   return (
     <div className="min-h-screen p-4 sm:p-8 transition-colors duration-300">
       <div className="max-w-3xl mx-auto space-y-8">
@@ -38,7 +43,11 @@ export const TestResultPage = () => {
             <span>out of {questions.length} points</span>
           </p>
           <div className="mt-8">
-            <Button variant="primary" onClick={()=> navigate("/home")} className="px-8 py-3">
+            <Button
+              variant="primary"
+              onClick={onReturnHome}
+              className="px-8 py-3"
+            >
               Return to Home
             </Button>
           </div>
