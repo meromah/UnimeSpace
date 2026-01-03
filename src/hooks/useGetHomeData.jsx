@@ -25,9 +25,11 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
   /* Redux */
   /* ----------------------------------*/
 
-  const { items, page, hasFetchRequest } = useSelector(
-    (state) => state.homeFeed
-  );
+  const {
+    items,
+    page,
+    hasFetchRequest,
+  } = useSelector((state) => state.homeFeed);
   const dispatch = useDispatch();
 
   /* ----------------------------------*/
@@ -52,7 +54,10 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     followingTests: true,
   });
   const [isFetching, setIsFetching] = useState(false);
-
+  const [likedData, setLikedData] = useState({
+    post: new Set(),
+    test: new Set(),
+  });
   /* ----------------------------------*/
   /* Refs */
   /* ----------------------------------*/
@@ -127,27 +132,6 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
     }
   );
 
-  /* ----------------------------------*/
-  /* useMemo - Derive Data */
-  /* ----------------------------------*/
-  const likedData = useMemo(() => {
-    if (tab === tabFilters.firstValue()) {
-      return {
-        post: new Set(posts?.liked || []),
-        test: new Set(tests?.liked || []),
-      };
-    }
-    return {
-      post: new Set(followingPosts?.liked || []),
-      test: new Set(followingTests?.liked || []),
-    };
-  }, [
-    posts?.likedData,
-    tests?.likedData,
-    followingPosts?.likedData,
-    followingTests?.likedData,
-    tab,
-  ]);
   const isSuccess = useMemo(() => {
     const isFirstTab = tab === tabFilters.firstValue();
     const isSecondTab = tab === tabFilters.secondValue();
@@ -197,6 +181,29 @@ const useGetHomeData = ({ sortBy, sortByType, tab }) => {
   useEffect(() => {
     dispatch(resetTab({ sortBy, itemType: sortByType, tab }));
   }, [sortBy, sortByType, dispatch, tab]);
+  //Update liked data
+  useEffect(() => {
+  setLikedData(prev => {
+    const next = {
+      post: new Set(prev.post),
+      test: new Set(prev.test),
+    };
+
+    const merge = (target, source) => {
+      if (Array.isArray(source)) {
+        source.forEach(id => next[target].add(id));
+      }
+    };
+
+    merge("post", posts?.liked);
+    merge("test", tests?.liked);
+    merge("post", followingPosts?.liked);
+    merge("test", followingTests?.liked);
+
+    return next;
+  });
+}, [posts, tests, followingPosts, followingTests]);
+
 
   //Save data to Redux if for the 'for-you' tab
   useEffect(() => {
