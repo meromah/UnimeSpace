@@ -15,7 +15,7 @@ export const ReviewAnswers = () => {
   );
   const dispatch = useDispatch();
 
-  const [submitYourAnswers] = usePostTestSubmitMutation();
+  const [submitYourAnswers, {isLoading}] = usePostTestSubmitMutation();
   const handleSubmit = async () => {
     try {
       const results = await submitYourAnswers({
@@ -171,6 +171,7 @@ export const ReviewAnswers = () => {
             variant="primary"
             onClick={handleSubmit}
             className="px-6 py-2 text-sm font-medium"
+            disabled={isLoading}
           >
             Submit Test
           </Button>
