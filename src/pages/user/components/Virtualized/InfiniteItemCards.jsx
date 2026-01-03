@@ -6,7 +6,8 @@ import React, {
   useEffect,
   useMemo,
 } from "react";
-import PostCard from "../PostCard";
+import PostCardWithErrorBoundary from "../ErrorBoundary/PostCardWithErrorBoundary";
+import { useSelector } from "react-redux";
 
 const getKey = (item, layoutKey) => {
   return `${layoutKey}-${item.id}`;
@@ -44,7 +45,7 @@ class HeightStore {
   scheduleNotification() {
     if (this.notificationScheduled) return;
     this.notificationScheduled = true;
-    
+
     requestAnimationFrame(() => {
       this.notificationScheduled = false;
       this.listeners.forEach((cb) => cb());
@@ -93,7 +94,7 @@ function ItemMeasurer({ item, onMeasured, heightStore, itemKey }) {
 
   return (
     <div ref={ref} className="virtual-item-padding-x">
-      <PostCard
+      <PostCardWithErrorBoundary
         item={item}
         onError={handleError}
         isFirst={false}
@@ -153,7 +154,7 @@ function VirtualItem({
 
   return (
     <div ref={ref} className="virtual-item-padding-x">
-      <PostCard
+      <PostCardWithErrorBoundary
         item={item}
         onError={handleError}
         isFirst={index === 0}
@@ -180,17 +181,19 @@ export default function InfiniteItemCards({
   },
   layoutVersion,
   layoutSchemaVersion,
-  onNearBottom
+  onNearBottom,
 }) {
+  const { sidebarMobileHeight } = useSelector((state) => state.ui);
+
   const INITIAL_MEASURE_COUNT = useMemo(
     () => Math.max(1, Math.min(20, items.length)),
     [items?.length]
   );
-  
+
   const layoutKey = useMemo(
     () => `${tab}:${layoutSchemaVersion}`,
     [tab, layoutSchemaVersion]
-  ); 
+  );
 
   const containerRef = useRef(null);
   const headerRef = useRef([]);
@@ -245,7 +248,7 @@ export default function InfiniteItemCards({
   // Subscribe to height changes
   useEffect(() => {
     return heightStore.subscribe(() => {
-      setHeightsVersion(v => v + 1);
+      setHeightsVersion((v) => v + 1);
     });
   }, [heightStore]);
 
@@ -267,11 +270,11 @@ export default function InfiniteItemCards({
   // Compute prefix sums with better height estimation
   const prefixSums = useMemo(() => {
     if (measuringPhase || items.length === 0) return null;
-    
+
     const sums = new Array(items.length + 1).fill(0);
     const DEFAULT_HEIGHT = 400;
     const WINDOW_SIZE = 10;
-    
+
     for (let i = 0; i < items.length; i++) {
       const key = getKey(items[i], layoutKey);
       const height = heightStore.get(key);
@@ -282,7 +285,7 @@ export default function InfiniteItemCards({
         // Use moving average of recent measured items
         let recentSum = 0;
         let recentCount = 0;
-        
+
         for (let j = Math.max(0, i - WINDOW_SIZE); j < i; j++) {
           const recentKey = getKey(items[j], layoutKey);
           const recentHeight = heightStore.get(recentKey);
@@ -291,11 +294,10 @@ export default function InfiniteItemCards({
             recentCount++;
           }
         }
-        
-        const estimatedHeight = recentCount > 0 
-          ? recentSum / recentCount 
-          : DEFAULT_HEIGHT;
-        
+
+        const estimatedHeight =
+          recentCount > 0 ? recentSum / recentCount : DEFAULT_HEIGHT;
+
         sums[i + 1] = sums[i] + estimatedHeight;
       }
     }
@@ -335,15 +337,18 @@ export default function InfiniteItemCards({
 
   const recomputeRange = useCallback(() => {
     if (!containerRef.current || items.length === 0 || !prefixSums) return;
-    
-    const scrollTop = Math.max(0, containerRef.current.scrollTop - headerHeight);
+
+    const scrollTop = Math.max(
+      0,
+      containerRef.current.scrollTop - headerHeight
+    );
     const viewportHeight = containerRef.current.clientHeight;
 
     const startIdx = findStartIndex(scrollTop);
     const endIdx = findStartIndex(scrollTop + viewportHeight);
     const overscanStart = Math.max(0, startIdx - OVERSCAN);
     const overscanEnd = Math.min(items.length, endIdx + OVERSCAN + 1);
-    
+
     setRange({ start: overscanStart, end: overscanEnd });
   }, [findStartIndex, items.length, prefixSums, headerHeight]);
 
@@ -380,34 +385,42 @@ export default function InfiniteItemCards({
 
   // Check if near bottom using scroll position
   const checkNearBottom = useCallback(() => {
-    if (!containerRef.current || !prefixSums || items.length === 0) return false;
-    
+    if (!containerRef.current || !prefixSums || items.length === 0)
+      return false;
+
     const scrollTop = containerRef.current.scrollTop;
     const scrollHeight = containerRef.current.scrollHeight;
     const clientHeight = containerRef.current.clientHeight;
-    
+
     const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-    
+
     return distanceFromBottom < BOTTOM_THRESHOLD;
   }, [prefixSums, items.length]);
 
   // Stable scroll handler
   const handleScroll = useCallback(() => {
     if (!containerRef.current || !prefixSums) return;
-    
+
     const isNearBottom = checkNearBottom();
-    
+
     if (onNearBottom && isNearBottom && items.length > 0) {
-      onNearBottom()
+      onNearBottom();
     }
-    
+
     recomputeRange();
-  }, [prefixSums, checkNearBottom, onNearBottom, recomputeRange, tab, items.length]);
+  }, [
+    prefixSums,
+    checkNearBottom,
+    onNearBottom,
+    recomputeRange,
+    tab,
+    items.length,
+  ]);
 
   // Throttled scroll with cleanup
   const throttledHandleScroll = useMemo(() => {
     let rafId = null;
-    
+
     const throttled = () => {
       if (!rafId) {
         rafId = requestAnimationFrame(() => {
@@ -416,14 +429,14 @@ export default function InfiniteItemCards({
         });
       }
     };
-    
+
     throttled.cancel = () => {
       if (rafId) {
         cancelAnimationFrame(rafId);
         rafId = null;
       }
     };
-    
+
     return throttled;
   }, [handleScroll]);
 
@@ -437,7 +450,7 @@ export default function InfiniteItemCards({
   // Layout version reset
   useEffect(() => {
     if (layoutVersion === undefined) return;
-    
+
     setRange({ start: 0, end: INITIAL_MEASURE_COUNT });
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
@@ -468,7 +481,13 @@ export default function InfiniteItemCards({
   // Render measuring phase
   if (measuringPhase && items.length > 0 && !error.hasError) {
     return (
-      <div className="flex flex-col gap-4" style={{ overflow: "auto", height: "100vh" }}>
+      <div
+        className="flex flex-col gap-4"
+        style={{
+          overflow: "auto",
+          height: window.innerHeight - sidebarMobileHeight,
+        }}
+      >
         {(() => {
           headerRef.current.length = 0;
           return headerElements.map((element, idx) =>
@@ -489,7 +508,7 @@ export default function InfiniteItemCards({
             />
           ))}
         </div>
-        
+
         <div className="flex items-center justify-center py-8">
           <div className="text-gray-500">Loading feed...</div>
         </div>
@@ -497,15 +516,24 @@ export default function InfiniteItemCards({
     );
   }
 
-  const topSpacerHeight = prefixSums && items.length > 0 && range.start < items.length
-    ? prefixSums[range.start] 
-    : 0;
-    
-  const bottomSpacerHeight = prefixSums && items.length > 0 && range.end <= items.length
-    ? prefixSums[items.length] - prefixSums[range.end]
-    : 0;
+  const topSpacerHeight =
+    prefixSums && items.length > 0 && range.start < items.length
+      ? prefixSums[range.start]
+      : 0;
+
+  const bottomSpacerHeight =
+    prefixSums && items.length > 0 && range.end <= items.length
+      ? prefixSums[items.length] - prefixSums[range.end]
+      : 0;
   return (
-    <div ref={containerRef} style={{ overflow: "auto", height: "100vh" }} className="flex flex-col gap-4">
+    <div
+      ref={containerRef}
+      style={{
+        overflow: "auto",
+        height: window.innerHeight - sidebarMobileHeight,
+      }}
+      className="flex flex-col gap-4"
+    >
       {(() => {
         headerRef.current.length = 0;
         return headerElements.map((element, idx) =>
@@ -515,12 +543,9 @@ export default function InfiniteItemCards({
 
       <div>
         {topSpacerHeight > 0 && (
-          <div
-            style={{ height: topSpacerHeight }}
-            aria-hidden="true"
-          />
+          <div style={{ height: topSpacerHeight }} aria-hidden="true" />
         )}
-        
+
         {items.length > 0 && !error.hasError
           ? items.slice(range.start, range.end).map((item, idx) => {
               const globalIndex = range.start + idx;
@@ -538,12 +563,9 @@ export default function InfiniteItemCards({
               );
             })
           : null}
-        
+
         {bottomSpacerHeight > 0 && (
-          <div
-            style={{ height: bottomSpacerHeight }}
-            aria-hidden="true"
-          />
+          <div style={{ height: bottomSpacerHeight }} aria-hidden="true" />
         )}
       </div>
     </div>
