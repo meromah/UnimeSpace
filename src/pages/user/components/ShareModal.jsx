@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaTimes, FaLink, FaCopy } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
-import { FaFacebook, FaTelegram, FaWhatsapp } from "react-icons/fa";
+import { X, Link as LinkIcon, Copy } from "lucide-react";
+import { facebookLogo, telegramLogo, whatsappLogo, xLogo } from "../../../assets";
 
 const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
   const [copied, setCopied] = useState(false);
@@ -43,14 +42,15 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
     {
       id: "copy",
       name: "Copy Link",
-      icon: copied ? FaCopy : FaLink,
+      icon: copied ? Copy : LinkIcon,
       color: "bg-gray-100 hover:bg-gray-200 text-gray-700",
       action: handleCopyLink,
+      iconFrom: "lucide"
     },
     {
       id: "twitter",
       name: "Twitter",
-      icon: FaXTwitter,
+      icon: xLogo,
       color: "bg-black hover:bg-gray-800 text-white",
       url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
         itemUrl
@@ -59,7 +59,7 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
     {
       id: "facebook",
       name: "Facebook",
-      icon: FaFacebook,
+      icon: facebookLogo,
       color: "bg-blue-600 hover:bg-blue-700 text-white",
       url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
         itemUrl
@@ -68,7 +68,7 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
     {
       id: "telegram",
       name: "Telegram",
-      icon: FaTelegram,
+      icon: telegramLogo,
       color: "bg-blue-500 hover:bg-blue-600 text-white",
       url: `https://t.me/share/url?url=${encodeURIComponent(
         itemUrl
@@ -77,7 +77,7 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
     {
       id: "whatsapp",
       name: "WhatsApp",
-      icon: FaWhatsapp,
+      icon: whatsappLogo,
       color: "bg-green-500 hover:bg-green-600 text-white",
       url: `https://wa.me/?text=${encodeURIComponent(
         (itemTitle || "") + " " + itemUrl
@@ -112,7 +112,7 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full p-1 cursor-pointer"
           aria-label="Close modal"
         >
-          <FaTimes className="w-5 h-5" />
+          <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
@@ -127,6 +127,7 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
         <div className="p-6">
           <div className="grid grid-cols-2 gap-3">
             {shareOptions.map((option) => {
+              const iconFrom = option?.iconFrom ?? "custom"
               const Icon = option.icon;
               return (
                 <button
@@ -134,7 +135,7 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
                   onClick={(e) => handleShareClick(option, e)}
                   className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg transition-all duration-200 ${option.color} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 cursor-pointer`}
                 >
-                  <Icon className="w-6 h-6" />
+                  {iconFrom === "lucide" ?<Icon className="w-6 h-6"/>: <img src={option.icon} className="w-6 h-6" />}
                   <span className="text-sm font-medium">{option.name}</span>
                   {option.id === "copy" && copied && (
                     <span className="text-xs text-green-600 font-semibold">
