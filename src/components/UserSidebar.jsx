@@ -23,6 +23,7 @@ import { Info } from "lucide-react";
 import { Search } from "lucide-react";
 import { setSidebarMobileHeight } from "../app/uiSlice.js";
 import logo from '../assets/logo.png'
+import DarkModeSwitch from "./DarkModeSwitch.jsx";
 const MenuLink = ({ to, label, icon: Icon, onClick }) => {
   return (
     <Link
@@ -445,10 +446,7 @@ const UserSidebar = () => {
                         <span>Edit profile</span>
                       </button>
                     </Link>
-                    <button className="w-full flex items-center justify-between px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all">
-                      <span>Language</span>
-                      <ChevronRight className="w-4 h-4 text-neutral-400" />
-                    </button>
+                    <DarkModeSwitch/>
                   </div>
                   <div className="h-px bg-neutral-200 mx-1.5" />
                   <div className="p-1.5">
