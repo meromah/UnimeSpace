@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
+import uiReducer from "./uiSlice";
 import myProfileReducer from "./myProfileSlice"
 import createTestReducer from './createTestSlice'
 import homeFeedReducer from './homeFeedSlice'
@@ -10,6 +11,7 @@ import { baseApi } from "../services/baseApi";
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
+    ui: uiReducer,
     auth: authReducer,
     myProfile: myProfileReducer,
     recentCommunities: recentCommunitiesReducer,
