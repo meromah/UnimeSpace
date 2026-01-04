@@ -1,11 +1,15 @@
 import React, { useMemo } from "react";
 import SearchPageHeader from "./SearchPageHeader";
 import CommunitySkeleton from "../Skeleton/CommunitySkeleton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getFileUrl, getInitials } from "../../../../utils";
 import { useSearchBoardsQuery } from "../../../../services/boardsApi";
+import { useSelector } from "react-redux";
+import { useSubscribeToBoardMutation, useUnsubscribeFromBoardMutation } from "../../../../services/boardSubscriptionsApi";
 
 const SearchPageBoards = ({ activeTab, onSelectTab, query }) => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
   const {
     data: items,
     isFetching,
@@ -15,6 +19,38 @@ const SearchPageBoards = ({ activeTab, onSelectTab, query }) => {
     () => new Set(items?.subscribed ?? []),
     [items]
   );
+  const [subscribeToBoard, { isLoading: isSubscribing }] =
+    useSubscribeToBoardMutation();
+  const [unsubscribeFromBoard, { isLoading: isUnsubscribing }] =
+    useUnsubscribeFromBoardMutation();
+  const onSubscribe = async (e, board) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    try {
+      await subscribeToBoard({ board: board.name }).unwrap();
+      subscribedIds.add(board.id)
+    } catch (err) {
+      console.error("Failed to subscribe:", err);
+    }
+  };
+  const onUnSubscribe = async (e, board) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    try {
+      await unsubscribeFromBoard({ board: board.name }).unwrap();
+      subscribedIds.add(board.id)
+    } catch (err) {
+      console.error("Failed to unsubscribe:", err);
+    }
+  };
   return isFetching ? (
     <div className="h-screen overflow-auto">
       <SearchPageHeader onSelect={() => null} activeTab={activeTab} />
@@ -77,16 +113,16 @@ const SearchPageBoards = ({ activeTab, onSelectTab, query }) => {
               {subscribedIds.has(element.id) ? (
                 <button
                   className="px-3 py-2 text-red-500 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
-                  // onClick={(e) => onUnSubscribe(e, element)}
-                  // disabled={isUnsubscribing}
+                  onClick={(e) => onUnSubscribe(e, element)}
+                  disabled={isUnsubscribing}
                 >
                   <span>Joined</span>
                 </button>
               ) : (
                 <button
                   className="px-5 py-2 text-primary-blue active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
-                  // onClick={(e) => onSubscribe(e, element)}
-                  // disabled={isSubscribing}
+                  onClick={(e) => onSubscribe(e, element)}
+                  disabled={isSubscribing}
                 >
                   <span>Join</span>
                 </button>

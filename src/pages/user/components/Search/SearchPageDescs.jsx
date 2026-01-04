@@ -2,10 +2,14 @@ import React, { useMemo } from "react";
 import { useSearchDescsQuery } from "../../../../services/descsApi";
 import SearchPageHeader from "./SearchPageHeader";
 import CommunitySkeleton from "../Skeleton/CommunitySkeleton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getFileUrl, getInitials } from "../../../../utils";
+import { useSelector } from "react-redux";
+import { useSubscribeToDescMutation, useUnsubscribeFromDescMutation } from "../../../../services/descSubscriptionsApi";
 
 const SearchPageDescs = ({ query, activeTab, onSelectTab }) => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
   const {
     data: items,
     isFetching,
@@ -16,7 +20,40 @@ const SearchPageDescs = ({ query, activeTab, onSelectTab }) => {
     [items]
   );
 
-  // TODO: subscribe, unsubscribe button
+  const [subscribeToDesc, { isLoading: isSubscribing }] =
+    useSubscribeToDescMutation();
+  const [unsubscribeFromDesc, { isLoading: isUnsubscribing }] =
+    useUnsubscribeFromDescMutation();
+
+  const onSubscribe = async (e, desc) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    try {
+      await subscribeToDesc({ desc: desc.name }).unwrap();
+      subscribedIds.add(desc.id)
+    } catch (err) {
+      console.error("Failed to subscribe:", err);
+    }
+  };
+
+  const onUnSubscribe = async (e, desc) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    try {
+      await unsubscribeFromDesc({ desc: desc.name }).unwrap();
+      subscribedIds.add(desc.id)
+    } catch (err) {
+      console.error("Failed to unsubscribe:", err);
+    }
+  };
   return isFetching && !isSuccess ? (
     <div className="h-screen overflow-auto">
       <SearchPageHeader onSelect={() => null} activeTab={activeTab} />
@@ -79,16 +116,16 @@ const SearchPageDescs = ({ query, activeTab, onSelectTab }) => {
               {subscribedIds.has(element.id) ? (
                 <button
                   className="px-3 py-2 text-red-500 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
-                  // onClick={(e) => onUnSubscribe(e, element)}
-                  // disabled={isUnsubscribing}
+                  onClick={(e) => onUnSubscribe(e, element)}
+                  disabled={isUnsubscribing}
                 >
                   <span>Joined</span>
                 </button>
               ) : (
                 <button
                   className="px-5 py-2 text-primary-blue active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
-                  // onClick={(e) => onSubscribe(e, element)}
-                  // disabled={isSubscribing}
+                  onClick={(e) => onSubscribe(e, element)}
+                  disabled={isSubscribing}
                 >
                   <span>Join</span>
                 </button>
