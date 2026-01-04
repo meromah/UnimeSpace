@@ -21,7 +21,7 @@ const ExpandableSection = ({
     <div>
       <button
         onClick={() => toggleSection(section.id)}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-all cursor-pointer"
+        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-700 dark:text-neutral-100 dark transition-all cursor-pointer"
       >
         {Icon && <Icon className="w-4 h-4 text-neutral-400" />}
         <span className="flex-1 text-left">{section.title}</span>
@@ -48,7 +48,7 @@ const ExpandableSection = ({
                   closeMobileMenu();
                   toggleSection(section.id);
                 }}
-                className="w-full flex text-left px-3 py-1.5 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-md transition-all"
+                className="w-full flex text-left px-3 py-1.5 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-700 dark:hover:text-neutral-100 dark:text-neutral-100 rounded-md transition-all"
               >
                 <span className="truncate">{item.name}</span>
               </Link>
@@ -62,7 +62,7 @@ const ExpandableSection = ({
           {section.id !== "recent" && section.id !== "resources" && section.items.length > 5 && (
             <button
               onClick={()=> onViewAllClick()}
-              className="w-full text-left px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-all"
+              className="w-full text-left px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md dark:hover:bg-neutral-700 dark:hover:text-blue-100 dark:text-blue-400  transition-all"
             >
               View all
             </button>

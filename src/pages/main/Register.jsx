@@ -211,12 +211,12 @@ const Register = () => {
         />
       )}
 
-      <main className="px-4 py-16 max-w-md mx-auto">
+      <main className="px-4 py-16 max-w-md mx-auto dark:bg-neutral-950">
         <header className="text-center mb-8">
-          <h1 className="text-4xl font-black text-neutral-900 mb-2">
+          <h1 className="text-4xl font-black text-neutral-900 dark:text-neutral-100 mb-2">
             Join UnimeSpace
           </h1>
-          <p className="text-neutral-700">
+          <p className="text-neutral-700 dark:text-neutral-200">
             Create your account and start learning, sharing, and vibing.
           </p>
         </header>
@@ -225,7 +225,7 @@ const Register = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between relative">
             {/* Progress Bar Background */}
-            <div className="absolute top-5 left-0 right-0 h-0.5 bg-gray-200 -z-10" />
+            <div className="absolute top-5 left-0 right-0 h-0.5 bg-gray-200 dark:bg-neutral-700 -z-10" />
 
             {/* Active Progress Bar */}
             <div
@@ -239,14 +239,14 @@ const Register = () => {
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
                   step >= 1
                     ? "bg-primary-yellow text-neutral-900 shadow-md"
-                    : "bg-gray-200 text-gray-500"
+                    : "bg-gray-200 dark:bg-neutral-700 text-gray-500 dark:text-neutral-400"
                 }`}
               >
                 {step > 1 ? <Check className="w-5 h-5" /> : "1"}
               </div>
               <span
                 className={`text-xs mt-2 font-medium transition-colors ${
-                  step === 1 ? "text-neutral-900" : "text-gray-500"
+                  step === 1 ? "text-neutral-900 dark:text-neutral-100" : "text-gray-500 dark:text-neutral-400"
                 }`}
               >
                 Verify Email
@@ -266,7 +266,7 @@ const Register = () => {
               </div>
               <span
                 className={`text-xs mt-2 font-medium transition-colors ${
-                  step === 2 ? "text-neutral-900" : "text-gray-500"
+                  step === 2 ? "text-neutral-900 dark:text-neutral-100" : "text-gray-500 dark:text-neutral-400"
                 }`}
               >
                 Enter Code
@@ -286,7 +286,7 @@ const Register = () => {
               </div>
               <span
                 className={`text-xs mt-2 font-medium transition-colors ${
-                  step === 3 ? "text-neutral-900" : "text-gray-500"
+                  step === 3 ? "text-neutral-900 dark:text-neutral-100" : "text-gray-500 dark:text-neutral-400"
                 }`}
               >
                 Create Account
@@ -302,11 +302,11 @@ const Register = () => {
               e.preventDefault();
               handleEmailVerification();
             }}
-            className="bg-white rounded-2xl p-6 sm:p-8 shadow"
+            className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 shadow"
           >
             <div className="grid gap-6">
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800">Email</span>
+                <span className="font-medium text-neutral-800 dark:text-neutral-100">Email</span>
                 <input
                   type="email"
                   placeholder="you@example.com"
@@ -315,10 +315,10 @@ const Register = () => {
                     setEmail(e.target.value);
                     if (errors.email) setErrors({ ...errors, email: "" });
                   }}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border ${
+                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
                     errors.email
-                      ? "border-red-300 focus:outline-red-500"
-                      : "border-gray-200 focus:outline-primary-yellow"
+                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
+                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
                   }`}
                   required
                 />
@@ -348,11 +348,11 @@ const Register = () => {
               e.preventDefault();
               handleOtpVerification();
             }}
-            className="bg-white rounded-2xl p-6 sm:p-8 shadow"
+            className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 shadow"
           >
             <div className="grid gap-6">
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800">
+                <span className="font-medium text-neutral-800 dark:text-neutral-200">
                   Verification Code
                 </span>
                 <input
@@ -364,10 +364,10 @@ const Register = () => {
                     if (errors.otp) setErrors({ ...errors, otp: "" });
                   }}
                   maxLength={6}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border ${
+                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
                     errors.otp
-                      ? "border-red-300 focus:outline-red-500"
-                      : "border-gray-200 focus:outline-primary-yellow"
+                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
+                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
                   }`}
                   required
                 />
@@ -380,7 +380,7 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="px-4 py-2.5 rounded-lg border border-gray-300 text-neutral-700 hover:bg-gray-50 transition-all"
+                  className="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-all"
                 >
                   Back
                 </button>
@@ -400,7 +400,7 @@ const Register = () => {
                 type="button"
                 onClick={handleResendCode}
                 disabled={isVerifyingEmail}
-                className="text-sm text-primary-blue underline hover:no-underline disabled:opacity-50"
+                className="text-sm text-primary-blue dark:text-blue-400 underline hover:no-underline disabled:opacity-50"
               >
                 {isVerifyingEmail ? "Sending..." : "Resend Code"}
               </button>
@@ -415,11 +415,11 @@ const Register = () => {
               e.preventDefault();
               handleRegistration();
             }}
-            className="bg-white rounded-2xl p-6 sm:p-8 shadow"
+            className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 shadow"
           >
             <div className="grid gap-6">
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800">Name</span>
+                <span className="font-medium text-neutral-800 dark:text-neutral-200">Name</span>
                 <input
                   type="text"
                   placeholder="John Doe"
@@ -428,10 +428,10 @@ const Register = () => {
                     setForm({ ...form, name: e.target.value });
                     if (errors.name) setErrors({ ...errors, name: "" });
                   }}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border ${
+                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
                     errors.name
-                      ? "border-red-300 focus:outline-red-500"
-                      : "border-gray-200 focus:outline-primary-yellow"
+                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
+                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
                   }`}
                   required
                 />
@@ -469,7 +469,7 @@ const Register = () => {
                 style={{ display: "none" }}
               />
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800">Password</span>
+                <span className="font-medium text-neutral-800 dark:text-neutral-200">Password</span>
                 <input
                   type="password"
                   placeholder="••••••••"
@@ -478,10 +478,10 @@ const Register = () => {
                     setForm({ ...form, password: e.target.value });
                     if (errors.password) setErrors({ ...errors, password: "" });
                   }}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border ${
+                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
                     errors.password
-                      ? "border-red-300 focus:outline-red-500"
-                      : "border-gray-200 focus:outline-primary-yellow"
+                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
+                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
                   }`}
                   required
                 />
@@ -493,7 +493,7 @@ const Register = () => {
               </label>
 
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800">
+                <span className="font-medium text-neutral-800 dark:text-neutral-200">
                   Confirm Password
                 </span>
                 <input
@@ -501,10 +501,10 @@ const Register = () => {
                   placeholder="••••••••"
                   value={form.password_confirmation}
                   onChange={handlePasswordVerificationChange}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border ${
+                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
                     !isPasswordMatch || errors.password_confirmation
-                      ? "border-red-300 focus:outline-red-500"
-                      : "border-gray-200 focus:outline-primary-yellow"
+                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
+                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
                   }`}
                   required
                 />
@@ -524,7 +524,7 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="px-4 py-2.5 rounded-lg border border-gray-300 text-neutral-700 hover:bg-gray-50 transition-all"
+                  className="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-all"
                 >
                   Back
                 </button>
@@ -543,11 +543,11 @@ const Register = () => {
           </form>
         )}
 
-        <p className="text-center text-neutral-700 mt-6">
+        <p className="text-center text-neutral-700 dark:text-neutral-200 mt-6">
           Already have an account?{" "}
           <a
             href="/login"
-            className="text-primary-blue underline hover:no-underline"
+            className="text-primary-blue dark:text-neutral-100 dark:font-semibold underline hover:no-underline"
           >
             Login
           </a>

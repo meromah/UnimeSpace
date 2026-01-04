@@ -24,8 +24,8 @@ export const TestResultPage = () => {
   return (
     <div className="min-h-screen p-4 sm:p-8 transition-colors duration-300">
       <div className="max-w-3xl mx-auto space-y-8">
-        <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 sm:p-12 text-center transition-colors">
-          <h1 className="text-xl font-medium text-slate-500 dark:text-slate-400 mb-4 uppercase tracking-wide">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-8 sm:p-12 text-center transition-colors">
+          <h1 className="text-xl font-medium text-neutral-500 dark:text-neutral-400 mb-4 uppercase tracking-wide">
             Assessment Complete
           </h1>
           <div
@@ -35,9 +35,9 @@ export const TestResultPage = () => {
           >
             {Number(results.score).toFixed(2)}%
           </div>
-          <p className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-300 text-lg">
+          <p className="flex items-center justify-center gap-2 text-neutral-600 dark:text-neutral-300 text-lg">
             <span>You scored</span>
-            <span className="font-semibold text-slate-900 dark:text-white">
+            <span className="font-semibold text-neutral-900 dark:text-white">
               {results.num_correct_answers}
             </span>
             <span>out of {questions.length} points</span>
@@ -54,7 +54,7 @@ export const TestResultPage = () => {
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white px-1">
+          <h2 className="text-lg font-bold text-neutral-900 dark:text-white px-1">
             Detailed Review
           </h2>
           {questions.map((question, index) => {

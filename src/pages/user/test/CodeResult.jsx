@@ -17,12 +17,12 @@ const CodeResult = ({ question, questionNum, result, currentSubmission }) => {
   return (
     <div
       key={question.id}
-      className="border border-slate-200 dark:border-slate-800 rounded-lg p-5 bg-white dark:bg-slate-900/30"
+      className="border border-neutral-200 dark:border-neutral-800 rounded-lg p-5 bg-white dark:bg-neutral-900/30"
     >
       {/* Question header */}
       <div className="flex items-start justify-between mb-4">
         <h2 className="text-base font-medium leading-snug">
-          <span className="pr-4 font-medium text-slate-600 dark:text-slate-300">
+          <span className="pr-4 font-medium text-neutral-600 dark:text-neutral-300">
             {questionNum}.
           </span>
           {question.body}
@@ -38,9 +38,9 @@ const CodeResult = ({ question, questionNum, result, currentSubmission }) => {
 
       {/* Answers */}
       <div className="flex flex-col gap-2">
-        <div className="mt-2 p-3 bg-slate-100 dark:bg-slate-800 rounded-md text-sm font-mono">
+        <div className="mt-2 p-3 bg-neutral-100 dark:bg-neutral-800 rounded-md text-sm font-mono">
           {<pre>{currentSubmission}</pre> || (
-            <span className="italic text-slate-400">No code submitted</span>
+            <span className="italic text-neutral-400">No code submitted</span>
           )}
         </div>
         {result.map((item, i) => {
@@ -50,17 +50,17 @@ const CodeResult = ({ question, questionNum, result, currentSubmission }) => {
           const hasError = item.error.length > 0;
           const stdSuccess = stdout && stdout.success;
           return hasError ? (
-            <div>
+            <div className="flex flex-col gap-2 p-3 border rounded-lg bg-red-100 dark:text-neutral-200 dark:bg-red-800/20 dark:border-red-600 border-red-300 text-red-600">
               <p>Syntax Error</p>
-              <p className="font-medium text-red-400">{item.error}</p>
+              <p className="font-medium">{item.error}</p>
             </div>
           ) : (
             <div
               key={testcase.id || i}
               className={`flex flex-col gap-2 p-3 border rounded-lg ${
                 stdSuccess
-                  ? "bg-green-50 border-green-300 text-green-600"
-                  : "bg-red-50 border-red-300 text-red-600"
+                  ? "bg-green-100 dark:text-neutral-200 dark:bg-green-800/20 border-green-300 text-green-600"
+                  : "bg-red-100 dark:text-neutral-200 dark:bg-red-800/20 dark:border-red-600 border-red-300 text-red-600"
               }`}
             >
               <div className="text-sm font-semibold">Test Case {i + 1}</div>

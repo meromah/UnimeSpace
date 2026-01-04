@@ -11,8 +11,6 @@
   --primary-bg: #faf8f6;
   --primary-dark: #22272a;
   --primary-light: #ebebeb;
-  --neutral-900: #111827;
-  --neutral-700: #374151;
   --secondary-light: #e6e7eb40;
 }
 
@@ -43,8 +41,6 @@
   --color-primary-bg: var(--primary-bg);
   --color-primary-dark: var(--primary-dark);
   --color-primary-light: var(--primary-light);
-  --color-neutral-900: var(--neutral-900);
-  --color-neutral-700: var(--neutral-700);
   --color-secondary-light: var(--secondary-light);
   --font-jakarta: "Plus Jakarta Sans", sans-serif;
   --font-mono: "Roboto Mono", monospace;
@@ -98,7 +94,7 @@
 }
 
 body {
-  @apply font-jakarta text-sm bg-primary-bg text-neutral-900;
+  @apply font-jakarta text-sm bg-primary-bg dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100;
 }
 /* Hide scrollbar but keep scrollable */
 body::-webkit-scrollbar {
@@ -108,22 +104,13 @@ body::-webkit-scrollbar {
   display: none;
 }
 .btn-cta {
-  @apply px-4 py-2 rounded-lg  outline-primary-blue outline-1 uppercase cursor-pointer hover:scale-105 transition-all duration-200 hover:bg-primary-blue/10;
+  @apply px-4 py-2 rounded-lg  outline-primary-blue outline-1 uppercase cursor-pointer transition-all duration-200 hover:bg-primary-blue/10 dark:bg-neutral-100 dark:outline-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 ;
 }
 .nav-list-item {
   @apply text-neutral-700 hover:text-primary-blue cursor-pointer;
 }
 .accent-text {
   @apply font-mono text-xs opacity-60 mb-4;
-}
-.story-title {
-  @apply flex items-center gap-1 uppercase w-1/2 bg-secondary-light p-0.5 rounded-xl text-sm;
-}
-.story-title-active {
-  @apply flex items-center gap-1 uppercase w-full bg-secondary-light p-0.5 rounded-xl text-sm;
-}
-.story-icon {
-  @apply p-3 rounded-lg text-xl m-0.5 z-10 text-white;
 }
 
 .virtual-item-padding-x {

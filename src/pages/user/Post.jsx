@@ -102,9 +102,9 @@ const Post = ({ itemType = "post" }) => {
   }
   if (!itemData) return null;
   return (
-    <div className="min-h-screen bg-primary-bg">
+    <div className="min-h-screen bg-primary-bg dark:bg-neutral-950">
       <div className="w-full md:max-w-4xl md:mx-auto sm:px-4 md:px-8 md:py-8">
-        <div className="bg-white md:rounded-lg md:border md:border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-neutral-900 md:rounded-lg md:border md:border-gray-200 dark:md:border-neutral-700 overflow-hidden">
           <PostHeader
             itemData={itemData}
             community={communityType}
@@ -131,7 +131,7 @@ const Post = ({ itemType = "post" }) => {
             onShare={() => setIsShareModalOpen(true)}
           />
 
-          <div className="border-t border-gray-200 p-4 sm:p-6 md:p-8 flex flex-col gap-6">
+          <div className="border-t border-gray-200 dark:border-neutral-700 p-4 sm:p-6 md:p-8 flex flex-col gap-6">
             <CommentForm onSubmit={handleCommentSubmit} isLoading={isLoading} />
 
             {isCommentsError && commentsError?.status === 404 ? (

@@ -1,4 +1,11 @@
-import { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  useLayoutEffect,
+} from "react";
 import {
   ChevronDown,
   ChevronRight,
@@ -22,18 +29,20 @@ import { FileEdit } from "lucide-react";
 import { Info } from "lucide-react";
 import { Search } from "lucide-react";
 import { setSidebarMobileHeight } from "../app/uiSlice.js";
-import logo from '../assets/logo.png'
+import logo from "../assets/logo.png";
 import DarkModeSwitch from "./DarkModeSwitch.jsx";
 const MenuLink = ({ to, label, icon: Icon, onClick }) => {
   return (
     <Link
       to={to}
       onClick={onClick}
-      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all group"
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all group"
     >
-      {Icon && <Icon className="w-4 h-4 text-neutral-400" />}
+      {Icon && (
+        <Icon className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
+      )}
       <span className="flex-1 text-left">{label}</span>
-      <ChevronRight className="w-4 h-4 text-neutral-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+      <ChevronRight className="w-4 h-4 text-neutral-400 dark:text-neutral-500 opacity-0 group-hover:opacity-100 transition-opacity" />
     </Link>
   );
 };
@@ -47,11 +56,6 @@ const resourcesSection = {
       id: "playground",
       name: "Python Playground",
       path: "/playground",
-    },
-    {
-      id: "how-to",
-      name: "How to ...",
-      path: "/how-to",
     },
     {
       id: "about",
@@ -209,7 +213,7 @@ const UserSidebar = () => {
       const newHeight = entry.contentRect.height;
 
       if (newHeight > 0 && sidebarMobileHeight !== newHeight) {
-        dispatch(setSidebarMobileHeight({height: newHeight}))
+        dispatch(setSidebarMobileHeight({ height: newHeight }));
       }
     });
 
@@ -219,18 +223,18 @@ const UserSidebar = () => {
 
   return (
     <>
-            {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div
-            className="fixed inset-0 bg-neutral-900/50 z-[95] lg:hidden animate-fade-in"
-            onClick={closeMobileMenu}
-            aria-hidden="true"
-          />
-        )}
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-neutral-900/50 z-[95] lg:hidden animate-fade-in"
+          onClick={closeMobileMenu}
+          aria-hidden="true"
+        />
+      )}
       <div className="md:flex md:justify-between md:items-center">
         <div
           ref={sidebarMobileRef}
-          className="md:hidden flex sticky top-0 justify-between items-center bg-white z-[90]"
+          className="md:hidden flex sticky top-0 justify-between items-center bg-white dark:bg-neutral-900 z-[90]"
         >
           {/* Logo Header - For Mobile devices */}
           <Link to="/home" className="flex-shrink-0 px-4 py-4">
@@ -238,41 +242,41 @@ const UserSidebar = () => {
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <img src={logo} alt="UnimeSpace logo" />
               </div>
-              <span className="text-lg font-semibold text-neutral-900 select-none">
+              <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 select-none">
                 UnimeSpace
               </span>
             </div>
           </Link>
           {/* Mobile Menu Toggle Button */}
           <button
-            className="lg:hidden z-[100] p-2 rounded-lg hover:bg-primary-blue/10 transition-colors duration-200"
+            className="lg:hidden z-[100] p-2 rounded-lg hover:bg-primary-blue/10 dark:hover:bg-primary-blue/20 transition-colors duration-200 dark:text-neutral-100"
             onClick={toggleMobileMenu}
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
           >
             {isMobileMenuOpen ? (
-              <X className="text-2xl text-neutral-900" />
+              <X className="text-2xl text-neutral-900 dark:text-neutral-100" />
             ) : (
-              <Menu className="text-2xl text-neutral-900" />
+              <Menu className="text-2xl text-neutral-900 dark:text-neutral-100" />
             )}
           </button>
         </div>
         <div
-          className={`fixed top-0 left-0 md:relative h-dvh w-72 md:w-full flex flex-col bg-white border-r border-neutral-200 z-[95] transform transition-transform duration-300 ease-in-out ${
+          className={`fixed top-0 left-0 md:relative h-dvh w-72 md:w-full flex flex-col bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-700 z-[95] transform transition-transform duration-300 ease-in-out ${
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           } md:translate-x-0`}
         >
           {/* Logo Header */}
           <Link
             to="/home"
-            className="flex-shrink-0 px-4 py-4 border-b border-neutral-200"
+            className="flex-shrink-0 px-4 py-4 border-b border-neutral-200 dark:border-neutral-700"
           >
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 flex items-center justify-center">
                 <img src={logo} alt="UnimeSpace logo" />
               </div>
-              <span className="text-lg font-semibold text-neutral-900 select-none">
+              <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 select-none">
                 UnimeSpace
               </span>
             </div>
@@ -285,11 +289,11 @@ const UserSidebar = () => {
                 <div className="mb-3">
                   <button
                     onClick={() => setOpen(!open)}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all"
                   >
                     <span className="flex-1 text-left">Create new</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${
+                      className={`w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${
                         open ? "rotate-180" : ""
                       }`}
                     />
@@ -307,7 +311,7 @@ const UserSidebar = () => {
                             to={item.path}
                             key={item.path}
                             onClick={closeMobileMenu}
-                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 rounded-lg transition-all"
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-600 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-neutral-100 rounded-lg transition-all"
                           >
                             <Icon className="w-4 h-4" />
                             <span>{item.label}</span>
@@ -318,7 +322,7 @@ const UserSidebar = () => {
                   </div>
                 </div>
                 {/* Divider */}
-                <div className="h-px bg-neutral-200 my-2" />
+                <div className="h-px bg-neutral-200 dark:bg-neutral-700 my-2" />
                 {/* Section that displays user-followed boards, descs */}
                 <ExpandableSection
                   section={subscribedBoards}
@@ -332,7 +336,7 @@ const UserSidebar = () => {
                   toggleSection={toggleSection}
                   closeMobileMenu={closeMobileMenu}
                 />
-                <div className="h-px bg-neutral-200" />
+                <div className="h-px bg-neutral-200 dark:bg-neutral-700" />
               </div>
             )}
             {/* Recent communities */}
@@ -342,7 +346,7 @@ const UserSidebar = () => {
               toggleSection={toggleSection}
               closeMobileMenu={closeMobileMenu}
             />
-            <div className="h-px bg-neutral-200" />
+            <div className="h-px bg-neutral-200 dark:bg-neutral-700" />
             <div className="py-1">
               <MenuLink
                 icon={Search}
@@ -361,7 +365,7 @@ const UserSidebar = () => {
                 />
               ))}
             </div>
-            <div className="h-px bg-neutral-200" />
+            <div className="h-px bg-neutral-200 dark:bg-neutral-700" />
             <div>
               <ExpandableSection
                 section={resourcesSection}
@@ -369,33 +373,34 @@ const UserSidebar = () => {
                 toggleSection={toggleSection}
                 closeMobileMenu={closeMobileMenu}
               />
+              {!isAuthenticated && <DarkModeSwitch />}
             </div>
           </div>
           {/* User Card at Bottom */}
           {isAuthenticated === undefined || isProfileDataLoading ? (
-            <div className="flex-shrink-0 border-t border-neutral-200 p-2">
+            <div className="flex-shrink-0 border-t border-neutral-200 dark:border-neutral-700 p-2">
               <div className="w-full flex items-center gap-3 px-2 py-3 rounded-lg">
                 {/* Profile Image Skeleton */}
-                <div className="w-8 h-8 rounded-full bg-neutral-200 animate-pulse flex-shrink-0"></div>
+                <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-700 animate-pulse flex-shrink-0"></div>
                 {/* Text Skeletons */}
                 <div className="flex-1 min-w-0">
-                  <div className="h-4 bg-neutral-200 rounded w-1/2 mb-2 animate-pulse"></div>
-                  <div className="h-3 bg-neutral-200 rounded w-1/3 animate-pulse"></div>
+                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2 mb-2 animate-pulse"></div>
+                  <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 animate-pulse"></div>
                 </div>
                 {/* Chevron Icon Skeleton */}
-                <div className="w-4 h-4 bg-neutral-200 rounded animate-pulse flex-shrink-0"></div>
+                <div className="w-4 h-4 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse flex-shrink-0"></div>
               </div>
             </div>
           ) : isAuthenticated === true ? (
             <div
-              className="flex-shrink-0 border-t border-neutral-200 p-2 relative"
+              className="flex-shrink-0 border-t border-neutral-200 dark:border-neutral-700 p-2 relative"
               ref={userMenuRef}
             >
               <button
                 onClick={() =>
                   !isProfileDataLoading && setUserMenuOpen(!userMenuOpen)
                 }
-                className="w-full flex items-center gap-3 px-2 py-3 hover:bg-neutral-100 rounded-lg transition-all group disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                className="w-full flex items-center gap-3 px-2 py-3 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all group disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                 disabled={isProfileDataLoading}
               >
                 {/* User Avatar */}
@@ -413,45 +418,45 @@ const UserSidebar = () => {
                   </div>
                 )}
                 <div className="flex-1 min-w-0 text-left">
-                  <p className="text-sm font-medium text-neutral-900 truncate">
+                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
                     {profileData?.name || "User"}
                   </p>
                   <Link
                     onClick={(e) => e.stopPropagation()}
                     to="profile"
-                    className="text-xs text-neutral-500 truncate cursor-pointer hover:underline"
+                    className="text-xs text-neutral-500 dark:text-neutral-400 truncate cursor-pointer hover:underline"
                   >
                     u/{profileData?.username || "username"}
                   </Link>
                 </div>
                 <ChevronDown
-                  className={`w-4 h-4 text-neutral-400 flex-shrink-0 transition-transform duration-200 ${
+                  className={`w-4 h-4 text-neutral-400 dark:text-neutral-500 flex-shrink-0 transition-transform duration-200 ${
                     userMenuOpen ? "rotate-180" : ""
                   }`}
                 />
               </button>
               {/* User Dropdown Menu */}
               {userMenuOpen && (
-                <div className="absolute bottom-full left-2 right-2 mb-2 bg-white border border-neutral-200 rounded-xl shadow-lg overflow-hidden z-[100]">
-                  <div className="px-4 pt-3 pb-2 text-xs text-neutral-500 truncate border-b border-neutral-200">
+                <div className="absolute bottom-full left-2 right-2 mb-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-lg overflow-hidden z-[100]">
+                  <div className="px-4 pt-3 pb-2 text-xs text-neutral-500 dark:text-neutral-400 truncate border-b border-neutral-200 dark:border-neutral-700">
                     {profileData?.email || "no email"}
                   </div>
                   <div className="p-1.5">
                     <Link
                       to="profile/edit"
-                      className="w-full flex items-center justify-between px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
+                      className="w-full flex items-center justify-between px-3 py-2 text-sm text-neutral-700 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all"
                     >
                       <button className="flex items-center gap-2">
                         <Settings className="w-4 h-4" />
                         <span>Edit profile</span>
                       </button>
                     </Link>
-                    <DarkModeSwitch/>
+                    <DarkModeSwitch />
                   </div>
-                  <div className="h-px bg-neutral-200 mx-1.5" />
+                  <div className="h-px bg-neutral-200 dark:bg-neutral-700 mx-1.5" />
                   <div className="p-1.5">
                     <button
-                      className="w-full flex items-center px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
+                      className="w-full flex items-center px-3 py-2 text-sm text-neutral-700 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all"
                       onClick={handleLogout}
                     >
                       <LogOut className="w-4 h-4 mr-2" />
@@ -465,7 +470,7 @@ const UserSidebar = () => {
             <div className="flex items-center justify-center py-2 px-4">
               <Link
                 to="/login"
-                className="block w-full py-2 px-4 rounded-lg bg-primary-blue text-white text-base font-medium text-center hover:bg-primary-blue/90 transition-colors"
+                className="block w-full py-2 px-4 rounded-lg bg-primary-blue text-white text-base font-medium text-center hover:bg-primary-blue/90 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 border border-primary-blue dark:border-neutral-100 transition-colors cursor-pointer"
               >
                 Login
               </Link>

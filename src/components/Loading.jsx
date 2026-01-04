@@ -5,8 +5,8 @@ const Loading = ({ message = 'Loading...' }) => {
   return (
     <div className="flex min-h-[50vh] items-center justify-center">
       <div className="flex flex-col items-center gap-4 text-center">
-        <Loader2 className="h-10 w-10 animate-spin text-indigo-500" aria-hidden="true" />
-        <p className="text-sm text-gray-500">{message}</p>
+        <Loader2 className="h-10 w-10 animate-spin text-indigo-500 dark:text-indigo-400" aria-hidden="true" />
+        <p className="text-sm text-gray-500 dark:text-neutral-400">{message}</p>
       </div>
     </div>
   );

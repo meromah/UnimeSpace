@@ -40,9 +40,9 @@ const UserPage = () => {
   }, [loginStatus, dispatch]);
 
   return (
-    <div className="relative h-full md:min-h-screen grid grid-cols-12">
+    <div className="relative h-full md:min-h-screen grid grid-cols-12 dark:bg-neutral-950">
       {/* Left Sidebar */}
-      <aside className="col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 border-r border-neutral-200 md:h-screen md:sticky md:top-0 overflow-y-scroll scrollbar-hide">
+      <aside className="col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-3 border-r border-neutral-200 dark:border-neutral-700 md:h-screen md:sticky md:top-0 overflow-y-scroll scrollbar-hide">
         <UserSidebar onNavigate={(path) => navigate(path)} />
       </aside>
 
@@ -53,7 +53,7 @@ const UserPage = () => {
 
       {/* Right Sidebar */}
       {location.pathname !== "/explore/" ? (
-        <aside className="hidden xl:block xl:col-span-3 border-l border-neutral-200">
+        <aside className="hidden xl:block xl:col-span-3 border-l border-neutral-200 dark:border-neutral-700">
           <AsidePanel />
         </aside>
       ) : null}

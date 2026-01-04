@@ -30,7 +30,7 @@ const Login = () => {
     }
   };
   return (
-    <main className="px-4 py-16 max-w-md mx-auto">
+    <main className="px-4 py-16 max-w-md mx-auto dark:bg-neutral-950">
       {showSuccessModal && (
         <SuccessModal
           onClose={() => setShowSuccessModal(false)}
@@ -42,45 +42,45 @@ const Login = () => {
         />
       )}
       <header className="text-center mb-8">
-        <h1 className="text-4xl font-black text-neutral-900 mb-2">
+        <h1 className="text-4xl font-black text-neutral-900 dark:text-neutral-100 mb-2">
           Welcome back
         </h1>
-        <p className="text-neutral-700">
+        <p className="text-neutral-700 dark:text-neutral-200">
           Sign in to post, not to spy — your info stays private.
         </p>
       </header>
 
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="bg-white rounded-2xl p-6 sm:p-8 shadow"
+        className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 shadow"
       >
         <div className="grid gap-4">
           <label className="flex flex-col gap-2">
-            <span className="font-medium text-neutral-800">Email</span>
+            <span className="font-medium text-neutral-800 dark:text-neutral-100">Email</span>
             <input
               type="email"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 focus:outline-primary-yellow"
+              className="px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 dark:focus:outline-neutral-200"
               required
             />
           </label>
           <div className="space-y-2">
             <label className="flex flex-col gap-2">
-              <span className="font-medium text-neutral-800">Password</span>
+              <span className="font-medium text-neutral-800 dark:text-neutral-100">Password</span>
               <input
                 type="password"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 focus:outline-primary-yellow`}
+                className="px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 dark:focus:outline-neutral-200"
                 required
               />
             </label>
-            {isError&&<p className="flex items-center gap-2 text-neutral-700 text-xs">
+            {isError&&<p className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 text-xs">
               <span>Forgot your password?</span>
-              <Link to="/reset-password" className="text-primary-blue underline">
+              <Link to="/reset-password" className="text-primary-blue underline dark:text-neutral-100 dark:font-semibold">
                 Reset
               </Link>
             </p>}
@@ -88,19 +88,19 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex items-center gap-2 justify-center bg-primary-blue py-2 rounded-lg uppercase cursor-pointer hover:scale-105 transition-all duration-200 text-white font-semibold hover:bg-primary-blue/90 w-full"
+            className="flex justify-center w-full py-2 px-4 rounded-lg bg-primary-blue text-white text-base font-medium text-center hover:bg-primary-blue/90 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 border border-primary-blue dark:border-neutral-100 transition-colors cursor-pointer"
           >
             <span>{isLoading ? "Logging in..." : "Log In"}</span>
             {isLoading && (
-              <Loader2 className="animate-spin text-white text-lg" />
+              <Loader2 className="animate-spin text-white dark:text-neutral-900 text-lg" />
             )}
           </button>
         </div>
       </form>
 
-      <p className="flex items-center gap-2 justify-center text-center text-neutral-700 mt-4">
+      <p className="flex items-center gap-2 justify-center text-center text-neutral-700 dark:text-neutral-200 text-sm mt-4">
         <span>New here?</span>
-        <Link to="/register" className="text-primary-blue underline">
+        <Link to="/register" className="text-primary-blue underline dark:text-neutral-100 dark:font-semibold">
           Create an account
         </Link>
       </p>

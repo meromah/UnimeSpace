@@ -41,7 +41,7 @@ const RenderMultiSelectMcqQuestion = () => {
     dispatch(removeOption({ question_id: question.id, option_id }));
   };
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 dark:bg-neutral-950">
       <div className="space-y-2">
         <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-50 leading-snug">
           {question.body}

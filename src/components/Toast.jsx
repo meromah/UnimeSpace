@@ -13,19 +13,19 @@ const Toast = ({ message, type = "success", onClose, time = 4000 }) => {
 
   const types = {
     success: {
-      bg: "bg-green-50 border-green-500",
-      icon: <CheckCircle className="w-6 h-6 text-green-500" />,
-      text: "text-green-800",
+      bg: "bg-green-50 dark:bg-green-900 border-green-500 dark:border-green-700",
+      icon: <CheckCircle className="w-6 h-6 text-green-500 dark:text-neutral-200" />,
+      text: "text-green-800 dark:text-neutral-200",
     },
     info: {
-      bg: "bg-blue-50 border-blue-500",
-      icon: <Info className="w-6 h-6 text-blue-500" />,
-      text: "text-blue-800",
+      bg: "bg-blue-50 dark:bg-blue-900 border-blue-500 dark:border-blue-700",
+      icon: <Info className="w-6 h-6 text-blue-500 dark:text-neutral-200" />,
+      text: "text-blue-800 dark:text-neutral-200",
     },
     error: {
-      bg: "bg-red-50 border-red-500",
-      icon: <AlertCircle className="w-6 h-6 text-red-500" />,
-      text: "text-red-800",
+      bg: "bg-red-50 dark:bg-red-900 border-red-500 dark:border-red-700",
+      icon: <AlertCircle className="w-6 h-6 text-red-500 dark:text-neutral-200" />,
+      text: "text-red-800 dark:text-neutral-200",
     },
   };
 

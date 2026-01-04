@@ -106,7 +106,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-200 mb-6 overflow-hidden">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 mb-6 overflow-hidden">
       {/* Cover Image */}
       <div className="flex flex-col">
         <div className="relative h-20 sm:h-32">
@@ -130,7 +130,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
         {/* Mobile Layout (< sm) */}
         <div className="sm:hidden relative px-4">
           <div className="flex justify-between items-start -mt-8 mb-3">
-            <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white bg-white">
+            <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white bg-white dark:border-neutral-900 dark:bg-neutral-900">
               {avatarUrl ? (
                 <img
                   src={avatarUrl}
@@ -145,34 +145,34 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
             </div>
           </div>
 
-          <h1 className="text-2xl font-bold text-neutral-900 mb-3">
+          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-3">
             b/{board.name}
           </h1>
 
           <div
-            className={`flex w-full items-center justify-center rounded-lg border ${
+            className={`flex w-full items-center justify-center rounded-lg border overflow-hidden ${
               isSubscribed
-                ? "border-red-500"
-                : "bg-primary-blue hover:bg-blue-700 border-primary-blue hover:border-blue-700"
+                ? "border-red-500 dark:border-neutral-100"
+                : "border-primary-blue dark:border-neutral-100"
             }
             ${(isSubscribing || isUnsubscribing) && "animate-pulse"}
             `}
           >
             {isSubscribed ? (
               <button
-                className="w-full px-5 py-2.5 text-red-500 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
+                className="w-full px-5 py-2.5 bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900 dark:hover:font-bold"
                 onClick={onUnSubscribe}
                 disabled={isUnsubscribing}
               >
-                <span>Unsubscribe</span>
+                <span>Joined</span>
               </button>
             ) : (
               <button
-                className="w-full px-5 py-2.5 text-white active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
+                className="w-full px-5 py-2.5 bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 dark:hover:font-bold"
                 onClick={onSubscribe}
                 disabled={isSubscribing}
               >
-                <span>Subscribe</span>
+                <span>Join</span>
               </button>
             )}
           </div>
@@ -180,7 +180,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
         <div className="hidden sm:block relative">
           <div className="absolute -top-14 left-2 right-2 flex items-end justify-between">
             <div className="flex items-end gap-4">
-              <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-white group">
+              <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-white dark:bg-neutral-900 dark:border-neutral-900 group">
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
@@ -193,22 +193,22 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
                   </div>
                 )}
               </div>
-              <h1 className="text-lg lg:text-xl xl::text-3xl font-bold text-neutral-900 whitespace-nowrap">
+              <h1 className="text-lg lg:text-xl xl::text-3xl font-bold text-neutral-900 dark:text-neutral-100 whitespace-nowrap">
                 b/{board.name}
               </h1>
             </div>
             <div
-              className={`flex w-fit items-center justify-center rounded-full border ${
+              className={`flex w-fit items-center justify-center rounded-full border overflow-hidden ${
                 isSubscribed
-                  ? "border-red-500"
-                  : "bg-primary-blue hover:bg-blue-700 border-primary-blue hover:border-blue-700"
+                  ? "border-red-500 dark:border-neutral-100"
+                  : "border-primary-blue dark:border-neutral-100"
               }
               ${(isSubscribing || isUnsubscribing) && "animate-pulse"}
               `}
             >
               {isSubscribed ? (
                 <button
-                  className="px-5 py-2.5 text-red-500 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
+                  className="px-5 py-2.5 bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900"
                   onClick={onUnSubscribe}
                   disabled={isUnsubscribing}
                 >
@@ -216,7 +216,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
                 </button>
               ) : (
                 <button
-                  className="px-5 py-2.5 text-white active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
+                  className="px-5 py-2.5 bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
                   onClick={onSubscribe}
                   disabled={isSubscribing}
                 >
@@ -230,22 +230,22 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
       </div>
       <div className="p-6">
         {/* Stats */}
-        <div className="flex items-center gap-6 mb-4 pb-4 border-b border-neutral-200">
+        <div className="flex items-center gap-6 mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-2 text-sm">
             <Users className="text-blue-600 text-base" />
-            <span className="text-neutral-700 font-medium">
+            <span className="text-neutral-700 dark:text-neutral-200 font-medium">
               {board.subscribers_count.toLocaleString()}
             </span>
-            <span className="text-neutral-500 hidden sm:inline">
+            <span className="text-neutral-500 dark:text-neutral-400 hidden sm:inline">
               {board.subscribers_count === 1 ? "member" : "members"}
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <FileText className="text-blue-600 text-base" />
-            <span className="text-neutral-700 font-medium">
+            <span className="text-neutral-700 dark:text-neutral-200 font-medium">
               {board.posts_count.toLocaleString()}
             </span>
-            <span className="text-neutral-500 hidden sm:inline">
+            <span className="text-neutral-500 dark:text-neutral-400 hidden sm:inline">
               {board.posts_count === 1 ? "post" : "posts"}
             </span>
           </div>
@@ -255,7 +255,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
         <div>
           <button
             onClick={() => setIsExpanded((p) => !p)}
-            className="w-full flex items-center justify-between py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 transition-colors group"
+            className="w-full flex items-center justify-between py-2 text-sm font-medium text-neutral-700 dark:text-neutral-100 hover:text-neutral-900 dark:hover:text-neutral-300 transition-colors group cursor-pointer"
           >
             <span>About this board</span>
             <ChevronDown
@@ -272,13 +272,13 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
           >
             <div className="space-y-2 text-sm">
               <div>
-                <span className="font-semibold text-neutral-900">
+                <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                   Description:{" "}
                 </span>
-                <span className="text-neutral-600">{board.description}</span>
+                <span className="text-neutral-600 dark:text-neutral-300">{board.description}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-neutral-600">
-                <span className="font-semibold text-neutral-900">Author:</span>
+              <div className="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300">
+                <span className="font-semibold text-neutral-900 dark:text-neutral-100">Author:</span>
                 <Link
                   to={`/user/${board.author.username}`}
                   className="hover:underline hover:text-blue-600 cursor-pointer transition-colors"
@@ -286,8 +286,8 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
                   u/{board.author.username}
                 </Link>
               </div>
-              <div className="flex items-center gap-1.5 text-neutral-600">
-                <span className="font-semibold text-neutral-900">Created:</span>
+              <div className="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300">
+                <span className="font-semibold text-neutral-900 dark:text-neutral-100">Created:</span>
                 <RelativeTime date={board.created_at} />
               </div>
             </div>

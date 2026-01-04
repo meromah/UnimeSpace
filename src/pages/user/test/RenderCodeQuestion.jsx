@@ -132,23 +132,23 @@ const RenderCodeQuestion = ({ onError }) => {
   };
   return (
     <div
-      className={`w-full bg-white flex flex-col overflow-hidden ${
+      className={`w-full bg-white flex flex-col overflow-hidden dark:bg-neutral-950 ${
         isExpanded
-          ? "fixed inset-0 z-50 "
+          ? "fixed inset-0 z-100 dark:text-neutral-200 "
           : "rounded-2xl border border-neutral-200 max-h-full h-full"
         // : "rounded-2xl border border-neutral-200 min-h-[80vh] max-h-[90vh] "
       }`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-neutral-200">
-        <h2 className="text-lg font-semibold text-neutral-900">
+        <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
           Code Question
         </h2>
         {isExpanded ? (
           <button
             type="button"
             onClick={() => setIsExpanded(false)}
-            className="text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+            className="text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-transparent dark:hover:text-neutral-500 cursor-pointer rounded-lg transition-colors"
           >
             <Minimize className="text-2xl" />
           </button>
@@ -156,7 +156,7 @@ const RenderCodeQuestion = ({ onError }) => {
           <button
             type="button"
             onClick={() => setIsExpanded(true)}
-            className="text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+            className="text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-transparent dark:hover:text-neutral-500 cursor-pointer rounded-lg transition-colors"
           >
             <Maximize className="text-2xl" />
           </button>
@@ -169,20 +169,20 @@ const RenderCodeQuestion = ({ onError }) => {
           <div className="flex flex-col gap-4">
             {/* Question Body */}
             <div>
-              <h3 className="text-sm font-semibold text-neutral-700 mb-2">
+              <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-400 mb-2">
                 Problem Description
               </h3>
-              <p className="text-sm text-neutral-900 whitespace-pre-wrap">
+              <p className="text-sm text-neutral-900 whitespace-pre-wrap dark:text-neutral-100">
                 {question.body || "No description provided"}
               </p>
             </div>
             {/* Function Signature */}
             {question.signature && (
               <div>
-                <h3 className="text-sm font-semibold text-neutral-700 mb-2">
+                <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-400 mb-2">
                   Function Signature
                 </h3>
-                <code className="block px-3 py-2 bg-neutral-50 border border-neutral-200 rounded text-sm text-neutral-900 font-mono">
+                <code className="block px-3 py-2 bg-neutral-100 dark:text-neutral-200 border border-neutral-200 dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-200 rounded text-sm text-neutral-900 font-mono">
                   def {question.signature.signature}(
                   {Array.from({
                     length: question.signature.arg_nums,
@@ -196,7 +196,7 @@ const RenderCodeQuestion = ({ onError }) => {
             {/* Test Cases */}
             {question.testcases && question.testcases.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-neutral-700 mb-2">
+                <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-200 mb-2">
                   Test Cases
                 </h3>
                 <div className="flex flex-col gap-3">
@@ -205,26 +205,26 @@ const RenderCodeQuestion = ({ onError }) => {
                     return (
                       <div
                         key={testCase.id || tcIndex}
-                        className="p-3 bg-neutral-50 border border-neutral-200 rounded-lg"
+                        className="p-3 bg-neutral-100 border border-neutral-200 dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-200 rounded-lg"
                       >
-                        <div className="text-xs font-medium text-neutral-600 mb-2">
+                        <div className="text-xs font-medium text-neutral-600 dark:text-neutral-200 mb-2">
                           Test Case {tcIndex + 1}
                         </div>
                         {args.length > 0 && (
                           <div className="mb-2">
-                            <span className="text-xs text-neutral-600">
+                            <span className="text-xs text-neutral-600 dark:text-neutral-300">
                               Input:{" "}
                             </span>
-                            <code className="text-xs text-neutral-900 font-mono">
+                            <code className="text-xs text-neutral-900 dark:text-neutral-100 font-mono">
                               {args.map((a) => a.body).join(", ")}
                             </code>
                           </div>
                         )}
                         <div>
-                          <span className="text-xs text-neutral-600">
+                          <span className="text-xs text-neutral-600 dark:text-neutral-400">
                             Expected Output:{" "}
                           </span>
-                          <code className="text-xs text-neutral-900 font-mono">
+                          <code className="text-xs text-neutral-900 dark:text-neutral-100 font-mono">
                             {testCase.expected_output || "N/A"}
                           </code>
                         </div>
@@ -237,16 +237,16 @@ const RenderCodeQuestion = ({ onError }) => {
           </div>
         </div>
         {/* Right Pane - Python Playground */}
-        <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto bg-neutral-50">
+        <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto bg-neutral-100 dark:bg-neutral-950 ">
           <div className="flex flex-col gap-4 h-full">
-            <h3 className="text-sm font-semibold text-neutral-700">
+            <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
               Python Playground
             </h3>
             <textarea
               value={pythonCode}
               onChange={(e) => setPythonCode(e.target.value)}
               placeholder="# Write your Python code here"
-              className="flex-1 w-full p-4 rounded-lg font-mono text-sm bg-white border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue resize-none"
+              className="flex-1 w-full p-4 rounded-lg font-mono text-sm bg-white border border-neutral-200 dark:bg-neutral-900 dark:focus:ring-neutral-400 dark:focus:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue resize-none"
               style={{ minHeight: "200px" }}
               onKeyDown={handleKeyDown}
             />
@@ -254,13 +254,13 @@ const RenderCodeQuestion = ({ onError }) => {
               type="button"
               onClick={handleRunCode}
               disabled={isRunningCode || !pythonCode.trim()}
-              className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-medium"
+              className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-medium dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 dark:border"
             >
               {isRunningCode ? "Running..." : "Run Code"}
             </button>
             {error.hasError ? (
               <div
-                className="flex flex-col gap-2 p-3 border rounded-lg bg-red-50 border-red-300 text-red-600"
+                className="flex flex-col gap-2 p-3 border rounded-lg bg-red-100 dark:text-neutral-200 dark:bg-red-800/20 dark:border-red-600 border-red-300 text-red-600"
               >
                 <h1 className="text-sm font-semibold">Syntax Error</h1>
                 <p>{error.message}</p>
@@ -268,7 +268,7 @@ const RenderCodeQuestion = ({ onError }) => {
             ) : null}
             {pythonOutput.length > 0 ? (
               <section className="space-y-2">
-                <h2 className="font-medium text-neutral-800 text-lg">
+                <h2 className="font-medium text-neutral-800 dark:text-neutral-100 text-lg">
                   {pythonOutput.length > 1 ? "Outputs" : "Output"}
                 </h2>
                 {pythonOutput.map((item, i) => {
@@ -279,8 +279,8 @@ const RenderCodeQuestion = ({ onError }) => {
                       key={testcase.id || i}
                       className={`flex flex-col gap-2 p-3 border rounded-lg ${
                         success
-                          ? "bg-green-50 border-green-300 text-green-600"
-                          : "bg-red-50 border-red-300 text-red-600"
+                          ? "bg-green-100 dark:text-neutral-200 dark:bg-green-800/20 border-green-300 text-green-600"
+                          : "bg-red-100 dark:text-neutral-200 dark:bg-red-800/20 dark:border-red-600 border-red-300 text-red-600"
                       }`}
                     >
                       <div className="text-sm font-semibold">

@@ -161,13 +161,13 @@ const Feeds = () => {
                     className="p-4 md:p-6"
                   />
                   <div className="flex flex-col items-center justify-center py-16 px-4">
-                    <div className="bg-neutral-100 rounded-full p-6 mb-4">
-                      <Inbox className="text-4xl text-neutral-400" />
+                    <div className="bg-neutral-100 dark:bg-neutral-800 rounded-full p-6 mb-4">
+                      <Inbox className="text-4xl text-neutral-400 dark:text-neutral-500" />
                     </div>
-                    <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                    <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-2">
                       No posts yet. Be a first one to post
                     </h3>
-                    <p className="text-neutral-600 text-sm text-center max-w-sm">
+                    <p className="text-neutral-600 dark:text-neutral-300 text-sm text-center max-w-sm">
                       {tab === "following"
                         ? "No posts from your boards. Check other filters."
                         : "Be the first to post something!"}

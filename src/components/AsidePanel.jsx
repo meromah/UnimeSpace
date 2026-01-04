@@ -82,18 +82,18 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       key={community.id}
       className={
         location.pathname === "/explore/"
-          ? "flex flex-col sm:flex-row sm:items-start lg:flex-col lg:items-stretch gap-3 flex-1 bg-white w-full lg:min-w-[30%] lg:max-w-2/5 p-4 border  border-neutral-100  rounded-lg shadow"
-          : "flex items-start justify-between gap-3 p-2 hover:bg-neutral-50 rounded-lg transition-colors"
+          ? "flex flex-col sm:flex-row sm:items-start lg:flex-col lg:items-stretch gap-3 flex-1 bg-white dark:bg-neutral-900 w-full lg:min-w-[30%] lg:max-w-2/5 p-4 border border-neutral-100 dark:border-neutral-800 rounded-lg shadow"
+          : "flex items-start justify-between gap-3 p-2 hover:bg-neutral-50 dark:bg-neutral-800 dark:hover:bg-neutral-900 rounded-lg transition-colors"
       }
     >
       <div className="flex-1 min-w-0">
-        <Link to={path} className="text-sm font-medium text-neutral-900 mb-0.5">
+        <Link to={path} className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-0.5">
           {path}
         </Link>
-        <p className="text-xs text-neutral-600 line-clamp-1">
+        <p className="text-xs text-neutral-600 dark:text-neutral-300 line-clamp-1">
           {community.description}
         </p>
-        <p className="text-xs text-neutral-500 mt-1">
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
           {community.subscribers_count > 1
             ? `${community.subscribers_count} members`
             : `${community.subscribers_count} member`}
@@ -102,7 +102,7 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       {isSubscribed ? (
         <button
           className={
-            "bg-white text-red-500 px-2 py-1.5 rounded-full text-xs font-bold hover:bg-red-500/10 border border-red-500 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
+            "bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 px-2 py-1.5 rounded-full text-xs font-bold hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900 border border-red-500 dark:border-neutral-100 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
           }
           onClick={(e) =>
             onUnsubscribe(e, isBoard, community.name, community.id)
@@ -114,7 +114,7 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       ) : (
         <button
           className={
-            "bg-white text-primary-blue px-4 py-1.5 rounded-full text-xs font-bold hover:bg-primary-blue/10 border border-primary-blue transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
+            "bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 border border-primary-blue dark:border-neutral-100 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
           }
           onClick={(e) => onSubscribe(e, isBoard, community.name, community.id)}
           disabled={isSubscribing}
@@ -145,7 +145,7 @@ const AsidePanel = () => {
 
   return (
     <>
-      <aside className="xl:h-screen xl:sticky xl:top-0 overflow-y-auto scrollbar-hide px-4 space-y-4">
+      <aside className="xl:h-screen xl:sticky xl:top-0 overflow-y-auto scrollbar-hide px-4 space-y-4 bg-white dark:bg-neutral-900">
         {/* Search Panel */}
         <SearchPanel className="pt-4" />
         {/* Announcements Panel */}
@@ -158,10 +158,10 @@ const AsidePanel = () => {
             className={
               location.pathname === "/explore/"
                 ? ""
-                : "bg-white rounded-lg shadow-sm border border-neutral-200 p-4"
+                : "bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4"
             }
           >
-            <h2 className="text-sm font-semibold text-neutral-900 mb-3">
+            <h2 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
               Announcements
             </h2>
             <div
@@ -177,17 +177,17 @@ const AsidePanel = () => {
                     key={announcement.id}
                     className={
                       location.pathname === "/explore/"
-                        ? "bg-white w-full p-4 border  border-neutral-100  rounded-lg shadow"
-                        : "pb-4 border-b border-neutral-100 last:border-b-0 last:pb-0"
+                        ? "bg-white dark:bg-neutral-900 w-full p-4 border border-neutral-100 dark:border-neutral-700 rounded-lg shadow"
+                        : "pb-4 border-b border-neutral-100 dark:border-neutral-700 last:border-b-0 last:pb-0"
                     }
                   >
-                    <h3 className="text-base font-medium text-neutral-900 mb-1">
+                    <h3 className="text-base font-medium text-neutral-900 dark:text-neutral-100 mb-1">
                       {announcement.title}
                     </h3>
-                    <p className="text-sm text-neutral-500">
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
                       {announcement.created_at}
                     </p>
-                    <p className="text-sm text-neutral-600 mb-2">
+                    <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
                       {announcement.body}
                     </p>
                   </div>
@@ -204,10 +204,10 @@ const AsidePanel = () => {
             className={
               location.pathname === "/explore/"
                 ? ""
-                : "bg-white rounded-lg shadow-sm border border-neutral-200 p-4"
+                : "bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4"
             }
           >
-            <h2 className="text-sm font-semibold text-neutral-900 mb-3">
+            <h2 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
               Recommended Communities
             </h2>
             <div
@@ -228,11 +228,11 @@ const AsidePanel = () => {
             </div>
           </div>
         )}
-        <ul className="flex flex-wrap text-xs text-neutral-600 gap-2 mb-10">
+        <ul className="flex flex-wrap text-xs text-neutral-600 dark:text-neutral-400 gap-2 mb-10">
           <li className="flex-1 min-w-fit">
             <Link
               to={"/terms"}
-              className="hover:underline hover:text-neutral-800"
+              className="hover:underline hover:text-neutral-800 dark:hover:text-neutral-200"
             >
               Terms of Service
             </Link>
@@ -240,7 +240,7 @@ const AsidePanel = () => {
           <li className="flex-1 min-w-fit">
             <Link
               to={"/terms#privacy-policy"}
-              className="hover:underline hover:text-neutral-800"
+              className="hover:underline hover:text-neutral-800 dark:hover:text-neutral-200"
             >
               Privacy Policy
             </Link>
@@ -248,7 +248,7 @@ const AsidePanel = () => {
           <li className="flex-1 min-w-fit">
             <Link
               to={"/terms#cookie-policy"}
-              className="hover:underline hover:text-neutral-800"
+              className="hover:underline hover:text-neutral-800 dark:hover:text-neutral-200"
             >
               Cookie Policy
             </Link>
@@ -256,7 +256,7 @@ const AsidePanel = () => {
           <li className="flex-1 min-w-fit">
             <Link
               to={"/terms#trademark-disclaimer"}
-              className="hover:underline hover:text-neutral-800"
+              className="hover:underline hover:text-neutral-800 dark:hover:text-neutral-200"
             >
               Trademark Disclaimer
             </Link>
@@ -264,7 +264,7 @@ const AsidePanel = () => {
           <li className="flex-1 min-w-fit">
             <Link
               to={"/terms#limitations-of-liability"}
-              className="hover:underline hover:text-neutral-800"
+              className="hover:underline hover:text-neutral-800 dark:hover:text-neutral-200"
             >
               Limitations of Liability
             </Link>

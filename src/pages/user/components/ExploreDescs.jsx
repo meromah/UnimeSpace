@@ -135,16 +135,16 @@ const ExploreDescs = () => {
   if (error) {
     return (
       <div className="max-w-5xl mx-auto p-4 md:p-6">
-        <div className="bg-white rounded border border-neutral-300 p-8 text-center">
-          <h3 className="text-xl font-medium text-neutral-900 mb-2">
+        <div className="bg-white dark:bg-neutral-900 rounded border border-neutral-300 dark:border-neutral-700 p-8 text-center">
+          <h3 className="text-xl font-medium text-neutral-900 dark:text-neutral-100 mb-2">
             Something went wrong
           </h3>
-          <p className="text-neutral-600 text-sm mb-4">
-            {error.message || "Failed to load data"}
+          <p className="text-neutral-600 dark:text-neutral-300 text-sm mb-4">
+            {error?.message || "Failed to load data"}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="bg-primary-blue text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-primary-blue/90"
+            className="bg-primary-blue text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-primary-blue/90 dark:bg-white dark:border dark:border-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 transition duration-150 ease-in-out"
           >
             Try Again
           </button>
@@ -156,31 +156,31 @@ const ExploreDescs = () => {
     <div className="flex flex-col gap-4 max-w-5xl mx-auto p-4 md:p-6">
       {/* Header */}
       <div className="">
-        <h1 className="text-2xl font-medium text-neutral-900 mb-1">
+        <h1 className="text-2xl font-medium text-neutral-900 dark:text-neutral-100 mb-1">
           Explore Descs
         </h1>
-        <p className="text-neutral-500 text-sm">{result.length} communities</p>
+        <p className="text-neutral-500 dark:text-neutral-400 text-sm">{result.length} communities</p>
       </div>
       {sortBy !== null && (
         <div className="flex items-center justify-between">
-          <h2>{label}</h2>
+          <h2 className="font-semibold">{label}</h2>
           <SortByComponent />
         </div>
       )}
       {/* List */}
       {result.length > 0 ? (
-        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4">
           <div className="space-y-3">
             {result?.map((element) => (
               <div
                 key={element.id}
-                className="flex items-start justify-between gap-3 p-2 hover:bg-neutral-50 rounded-lg transition-colors"
+                className="flex items-start justify-between gap-3 p-2 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
               >
                 <Link
                   to={`/d/${element.name}`}
                   className="flex items-center gap-3 flex-1 min-w-0"
                 >
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-4 border-white bg-white">
+                  <div className="w-12 h-12 rounded-full overflow-hidden border-4 border-white bg-white dark:border-neutral-900 dark:bg-neutral-900">
                     {element?.avatar ? (
                       <img
                         src={getFileUrl(element?.avatar?.file_hash)}
@@ -196,13 +196,13 @@ const ExploreDescs = () => {
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-medium text-neutral-900 mb-0.5">
+                    <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-0.5">
                       {`d/${element.name}`}
                     </h3>
-                    <p className="text-xs text-neutral-600 line-clamp-1">
+                    <p className="text-xs text-neutral-600 dark:text-neutral-300 line-clamp-1">
                       {element.description || "No description"}
                     </p>
-                    <p className="flex items-center gap-2 text-xs text-neutral-500 mt-1">
+                    <p className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                       <span>{element.subscribers_count} members</span>
                       <span>{element.tests_count} tests</span>
                     </p>
@@ -210,18 +210,18 @@ const ExploreDescs = () => {
                 </Link>
 
                 <div
-                  className={`flex items-center gap-2 rounded-full border ${
+                  className={`flex items-center gap-2 rounded-full border overflow-hidden ${
                     subscribedIds.has(element.id) ||
                     searchParams.get("sort") === "subscribed"
-                      ? "border-red-500"
-                      : "border-primary-blue hover:border-blue-700"
+                      ? "border-red-500 dark:border-neutral-100"
+                      : "border-primary-blue dark:border-neutral-100"
                   }
                 ${(isSubscribing || isUnsubscribing) && "animate-pulse"} `}
                 >
                   {subscribedIds.has(element.id) ||
                   searchParams.get("sort") === "subscribed" ? (
                     <button
-                      className="px-3 py-2 text-red-500 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
+                      className="px-3 py-2 bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900"
                       onClick={(e) => onUnSubscribe(e, element)}
                       disabled={isUnsubscribing}
                     >
@@ -229,7 +229,7 @@ const ExploreDescs = () => {
                     </button>
                   ) : (
                     <button
-                      className="px-5 py-2 text-primary-blue active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer"
+                      className="px-5 py-2 bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
                       onClick={(e) => onSubscribe(e, element)}
                       disabled={isSubscribing}
                     >
@@ -242,11 +242,11 @@ const ExploreDescs = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded border border-neutral-300 p-8 text-center">
-          <h2 className="text-neutral-800 text-lg font-bold">
+        <div className="bg-white dark:bg-neutral-900 rounded border border-neutral-300 dark:border-neutral-700 p-8 text-center">
+          <h2 className="text-neutral-800 dark:text-neutral-100 text-lg font-bold">
             {emptyStateMessages.title}
           </h2>
-          <p className="text-neutral-600 text-sm">
+          <p className="text-neutral-600 dark:text-neutral-300 text-sm">
             {emptyStateMessages.message}
           </p>
         </div>

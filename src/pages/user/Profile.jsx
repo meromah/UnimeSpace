@@ -173,8 +173,8 @@ const Profile = ({ isMyProfile = false }) => {
   }
 
   return (
-    <div className="min-h-screen bg-primary-bg py-6 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto h-screen bg-white flex flex-col gap-6 rounded-lg overflow-hidden">
+    <div className="bg-primary-bg dark:bg-neutral-950 py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto min-h-screen bg-white dark:bg-neutral-900 flex flex-col gap-6 rounded-lg">
         {/* Banner and Avatar Section - Mobile First */}
         <div>
           {/* Banner Section */}
@@ -198,7 +198,7 @@ const Profile = ({ isMyProfile = false }) => {
             <div className="px-4 pb-4">
               <div className="flex flex-col items-start sm:flex-row sm:items-end gap-4 -mt-14">
                 {/* Avatar */}
-                <div className="w-28 h-28 rounded-full border-4 border-white bg-white overflow-hidden flex-shrink-0">
+                <div className="w-28 h-28 rounded-full border-4 border-white dark:border-neutral-900 bg-white dark:bg-neutral-900 overflow-hidden flex-shrink-0">
                   {!imageError && avatarUrl ? (
                     <img
                       src={avatarUrl}
@@ -215,10 +215,10 @@ const Profile = ({ isMyProfile = false }) => {
 
                 {/* User info */}
                 <div className="flex flex-col gap-0.5">
-                  <h1 className="text-lg md:text-xl font-bold text-neutral-900">
+                  <h1 className="text-lg md:text-xl font-bold text-neutral-900 dark:text-neutral-100">
                     {user?.name || user?.username || "User"}
                   </h1>
-                  <p className="text-sm text-neutral-600">
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
                     u/{user?.username || "user"}
                   </p>
                 </div>
@@ -230,7 +230,7 @@ const Profile = ({ isMyProfile = false }) => {
         {/* Navigation Tabs and Content */}
         <div>
           {/* Tabs */}
-          <div className="border-b border-neutral-200">
+          <div className="border-b border-neutral-200 dark:border-neutral-700">
             <nav className="flex overflow-x-auto">
               {tabs.map((tab) => (
                 <button
@@ -238,8 +238,8 @@ const Profile = ({ isMyProfile = false }) => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex-1 min-w-[80px] flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
                     activeTab === tab.id
-                      ? "text-primary-blue border-b-2 border-primary-blue bg-blue-50"
-                      : "text-neutral-600 hover:text-primary-blue hover:bg-neutral-50"
+                      ? "text-primary-blue dark:text-neutral-200 border-b-2 border-primary-blue dark:border-neutral-200 bg-blue-50 dark:bg-neutral-800"
+                      : "text-neutral-600 dark:text-neutral-400 hover:text-primary-blue dark:hover:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                   }`}
                 >
                   <span>{tab.label}</span>

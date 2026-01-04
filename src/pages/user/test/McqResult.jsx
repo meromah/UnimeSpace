@@ -4,12 +4,12 @@ const McqResult = ({question, questionNum, result, selectedOptions}) => {
   return (
     <div
       key={question.id}
-      className="border border-slate-200 dark:border-slate-800 rounded-lg p-5 bg-white dark:bg-slate-900/30"
+      className="border border-neutral-200 dark:border-neutral-800 rounded-lg p-5 bg-white dark:bg-neutral-900/30"
     >
       {/* Question header */}
       <div className="flex items-start justify-between mb-4">
         <h2 className="text-base font-medium leading-snug">
-          <span className="pr-4 font-medium text-slate-600 dark:text-slate-300">
+          <span className="pr-4 font-medium text-neutral-600 dark:text-neutral-300">
             {questionNum}.
           </span>
           {question.body}
@@ -48,7 +48,7 @@ const McqResult = ({question, questionNum, result, selectedOptions}) => {
                         ? "border-red-400 bg-red-50 dark:bg-red-950/20"
                         : isMissed
                         ? "border-green-400 bg-green-50/50 dark:bg-green-950/10"
-                        : "border-slate-200 dark:border-slate-800"
+                        : "border-neutral-200 dark:border-neutral-800"
                     }`}
               >
                 <div
@@ -59,8 +59,8 @@ const McqResult = ({question, questionNum, result, selectedOptions}) => {
                           : isIncorrect
                           ? "border-red-600 bg-red-600"
                           : isMissed
-                          ? "border-green-600 bg-white dark:bg-slate-900"
-                          : "border-slate-400"
+                          ? "border-green-600 bg-white dark:bg-neutral-900"
+                          : "border-neutral-400"
                       }`}
                 >
                   {(isSelected || isMissed) && (
@@ -93,7 +93,7 @@ const McqResult = ({question, questionNum, result, selectedOptions}) => {
                       ? "font-medium text-green-700 dark:text-green-400"
                       : isIncorrect
                       ? "font-medium text-red-700 dark:text-red-400"
-                      : "text-slate-600 dark:text-slate-300"
+                      : "text-neutral-600 dark:text-neutral-300"
                   }`}
                 >
                   {option.body}
@@ -109,9 +109,9 @@ const McqResult = ({question, questionNum, result, selectedOptions}) => {
         </div>
         {/* {questionType?.type === "mcq" && question.options ? (
         ) : questionType?.type === "code" ? (
-          <div className="mt-2 p-3 bg-slate-100 dark:bg-slate-800 rounded-md text-sm font-mono">
+          <div className="mt-2 p-3 bg-neutral-100 dark:bg-neutral-800 rounded-md text-sm font-mono">
             {<pre>{currentSubmission}</pre> || (
-              <span className="italic text-slate-400">No code submitted</span>
+              <span className="italic text-neutral-400">No code submitted</span>
             )}
             {result.map((item, i) => {
               const testcase = question.testcases[i];

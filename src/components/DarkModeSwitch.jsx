@@ -18,12 +18,10 @@ const DarkModeSwitch = () => {
       </span>
 
       <div
-        className={`relative w-11 h-6 flex items-center rounded-full p-0.5 transition-colors duration-300 ${
-          isDark ? "bg-green-500" : "bg-neutral-300"
-        }`}
+        className="relative w-11 h-6 flex items-center rounded-full p-0.5 transition-colors duration-300 bg-neutral-300"
       >
         <span
-          className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+          className={`w-5 h-5 bg-white dark:bg-neutral-900 rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
             isDark ? "translate-x-5" : "translate-x-0"
           }`}
         />

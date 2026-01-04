@@ -37,11 +37,11 @@ const SearchResult = ({
       <button
         type="button"
         onClick={() => toggleSection(id)}
-        className="w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-neutral-900 hover:bg-neutral-50 rounded-lg transition"
+        className="w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition"
       >
         <span className="flex-1 text-left">{title}</span>
         <ChevronDown
-          className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${
+          className={`w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${
             isExpanded ? "rotate-180" : ""
           }`}
         />
@@ -63,13 +63,13 @@ const SearchResult = ({
               <li key={`${itemUrl}${item.id}`}>
                 <button
                   type="button"
-                  className="w-full flex items-center px-3 py-2.5 rounded-lg hover:bg-neutral-100 transition text-left"
+                  className="w-full flex items-center px-3 py-2.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition text-left"
                   onClick={() => {
                     navigate(`/${itemUrl}${item.name}`);
                     onSelectItem();
                   }}
                 >
-                  <span className="text-sm text-neutral-900 truncate">
+                  <span className="text-sm text-neutral-900 dark:text-neutral-100 truncate">
                     {item.name}
                   </span>
                 </button>
@@ -77,7 +77,7 @@ const SearchResult = ({
             ))}
           </ul>
         ) : (
-          <p className="px-4 py-2 text-sm text-neutral-500">
+          <p className="px-4 py-2 text-sm text-neutral-500 dark:text-neutral-400">
             {emptyStateMessage}
           </p>
         )}
@@ -166,7 +166,7 @@ const SearchPanel = ({ className }) => {
     <section ref={panelRef} className="relative w-full">
       <div className={className}>
         <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500" />
 
           <input
             ref={inputRef}
@@ -179,14 +179,14 @@ const SearchPanel = ({ className }) => {
             onFocus={() => setShowDropdown(true)}
             onKeyDown={handleKeyDown}
             placeholder="Search anything"
-            className="w-full py-3 pl-10 pr-10 text-sm text-neutral-900 placeholder:text-neutral-400 bg-neutral-50 border border-neutral-200 rounded-full focus:outline-none focus:bg-white focus:border-neutral-300 focus:ring-4 focus:ring-neutral-100 transition"
+            className="w-full py-3 pl-10 pr-10 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-full focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
           />
 
           {searchQuery && (
             <button
               type="button"
               onClick={clearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-neutral-100 transition"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition dark:text-neutral-100"
             >
               <X />
             </button>
@@ -195,13 +195,13 @@ const SearchPanel = ({ className }) => {
       </div>
 
       {showDropdown && debouncedQuery && (
-        <div className="absolute z-50 w-full mt-2 bg-white border border-neutral-200 rounded-xl shadow-lg">
+        <div className="absolute z-50 w-full mt-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-lg">
           <div className="max-h-[60vh] overflow-y-auto grid gap-2 py-2">
             <p
               onClick={() => handleSearch()}
-              className="flex items-center gap-2 px-4 py-4 text-sm text-neutral-500 cursor-pointer select-none hover:text-neutral-800"
+              className="flex items-center gap-2 px-4 py-4 text-sm text-neutral-500 dark:text-neutral-400 cursor-pointer select-none hover:text-neutral-800 dark:hover:text-neutral-100"
             >
-              <span className="text-lg text-neutral-900">
+              <span className="text-lg text-neutral-900 dark:text-neutral-100">
                 <Search />
               </span>
               <span>{debouncedQuery}</span>

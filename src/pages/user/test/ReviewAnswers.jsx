@@ -33,16 +33,16 @@ export const ReviewAnswers = () => {
 
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 transition-colors">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-950/80 backdrop-blur">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          <div className="flex items-center justify-center w-10 h-10 rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
             <Edit3 className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-lg font-semibold">Review Your Answers</h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {test.title}
             </p>
           </div>
@@ -52,11 +52,11 @@ export const ReviewAnswers = () => {
       {/* Main */}
       <main className="flex-1 w-full max-w-3xl mx-auto p-4 sm:p-6">
         {/* Banner */}
-        <div className="mb-6 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 p-4 flex items-start gap-3">
-          <CheckCircle className="w-5 h-5 text-slate-500 dark:text-slate-400 mt-0.5" />
+        <div className="mb-6 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 p-4 flex items-start gap-3">
+          <CheckCircle className="w-5 h-5 text-neutral-500 dark:text-neutral-400 mt-0.5" />
           <div className="text-sm">
             <p className="font-medium mb-1">Review before submitting</p>
-            <p className="text-slate-600 dark:text-slate-400">
+            <p className="text-neutral-600 dark:text-neutral-400">
               You can edit any answer before final submission.
             </p>
           </div>
@@ -74,12 +74,12 @@ export const ReviewAnswers = () => {
             return (
               <div
                 key={question.id}
-                className="border border-slate-200 dark:border-slate-800 rounded-lg p-5 bg-slate-50/30 dark:bg-slate-900/30"
+                className="border border-neutral-200 dark:border-neutral-800 rounded-lg p-5 bg-neutral-50/30 dark:bg-neutral-900/30"
               >
                 {/* Question header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex gap-3 flex-1">
-                    <span className="w-8 h-8 flex items-center justify-center text-sm font-medium rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                    <span className="w-8 h-8 flex items-center justify-center text-sm font-medium rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
                       {index + 1}
                     </span>
                     <h2 className="text-base font-medium leading-snug">
@@ -88,7 +88,7 @@ export const ReviewAnswers = () => {
                   </div>
                   <button
                     onClick={() => handleEdit(question.id, index)}
-                    className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 border-b border-b-transparent hover:border-b-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition cursor-pointer"
+                    className="flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700 border-b border-b-transparent hover:border-b-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 transition cursor-pointer"
                   >
                     <Edit3 className="w-4 h-4" />
                     <span>Edit</span>
@@ -107,16 +107,16 @@ export const ReviewAnswers = () => {
                             className={`flex items-center gap-3 p-2 rounded-md border text-sm transition
                               ${
                                 isSelected
-                                  ? "border-slate-400 bg-slate-100 dark:bg-slate-800/50"
-                                  : "border-slate-200 dark:border-slate-800"
+                                  ? "border-neutral-400 bg-neutral-100 dark:bg-neutral-800/50"
+                                  : "border-neutral-200 dark:border-neutral-800"
                               }`}
                           >
                             <div
                               className={`w-4 h-4 border-2 rounded-sm flex items-center justify-center transition-colors
                                 ${
                                   isSelected
-                                    ? "border-slate-600 bg-slate-600"
-                                    : "border-slate-400"
+                                    ? "border-neutral-600 bg-neutral-600"
+                                    : "border-neutral-400"
                                 }`}
                             >
                               {isSelected && (
@@ -138,8 +138,8 @@ export const ReviewAnswers = () => {
                             <span
                               className={`${
                                 isSelected
-                                  ? "font-medium text-slate-800 dark:text-slate-100"
-                                  : "text-slate-600 dark:text-slate-300"
+                                  ? "font-medium text-neutral-800 dark:text-neutral-100"
+                                  : "text-neutral-600 dark:text-neutral-300"
                               }`}
                             >
                               {option.body}
@@ -149,9 +149,9 @@ export const ReviewAnswers = () => {
                       })}
                     </div>
                   ) : questionType?.type === "code" ? (
-                    <div className="mt-2 p-3 bg-slate-100 dark:bg-slate-800 rounded-md text-sm font-mono">
+                    <div className="mt-2 p-3 bg-neutral-100 dark:bg-neutral-800 rounded-md text-sm font-mono">
                       {<pre>{currentSubmission}</pre> || (
-                        <span className="italic text-slate-400">
+                        <span className="italic text-neutral-400">
                           No code submitted
                         </span>
                       )}
@@ -165,7 +165,7 @@ export const ReviewAnswers = () => {
       </main>
 
       {/* Footer */}
-      <footer className="sticky bottom-0 border-t border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur p-4">
+      <footer className="sticky bottom-0 border-t border-neutral-200 dark:border-neutral-800 bg-white/90 dark:bg-neutral-950/90 backdrop-blur p-4">
         <div className="max-w-3xl mx-auto flex justify-end">
           <Button
             variant="primary"

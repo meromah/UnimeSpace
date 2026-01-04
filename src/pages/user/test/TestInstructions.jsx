@@ -91,8 +91,8 @@ export const TestInstructions = () => {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-950">
-        <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-neutral-100 dark:bg-neutral-950">
+        <div className="w-full max-w-2xl bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 overflow-hidden">
           {/* Header Section */}
           <div className="bg-gradient-to-br from-indigo-600 via-indigo-600 to-indigo-700 dark:from-indigo-900 dark:to-indigo-950 p-8">
             <h1 className="text-3xl font-bold text-white mb-2">
@@ -115,11 +115,11 @@ export const TestInstructions = () => {
           <div className="p-8 space-y-6">
             {/* Description */}
             <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
                 About this test
               </h2>
               {testInfo.data.description !== null ? (
-                <p className="flex flex-col gap-1 text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="flex flex-col gap-1 text-neutral-600 dark:text-neutral-400 leading-relaxed">
                   <strong>Description</strong>
                   <span>{testInfo.data.description}</span>
                 </p>
@@ -129,30 +129,30 @@ export const TestInstructions = () => {
             </div>
             {/* Test Info Grid */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-3 p-4 bg-neutral-100 dark:bg-neutral-950/50 rounded-xl border border-neutral-200 dark:border-neutral-800">
                 <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
                     Duration
                   </p>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
                     {testInfo.data.duration
                       ? `${testInfo.data.duration} min`
                       : "No limit"}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-3 p-4 bg-neutral-100 dark:bg-neutral-950/50 rounded-xl border border-neutral-200 dark:border-neutral-800">
                 <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
                     Questions
                   </p>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
                     {testInfo.data.questions_count}
                   </p>
                 </div>
@@ -169,7 +169,7 @@ export const TestInstructions = () => {
                 Start Test
               </Button>
               {testInfo.data.duration && (
-                <p className="text-xs text-center text-slate-500 dark:text-slate-400 mt-3">
+                <p className="text-xs text-center text-neutral-500 dark:text-neutral-400 mt-3">
                   Timer starts immediately when you begin
                 </p>
               )}

@@ -119,7 +119,7 @@ const NameAvailabilityInput = ({
 
   return (
     <div className="flex flex-col">
-      <label className="font-medium text-neutral-800">{`${label} *`}</label>
+      <label className="font-medium text-neutral-800 dark:text-neutral-200">{`${label} *`}</label>
       <input
         ref={inputRef}
         type="text"
