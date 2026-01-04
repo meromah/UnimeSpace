@@ -31,6 +31,7 @@ import { Search } from "lucide-react";
 import { setSidebarMobileHeight } from "../app/uiSlice.js";
 import logo from "../assets/logo.png";
 import DarkModeSwitch from "./DarkModeSwitch.jsx";
+import { logoDark } from "../assets/index.js";
 const MenuLink = ({ to, label, icon: Icon, onClick }) => {
   return (
     <Link
@@ -239,8 +240,9 @@ const UserSidebar = () => {
           {/* Logo Header - For Mobile devices */}
           <Link to="/home" className="flex-shrink-0 px-4 py-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <img src={logo} alt="UnimeSpace logo" />
+              <div className="w-8 h-8 flex items-center justify-center">
+                <img src={logo} alt="UnimeSpace logo" className="dark:hidden"/>
+                <img src={logoDark} alt="UnimeSpace logo" className="hidden dark:inline" />
               </div>
               <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 select-none">
                 UnimeSpace
@@ -274,7 +276,8 @@ const UserSidebar = () => {
           >
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 flex items-center justify-center">
-                <img src={logo} alt="UnimeSpace logo" />
+                <img src={logo} alt="UnimeSpace logo" className="dark:hidden"/>
+                <img src={logoDark} alt="UnimeSpace logo" className="hidden dark:inline" />
               </div>
               <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 select-none">
                 UnimeSpace
