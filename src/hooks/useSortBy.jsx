@@ -93,7 +93,7 @@ const useSortBy = ({
     <div className="relative">
       <button
         onClick={() => setShowSortDropdown(!showSortDropdown)}
-        className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors"
+        className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-900 bg-white dark:bg-neutral-100 border border-neutral-200 dark:border-neutral-100 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 transition-colors duration-150 ease-in-out"
       >
         <span>{currentSortOption.label}</span>
         <ChevronDown
@@ -109,17 +109,17 @@ const useSortBy = ({
             className="fixed inset-0 z-10"
             onClick={() => setShowSortDropdown(false)}
           />
-          <div className="absolute right-0 mt-2 w-40 bg-white border border-neutral-200 rounded-lg shadow-lg z-20">
+          <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-neutral-900 dark:text-neutral-100 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg z-20">
             {availableSortOptions.map((option) => (
               <button
                 key={option.id}
                 onClick={() =>
                   handleSortChange({ sortType: option.id, label: option.label })
                 }
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-neutral-50 transition-colors ${
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors ${
                   sortBy === option.id
-                    ? "text-primary-blue font-medium bg-primary-blue/5"
-                    : "text-neutral-700"
+                    ? "text-primary-blue dark:text-neutral-100 font-medium bg-primary-blue/5 dark:bg-neutral-700"
+                    : "text-neutral-700 dark:text-neutral-400"
                 }`}
               >
                 {option.label}

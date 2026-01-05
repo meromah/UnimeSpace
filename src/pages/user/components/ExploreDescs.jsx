@@ -163,7 +163,7 @@ const ExploreDescs = () => {
       </div>
       {sortBy !== null && (
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold">{label}</h2>
+          <h2 className="font-semibold text-neutral-900 dark:text-neutral-100">{label}</h2>
           <SortByComponent />
         </div>
       )}
