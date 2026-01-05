@@ -4,8 +4,8 @@ export const DEFAULT_PLACEHOLDERS = {
   education: "Education not specified",
   joinDate: "Unknown",
   noPosts: "No posts yet",
-  noQuizzes: "No quizzes created yet",
-  noLibrary: "No library items yet",
+  noTests: "No tests created yet",
+  noComments: "No comments yet",
 };
 
 export const SUCCESS_MESSAGES_FOR_UPDATES = {
