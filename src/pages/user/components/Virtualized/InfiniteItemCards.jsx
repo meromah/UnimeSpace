@@ -485,7 +485,7 @@ export default function InfiniteItemCards({
         className="flex flex-col gap-4"
         style={{
           overflow: "auto",
-          height: window.innerHeight - sidebarMobileHeight,
+          height: window.innerWidth < 768? window.innerHeight - sidebarMobileHeight: "100dvh",
         }}
       >
         {(() => {
@@ -530,7 +530,7 @@ export default function InfiniteItemCards({
       ref={containerRef}
       style={{
         overflow: "auto",
-        height: window.innerHeight - sidebarMobileHeight,
+        height:window.innerWidth < 768? window.innerHeight - sidebarMobileHeight: "100dvh",
       }}
       className="flex flex-col gap-4"
     >
