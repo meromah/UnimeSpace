@@ -112,7 +112,12 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
 
   // Sync "youLiked" state
   useEffect(() => {
-    if (postData?.data) {
+    if (itemType === "test" && testData?.data) {
+      setIsPostLiked(testData.data.youLiked);
+    }
+  }, [testData]);
+  useEffect(() => {
+    if (itemType === "post" && postData?.data) {
       setIsPostLiked(postData.data.youLiked);
     }
   }, [postData]);
@@ -183,7 +188,6 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
         [communityType]: community,
         [itemType]: itemId,
       }).unwrap();
-      console.log(res);
       setIsPostLiked(res.toggle);
 
       if (postLikesCountRef.current) {
