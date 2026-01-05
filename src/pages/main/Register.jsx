@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Check, Loader2 } from "lucide-react";
+import { Check, CircleAlert, Loader2 } from "lucide-react";
 import {
   useEmailVerificationMutation,
   useOtpVerificationMutation,
@@ -68,7 +68,7 @@ const Register = () => {
 
     try {
       const res = await emailVerification(email).unwrap();
-      setToast({ message: res.message, type: 'info' });
+      setToast({ message: res.message, type: "info" });
       setStep(2);
     } catch (err) {
       const errorMessage =
@@ -126,9 +126,7 @@ const Register = () => {
 
     try {
       const userData = { ...form, email };
-      await registerUser(
-        userData
-      ).unwrap();
+      await registerUser(userData).unwrap();
       setShowSuccessModal(true);
     } catch (err) {
       const errorMessage =
@@ -225,16 +223,16 @@ const Register = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between relative">
             {/* Progress Bar Background */}
-            <div className="absolute top-5 left-0 right-0 h-0.5 bg-gray-200 dark:bg-neutral-700 -z-10" />
+            <div className="absolute top-5 left-0 right-0 h-0.5 bg-gray-200 dark:bg-neutral-700 -z-10 dark:z-0" />
 
             {/* Active Progress Bar */}
             <div
-              className="absolute top-5 left-0 h-0.5 bg-primary-yellow transition-all duration-500 ease-out -z-10"
+              className="absolute top-5 left-0 h-0.5 bg-primary-yellow transition-all duration-500 ease-out -z-10 dark:z-0"
               style={{ width: `${((step - 1) / 2) * 100}%` }}
             />
 
             {/* Step 1 */}
-            <div className="flex flex-col items-center flex-1">
+            <div className="flex flex-col items-center flex-1 dark:z-10">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
                   step >= 1
@@ -246,7 +244,9 @@ const Register = () => {
               </div>
               <span
                 className={`text-xs mt-2 font-medium transition-colors ${
-                  step === 1 ? "text-neutral-900 dark:text-neutral-100" : "text-gray-500 dark:text-neutral-400"
+                  step === 1
+                    ? "text-neutral-900 dark:text-neutral-100"
+                    : "text-gray-500 dark:text-neutral-400"
                 }`}
               >
                 Verify Email
@@ -254,7 +254,7 @@ const Register = () => {
             </div>
 
             {/* Step 2 */}
-            <div className="flex flex-col items-center flex-1">
+            <div className="flex flex-col items-center flex-1 dark:z-10">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
                   step >= 2
@@ -266,7 +266,9 @@ const Register = () => {
               </div>
               <span
                 className={`text-xs mt-2 font-medium transition-colors ${
-                  step === 2 ? "text-neutral-900 dark:text-neutral-100" : "text-gray-500 dark:text-neutral-400"
+                  step === 2
+                    ? "text-neutral-900 dark:text-neutral-100"
+                    : "text-gray-500 dark:text-neutral-400"
                 }`}
               >
                 Enter Code
@@ -274,7 +276,7 @@ const Register = () => {
             </div>
 
             {/* Step 3 */}
-            <div className="flex flex-col items-center flex-1">
+            <div className="flex flex-col items-center flex-1 dark:z-10">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
                   step >= 3
@@ -286,7 +288,9 @@ const Register = () => {
               </div>
               <span
                 className={`text-xs mt-2 font-medium transition-colors ${
-                  step === 3 ? "text-neutral-900 dark:text-neutral-100" : "text-gray-500 dark:text-neutral-400"
+                  step === 3
+                    ? "text-neutral-900 dark:text-neutral-100"
+                    : "text-gray-500 dark:text-neutral-400"
                 }`}
               >
                 Create Account
@@ -306,7 +310,9 @@ const Register = () => {
           >
             <div className="grid gap-6">
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800 dark:text-neutral-100">Email</span>
+                <span className="font-medium text-neutral-800 dark:text-neutral-100">
+                  Email
+                </span>
                 <input
                   type="email"
                   placeholder="you@example.com"
@@ -419,7 +425,9 @@ const Register = () => {
           >
             <div className="grid gap-6">
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800 dark:text-neutral-200">Name</span>
+                <span className="font-medium text-neutral-800 dark:text-neutral-200">
+                  Name
+                </span>
                 <input
                   type="text"
                   placeholder="John Doe"
@@ -469,7 +477,9 @@ const Register = () => {
                 style={{ display: "none" }}
               />
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800 dark:text-neutral-200">Password</span>
+                <span className="font-medium text-neutral-800 dark:text-neutral-200">
+                  Password
+                </span>
                 <input
                   type="password"
                   placeholder="••••••••"
@@ -519,7 +529,30 @@ const Register = () => {
                   </span>
                 )}
               </label>
-
+              <div className="rounded-md bg-yellow-50 dark:bg-neutral-900/70 border border-yellow-200 dark:border-neutral-700 p-4 my-2 flex items-start gap-2 text-sm">
+                <CircleAlert
+                  className="h-5 w-5 mt-0.5 text-yellow-500 dark:text-yellow-400 flex-shrink-0"
+                  aria-hidden="true"
+                />
+                <div>
+                  <p className="text-neutral-800 dark:text-neutral-200 mb-1">
+                    Please review our{" "}
+                    <a
+                      href="/terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary-blue dark:text-neutral-100 font-semibold underline hover:text-primary-yellow dark:hover:text-primary-yellow transition"
+                    >
+                      Terms &amp; Conditions
+                    </a>{" "}
+                    before completing your registration.
+                  </p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                    By registering, you agree to our platform's terms and
+                    conditions.
+                  </p>
+                </div>
+              </div>
               <div className="flex gap-3">
                 <button
                   type="button"
