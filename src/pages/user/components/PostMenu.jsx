@@ -73,7 +73,7 @@ const PostMenu = ({
       <button
         ref={buttonRef}
         onClick={handleToggle}
-        className="p-2 rounded-full hover:bg-gray-100 text-gray-700 hover:text-gray-900 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 cursor-pointer"
+        className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 cursor-pointer"
         aria-label="Post options"
         aria-expanded={isOpen}
       >
@@ -84,7 +84,7 @@ const PostMenu = ({
         <div
           ref={menuRef}
           role="menu"
-          className="absolute right-0 top-full mt-1 bg-white rounded-xl shadow-lg border border-gray-200 py-1 z-50 min-w-[180px]"
+          className="absolute right-0 top-full mt-1 bg-white dark:bg-neutral-900 rounded-xl shadow-lg border border-neutral-200 dark:border-neutral-700 py-1 z-50 min-w-[180px]"
           onClick={(e) => e.stopPropagation()}
         >
           {isAuthor ? (
@@ -92,18 +92,18 @@ const PostMenu = ({
               <button
                 role="menuitem"
                 onClick={(e) => handleMenuAction(e, onEdit)}
-                className="w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-50 transition-colors duration-150"
+                className="w-full text-left px-4 py-2 text-sm text-neutral-800 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors duration-150"
               >
                 Edit {itemType}
               </button>
 
               {/* Divider for visual grouping */}
-              <div className="my-1 border-t border-gray-200"></div>
+              <div className="my-1 border-t border-neutral-200 dark:border-neutral-700"></div>
 
               <button
                 role="menuitem"
                 onClick={(e) => handleMenuAction(e, onDelete)}
-                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150"
+                className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors duration-150"
               >
                 Delete {itemType}
               </button>
@@ -112,7 +112,7 @@ const PostMenu = ({
             <button
               role="menuitem"
               onClick={(e) => handleMenuAction(e, onReport)}
-              className="w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-50 transition-colors duration-150"
+              className="w-full text-left px-4 py-2 text-sm text-neutral-800 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors duration-150"
             >
               Report {itemType}
             </button>

@@ -157,7 +157,7 @@ const CommentCard = ({
 
           {/* Vertical Line for nested comments */}
           {comment.direct_children_count > 0 && (
-            <div className="w-0.5 bg-gray-300 flex-1 min-h-[20px]" />
+            <div className="w-0.5 bg-neutral-300 dark:bg-neutral-700 flex-1 min-h-[20px]" />
           )}
         </div>
 
@@ -167,12 +167,12 @@ const CommentCard = ({
             {/* Username and metadata */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-gray-900 hover:underline cursor-pointer">
+                <span className="text-xs font-bold text-neutral-900 dark:text-neutral-100 hover:underline cursor-pointer">
                   u/{comment.author.username}
                 </span>
                 <RelativeTime
                   date={comment.created_at}
-                  className="flex items-center text-[12px] text-gray-600"
+                  className="flex items-center text-[12px] text-neutral-600 dark:text-neutral-400"
                 />
               </div>
               <div onClick={(e) => e.stopPropagation()}>
@@ -200,7 +200,7 @@ const CommentCard = ({
                   }}
                   autoFocus
                   rows={3}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 resize-none"
+                  className="w-full px-3 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-500 resize-none"
                   style={{
                     minHeight: "60px",
                     maxHeight: "200px",
@@ -215,30 +215,30 @@ const CommentCard = ({
                   <button
                     onClick={handleEditSave}
                     disabled={!editText.trim() || isUpdating}
-                    className="px-4 py-1.5 bg-blue-500 text-white text-sm rounded-lg font-medium hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-1.5 bg-blue-500 dark:bg-neutral-100 text-white dark:text-neutral-900 text-sm rounded-lg font-medium hover:bg-blue-600 dark:hover:bg-neutral-900 dark:border dark:border-neutral-100 dark:hover:text-neutral-100 disabled:bg-neutral-300 dark:disabled:bg-neutral-700 dark:disabled:hover:text-neutral-900 dark:disabled:border-neutral-700 disabled:cursor-not-allowed transition-colors"
                   >
                     {isUpdating ? "Saving..." : "Save"}
                   </button>
                   <button
                     onClick={handleEditCancel}
                     disabled={isUpdating}
-                    className="px-4 py-1.5 text-gray-700 text-sm rounded-lg font-medium hover:bg-gray-100 disabled:opacity-50 transition-colors"
+                    className="px-4 py-1.5 text-neutral-700 dark:text-neutral-200 text-sm rounded-lg font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-50 transition-colors"
                   >
                     Cancel
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="text-sm text-gray-900 leading-relaxed">
+              <div className="text-sm text-neutral-900 dark:text-neutral-100 leading-relaxed">
                 {comment.body}
               </div>
             )}
             {/* Action buttons */}
             {!isEditing && (
-              <div className="flex items-center gap-3 text-xs font-bold text-gray-500">
+              <div className="flex items-center gap-3 text-xs font-bold text-neutral-500 dark:text-neutral-400">
                 <button
                   onClick={onToggleCommentLike}
-                  className="flex items-center gap-1 hover:bg-gray-100 px-1 py-0.5 rounded transition-colors"
+                  className="flex items-center gap-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 px-1 py-0.5 rounded transition-colors"
                 >
                   <Heart className={isLiked ? "text-red-500 fill-red-500" : ""} />
                   <span
@@ -250,7 +250,7 @@ const CommentCard = ({
                 </button>
                 <button
                   onClick={handleReplyClick}
-                  className="hover:bg-gray-100 px-2 py-0.5 rounded transition-colors"
+                  className="hover:bg-neutral-100 dark:hover:bg-neutral-700 px-2 py-0.5 rounded transition-colors"
                 >
                   {isReplying ? "✕ Cancel" : "Reply"}
                 </button>
@@ -275,7 +275,7 @@ const CommentCard = ({
                 placeholder={`Reply to u/${comment.author.username}...`}
                 autoFocus
                 rows={1}
-                className="flex-1 px-3 py-2.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-neutral-400 resize-none overflow-hidden"
+                className="flex-1 px-3 py-2.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-neutral-400 dark:placeholder-neutral-500 dark:bg-neutral-800 dark:text-neutral-100 resize-none overflow-hidden"
                 style={{
                   minHeight: "40px",
                   maxHeight: "120px",
@@ -289,7 +289,7 @@ const CommentCard = ({
               <button
                 onClick={onReplySubmit}
                 disabled={!replyText.trim()}
-                className="px-4 h-10 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center text-sm flex-shrink-0"
+                className="px-4 h-10 bg-blue-500 dark:bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-600 dark:hover:bg-blue-700 disabled:bg-neutral-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-colors flex items-center justify-center text-sm flex-shrink-0"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -325,13 +325,13 @@ const CommentCard = ({
             comment.direct_children.length > 0 && (
               <div className="flex items-center gap-2">
                 <div
-                  className="border rounded-full p-0.5 text-xs cursor-pointer hover:text-neutral-600"
+                  className="border border-neutral-300 dark:border-neutral-700 rounded-full p-0.5 text-xs cursor-pointer hover:text-neutral-600 dark:hover:text-neutral-300 text-neutral-500 dark:text-neutral-400"
                   onClick={() => setIsRepliesShown((prev) => !prev)}
                 >
                   {isRepliesShown ? <Minus /> : <Plus />}
                 </div>
                 {!isRepliesShown && (
-                  <p className="flex items-center gap-1 text-xs text-blue-600 font-bold cursor-pointer hover:underline">
+                  <p className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 font-bold cursor-pointer hover:underline">
                     <span>{comment.direct_children_count}</span>
                     <span>
                       {comment.direct_children_count === 1

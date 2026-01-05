@@ -8,18 +8,18 @@ const PostActions = ({
   onShare,
 }) => {
   return (
-    <div className="px-4 sm:px-6 md:px-8 py-3 border-t border-gray-100">
-      <div className="flex items-center gap-4 text-neutral-600 text-sm">
+    <div className="px-4 sm:px-6 md:px-8 py-3 border-t border-neutral-100 dark:border-neutral-700">
+      <div className="flex items-center gap-4 text-neutral-600 dark:text-neutral-200 text-sm">
         <button
           onClick={onTogglePostLike}
-          className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none"
+          className="flex items-center gap-2 hover:text-red-500 p-2 -m-2 rounded focus:outline-none"
           title={isPostLiked ? "Unlike" : "Like"}
           aria-label={`${likesCount} likes`}
         >
-          <Heart className={isPostLiked ? "text-red-500 fill-red-500" : ""} />
+          <Heart className={`transition-colors cursor-pointer ${isPostLiked ? "text-red-500 fill-red-500" : ""} `}/>
           <span
             ref={postLikesCountRef}
-            className={isPostLiked ? "text-red-500" : ""}
+            className={` transition-colors duration-200 ${isPostLiked ? "text-red-500" : ""}`}
           >
             {likesCount}
           </span>
@@ -29,7 +29,7 @@ const PostActions = ({
             e.stopPropagation();
             onShare();
           }}
-          className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer"
+          className="flex items-center gap-2 text-neutral-600 dark:text-neutral-100 hover:text-neutral-900 dark:hover:text-neutral-300 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer"
           title="Share"
         >
           <Share2 />

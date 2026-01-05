@@ -119,7 +119,7 @@ const DescPage = () => {
     youLiked: testData.likedTests?.includes(test.id) || false,
   }));
   return (
-    <div className="min-h-screen bg-primary-bg">
+    <div className="min-h-screen bg-primary-bg dark:bg-neutral-950">
       <InfiniteItemCards
         items={testData.data}
         likedData={{ post: new Set(testData?.liked || []) }}
@@ -136,7 +136,7 @@ const DescPage = () => {
               />
 
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-neutral-900">
+                <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
                   Tests
                 </h2>
                 <div className="flex items-center gap-3">
@@ -144,7 +144,7 @@ const DescPage = () => {
                   {!showCreateTest && isAuthenticated && (
                     <button
                       onClick={onShowCreateTest}
-                      className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-blue hover:bg-primary-blue/10 hover:text-primary-blue rounded-lg transition-colors shadow-sm"
+                      className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white dark:text-neutral-900 bg-primary-blue dark:bg-neutral-100 hover:bg-primary-blue/90 dark:hover:bg-neutral-900 hover:text-white dark:hover:text-neutral-100 rounded-lg transition-colors shadow-sm"
                       aria-label="Create test"
                     >
                       <Plus className="w-5 h-5" />
@@ -168,16 +168,16 @@ const DescPage = () => {
               )}
 
               {/* Tests Feed */}
-              <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+              <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700">
                 {transformedTests.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-16 px-4">
-                    <div className="bg-neutral-100 rounded-full p-6 mb-4">
-                      <FileText className="text-4xl text-neutral-700" />
+                    <div className="bg-neutral-100 dark:bg-neutral-800 rounded-full p-6 mb-4">
+                      <FileText className="text-4xl text-neutral-700 dark:text-neutral-200" />
                     </div>
-                    <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                    <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-2">
                       No tests yet
                     </h3>
-                    <p className="text-neutral-600 text-sm text-center max-w-sm">
+                    <p className="text-neutral-600 dark:text-neutral-300 text-sm text-center max-w-sm">
                       Be the first to create a test in this desc!
                     </p>
                   </div>

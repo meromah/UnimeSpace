@@ -74,20 +74,20 @@ const ProfileMenu = ({ isMyProfile, onReport }) => {
       {isOpen && (
         <div
           ref={menuRef}
-          className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 min-w-[160px] overflow-hidden"
+          className="absolute right-0 top-full mt-1 bg-white dark:bg-neutral-900 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 z-50 min-w-[160px] overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {isMyProfile ? (
             <button
               onClick={handleEdit}
-              className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+              className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors duration-150 cursor-pointer"
             >
               Edit profile
             </button>
           ) : (
             <button
               onClick={handleReport}
-              className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+              className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors duration-150 cursor-pointer"
             >
               Report user
             </button>

@@ -17,20 +17,20 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
     navigate(path);
   };
   return (
-    <div className="px-4 border-b border-gray-200">
+    <div className="px-4 border-b border-neutral-200 dark:border-neutral-700">
       <div className="flex items-center justify-between gap-2 py-4">
         <div className="flex items-center gap-2">
           {/* Back button */}
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-neutral-600 hover:text-neutral-900 transition-colors font-medium cursor-pointer"
+            className="flex items-center text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors font-medium cursor-pointer"
           >
             <ChevronLeft className="text-2xl" />
           </button>
           {/* Author */}
           <div className="flex items-center gap-3">
             <div
-              className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white"
+              className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white dark:ring-neutral-900"
               onClick={(e) =>
                 itemData?.data?.author && handleAuthorClick(e, `/user/${itemData.data.author.username}`)
               }
@@ -49,7 +49,7 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
             </div>
             <div>
               <p
-                className="w-full text-primary-blue text-base cursor-pointer hover:underline truncate font-medium"
+                className="w-full text-primary-blue dark:text-neutral-200 dark:font-semibold text-base cursor-pointer hover:underline truncate font-medium"
                 role="button"
                 tabIndex={0}
                 onClick={(e) =>
@@ -69,7 +69,7 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
                 {communityUrl}
                 {itemData.data[community].name}
               </p>
-              <p className="text-[12px] flex items-center gap-1">
+              <p className="text-[12px] flex items-center gap-1 text-neutral-600 dark:text-neutral-400">
                 {itemData?.data?.author?<span
                   onClick={(e) =>
                     handleAuthorClick(
@@ -89,7 +89,7 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
                 </span>}
                 <RelativeTime
                   date={itemData.data.created_at}
-                  className="flex items-center text-gray-700 ml-1 "
+                  className="flex items-center text-neutral-700 dark:text-neutral-400 ml-1 "
                 />
               </p>
             </div>

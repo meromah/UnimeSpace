@@ -101,45 +101,45 @@ const ReportModal = ({ isOpen, onClose, item, itemType = "post" }) => {
       onClick={handleClose}
     >
       {!isUninitialized && isSuccess && data?.message && (
-        <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-xl max-w-md w-full mx-4 relative">
           {/* Close button */}
           <button
             onClick={handleClose}
             disabled={isLoading}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full p-1 cursor-pointer disabled:opacity-50"
+            className="absolute top-4 right-4 text-gray-400 dark:text-neutral-400 hover:text-gray-600 dark:hover:text-neutral-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-neutral-600 rounded-full p-1 cursor-pointer disabled:opacity-50"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
           <div className="px-6 pt-6 pb-4">
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-neutral-100">
               Report {itemTypeLabel}
             </h2>
-            <p className="text-sm text-gray-500">{data.message}</p>
+            <p className="text-sm text-gray-500 dark:text-neutral-400">{data.message}</p>
           </div>
         </div>
       )}
       {!data?.message && (
         <div
-          className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative"
+          className="bg-white dark:bg-neutral-900 rounded-lg shadow-xl max-w-md w-full mx-4 relative"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close button */}
           <button
             onClick={handleClose}
             disabled={isLoading}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full p-1 cursor-pointer disabled:opacity-50"
+            className="absolute top-4 right-4 text-gray-400 dark:text-neutral-400 hover:text-gray-600 dark:hover:text-neutral-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-neutral-600 rounded-full p-1 cursor-pointer disabled:opacity-50"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
 
           {/* Modal Header */}
-          <div className="px-6 pt-6 pb-4 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900">
+          <div className="px-6 pt-6 pb-4 border-b border-gray-200 dark:border-neutral-700">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-neutral-100">
               Report {itemTypeLabel}
             </h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-gray-500 dark:text-neutral-400 mt-1">
               Help us understand what's wrong with this {itemTypeLabel}
             </p>
           </div>
@@ -161,7 +161,7 @@ const ReportModal = ({ isOpen, onClose, item, itemType = "post" }) => {
                     disabled={isLoading}
                     className="w-4 h-4 text-blue-600 cursor-pointer"
                   />
-                  <span className="text-sm text-gray-700 flex-1">{reason}</span>
+                  <span className="text-sm text-gray-700 dark:text-neutral-200 flex-1">{reason}</span>
                 </label>
               ))}
             </div>
@@ -170,7 +170,7 @@ const ReportModal = ({ isOpen, onClose, item, itemType = "post" }) => {
             {isOtherSelected && (
               <div className="mt-4">
                 <label className="flex flex-col gap-2">
-                  <span className="text-sm font-medium text-gray-700">
+                  <span className="text-sm font-medium text-gray-700 dark:text-neutral-200">
                     Please provide more details
                   </span>
                   <input
@@ -178,7 +178,7 @@ const ReportModal = ({ isOpen, onClose, item, itemType = "post" }) => {
                     value={otherReason}
                     onChange={(e) => setOtherReason(e.target.value)}
                     placeholder="Describe the issue..."
-                    className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-gray-400"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-gray-400 dark:placeholder-neutral-500 dark:bg-neutral-800 dark:text-neutral-100"
                     disabled={isLoading}
                     required={isOtherSelected}
                   />
@@ -187,12 +187,12 @@ const ReportModal = ({ isOpen, onClose, item, itemType = "post" }) => {
             )}
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+            <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-200 dark:border-neutral-700">
               <button
                 type="button"
                 onClick={handleClose}
                 disabled={isLoading}
-                className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors disabled:opacity-50 cursor-pointer"
+                className="px-4 py-2 text-gray-700 dark:text-neutral-200 hover:text-gray-900 dark:hover:text-neutral-100 font-medium transition-colors disabled:opacity-50 cursor-pointer"
               >
                 Cancel
               </button>
@@ -203,7 +203,7 @@ const ReportModal = ({ isOpen, onClose, item, itemType = "post" }) => {
                   (isOtherSelected && !otherReason.trim()) ||
                   isLoading
                 }
-                className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium cursor-pointer"
+                className="px-6 py-2 bg-red-600 dark:bg-red-700 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-800 disabled:bg-gray-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-colors font-medium cursor-pointer"
               >
                 {isLoading ? "Submitting..." : "Submit report"}
               </button>

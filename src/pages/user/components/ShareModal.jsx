@@ -43,7 +43,7 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
       id: "copy",
       name: "Copy Link",
       icon: copied ? Copy : LinkIcon,
-      color: "bg-gray-100 hover:bg-gray-200 text-gray-700",
+      color: "bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 text-gray-700 dark:text-neutral-200",
       action: handleCopyLink,
       iconFrom: "lucide"
     },
@@ -103,22 +103,22 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative"
+        className="bg-white dark:bg-neutral-900 rounded-lg shadow-xl max-w-md w-full mx-4 relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full p-1 cursor-pointer"
+          className="absolute top-4 right-4 text-gray-400 dark:text-neutral-400 hover:text-gray-600 dark:hover:text-neutral-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-neutral-600 rounded-full p-1 cursor-pointer"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-gray-900">Share this post</h2>
-          <p className="text-sm text-gray-500 mt-1">
+        <div className="px-6 pt-6 pb-4 border-b border-gray-200 dark:border-neutral-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-neutral-100">Share this post</h2>
+          <p className="text-sm text-gray-500 dark:text-neutral-400 mt-1">
             Choose how you want to share
           </p>
         </div>
@@ -150,9 +150,9 @@ const ShareModal = ({ isOpen, onClose, itemUrl, itemTitle }) => {
 
         {/* URL Preview */}
         <div className="px-6 pb-6">
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-            <p className="text-xs text-gray-500 mb-1">Link to share:</p>
-            <p className="text-sm text-gray-700 break-all">{itemUrl}</p>
+          <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-3 border border-gray-200 dark:border-neutral-700">
+            <p className="text-xs text-gray-500 dark:text-neutral-400 mb-1">Link to share:</p>
+            <p className="text-sm text-gray-700 dark:text-neutral-300 break-all">{itemUrl}</p>
           </div>
         </div>
       </div>

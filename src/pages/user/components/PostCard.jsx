@@ -118,7 +118,7 @@ const PostCard = ({
     <>
       <Link
         to={`/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`}
-        className={`block bg-white border-x border-b border-gray-200 p-4 hover:bg-primary-bg transition-colors duration-200 ${
+        className={`block bg-white dark:bg-neutral-900 border-x border-b border-neutral-200 dark:border-neutral-700 p-4 hover:bg-primary-bg dark:hover:bg-neutral-800 transition-colors duration-200 ${
           isFirst ? "rounded-t-lg border-t" : isLast ? "rounded-b-lg" : ""
         }`}
       >
@@ -150,7 +150,7 @@ const PostCard = ({
             {/* User + Community */}
             <div className="max-w-52 sm:max-w-full flex flex-col gap-0.5">
               <button
-                className="w-full text-primary-blue text-base text-start cursor-pointer hover:underline truncate focus:outline-none"
+                className="w-full text-primary-blue text-base text-start cursor-pointer hover:underline truncate focus:outline-none dark:text-neutral-200 dark:font-semibold"
                 onClick={(e) =>
                   handleBoardClick(
                     e,
@@ -161,7 +161,7 @@ const PostCard = ({
                 {communityUrl + item[communityType].name}
               </button>
 
-              <p className="text-xs text-neutral-600 flex items-center gap-1">
+              <p className="text-xs text-neutral-600 dark:text-neutral-400 flex items-center gap-1">
                 {item?.author ? (
                   <button
                     onClick={(e) =>
@@ -172,11 +172,11 @@ const PostCard = ({
                     u/{item.author.username}
                   </button>
                 ) : (
-                  <span>[deleted]</span>
+                  <span className="dark:text-neutral-400">[deleted]</span>
                 )}
                 <RelativeTime
                   date={item.created_at}
-                  className="text-neutral-500"
+                  className="text-neutral-500 dark:text-neutral-400"
                 />
               </p>
             </div>
@@ -196,13 +196,13 @@ const PostCard = ({
 
         {/* Content */}
         {itemType === "test" ? (
-          <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 p-3 rounded hover:bg-blue-100 transition-colors duration-200">
+          <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 dark:bg-neutral-800 p-3 rounded hover:bg-blue-100 dark:hover:bg-neutral-700 transition-colors duration-200">
             <div className="flex-1 overflow-hidden flex flex-col gap-0.5">
-              <p className="font-medium">{item.title}</p>
-              <p className="text-sm text-neutral-600 truncate">{item.body}</p>
+              <p className="font-medium text-neutral-900 dark:text-neutral-100">{item.title}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-200 truncate">{item.body}</p>
             </div>
             <button
-              className="px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+              className="px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-neutral-100 dark:text-neutral-900 active:scale-95 font-medium whitespace-nowrap cursor-pointer dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
               onClick={onStartTest}
             >
               Start
@@ -211,8 +211,8 @@ const PostCard = ({
         ) : (
           <div className="mb-3 flex flex-col gap-2">
             <div>
-              <p className="font-medium mb-1">{item.title}</p>
-              <p className="text-sm text-neutral-600">{item.body}</p>
+              <p className="font-medium text-neutral-900 dark:text-neutral-100 mb-1">{item.title}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">{item.body}</p>
             </div>
 
             {images.length > 0 && <PostImages images={images} />}
@@ -221,9 +221,9 @@ const PostCard = ({
         )}
 
         {/* Actions */}
-        <div className="flex items-center gap-4 text-neutral-600 text-sm">
+        <div className="flex items-center gap-4 text-neutral-600 dark:text-neutral-200 text-sm">
           <button
-            className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
+            className="flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
             title="Comments"
             aria-label={`${item.comments_count} comments`}
           >
@@ -234,7 +234,7 @@ const PostCard = ({
             onClick={onTogglePostLike}
             className={`${
               isLoading ? "animate-pulse" : ""
-            } flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer`}
+            } flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer`}
             aria-label={`${item.likes_count} likes. ${
               liked ? "Unlike" : "Like"
             } this item`}
@@ -250,7 +250,7 @@ const PostCard = ({
           </button>
 
           <button
-            className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
+            className="flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
             title="Share"
             onClick={(e) => {
               preventNavigation(e);

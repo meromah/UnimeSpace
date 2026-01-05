@@ -21,12 +21,12 @@ const ExpandableSection = ({
     <div>
       <button
         onClick={() => toggleSection(section.id)}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-700 dark:text-neutral-100 dark transition-all cursor-pointer"
+        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all cursor-pointer"
       >
-        {Icon && <Icon className="w-4 h-4 text-neutral-400" />}
+        {Icon && <Icon className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />}
         <span className="flex-1 text-left">{section.title}</span>
         <ChevronDown
-          className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${
+          className={`w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${
             isExpanded ? "rotate-180" : ""
           }`}
         />
@@ -54,7 +54,7 @@ const ExpandableSection = ({
               </Link>
             ))
           ) : (
-            <p className="text-neutral-500 text-xs py-1">
+            <p className="text-neutral-500 dark:text-neutral-400 text-xs py-1">
               No {section.id} exists.
             </p>
           )}

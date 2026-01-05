@@ -105,7 +105,7 @@ const BoardPage = () => {
 
   if (!boardData || !postData) return null;
   return (
-    <div className="min-h-screen bg-primary-bg">
+    <div className="min-h-screen bg-primary-bg dark:bg-neutral-950">
       <InfiniteItemCards
         items={postData.data}
         likedData={{ post: new Set(postData?.liked || []) }}
@@ -122,13 +122,13 @@ const BoardPage = () => {
               />
 
               {/* Create Post Section */}
-              <div className="bg-white rounded-lg border border-neutral-200 mb-6">
+              <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 mb-6">
                 {!showCreatePost ? (
                   <div className="flex items-center gap-3 p-4">
                     {/* Avatar */}
                     <div
                       onClick={onShowCreatePost}
-                      className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white flex-shrink-0"
+                      className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white dark:ring-neutral-900 flex-shrink-0"
                     >
                       <p className="w-11 h-11 flex items-center justify-center rounded-full">
                         {getInitials(
@@ -140,7 +140,7 @@ const BoardPage = () => {
                     {/* Placeholder Text */}
                     <div
                       onClick={onShowCreatePost}
-                      className="flex-1 px-4 py-2 text-sm text-neutral-500 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer border border-transparent hover:border-neutral-200"
+                      className="flex-1 px-4 py-2 text-sm text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-800 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors cursor-pointer border border-transparent hover:border-neutral-200 dark:hover:border-neutral-600"
                     >
                       What is on your mind, {profileData?.username || "User"}?
                     </div>
@@ -148,7 +148,7 @@ const BoardPage = () => {
                     {/* Attachment Icon */}
                     <button
                       onClick={onShowCreatePost}
-                      className="p-2 text-neutral-500 hover:text-primary-blue hover:bg-primary-blue/10 rounded-lg transition-colors cursor-pointer"
+                      className="p-2 text-neutral-500 dark:text-neutral-400 hover:text-primary-blue hover:bg-primary-blue/10 dark:hover:bg-primary-blue/20 rounded-lg transition-colors cursor-pointer"
                       aria-label="Attach file"
                     >
                       <Paperclip className="w-5 h-5" />
@@ -170,23 +170,23 @@ const BoardPage = () => {
 
               {/* Sorting/Filtering Controls */}
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-neutral-900">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                   Posts
                 </h2>
                 <SortByComponent />
               </div>
 
               {/* Posts Feed */}
-              <div className="bg-white rounded-lg border border-neutral-200">
+              <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
                 {postData.data.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-16 px-4">
-                    <div className="bg-neutral-100 rounded-full p-6 mb-4">
-                      <FileText className="text-4xl text-neutral-700" />
+                    <div className="bg-neutral-100 dark:bg-neutral-800 rounded-full p-6 mb-4">
+                      <FileText className="text-4xl text-neutral-700 dark:text-neutral-200" />
                     </div>
-                    <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                    <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-2">
                       {emptyStateMessages.title}
                     </h3>
-                    <p className="text-neutral-600 text-sm text-center max-w-sm">
+                    <p className="text-neutral-600 dark:text-neutral-300 text-sm text-center max-w-sm">
                       {emptyStateMessages.message}
                     </p>
                   </div>
