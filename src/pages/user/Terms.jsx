@@ -10,28 +10,57 @@ const Terms = () => {
   const [html, setHtml] = useState("");
   const iframeRef = useRef(null);
 
-  // Fetch HTML
   useEffect(() => {
     fetch(API_BASE_URL)
       .then((res) => res.text())
-      .then(setHtml);
+      .then((rawHtml) => {
+        const isDark = document.documentElement.classList.contains("dark");
+
+        const styledHtml = `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="UTF-8" />
+              <style>
+                body {
+                  margin: 0;
+                  padding: 24px;
+                  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+                  background-color: ${isDark ? "#0a0a0a" : "#ffffff"};
+                  color: ${isDark ? "#f5f5f5" : "#000000"};
+                }
+
+                h1, h2, h3, h4 {
+                  color: ${isDark ? "#fafafa" : "#000000"};
+                }
+
+                a {
+                  color: ${isDark ? "#93c5fd" : "#2563eb"};
+                }
+              </style>
+            </head>
+            <body>
+              ${rawHtml}
+            </body>
+          </html>
+        `;
+
+        setHtml(styledHtml);
+      });
   }, []);
 
-  // Scroll inside iframe after load + hash change
+  // Scroll inside iframe
   useEffect(() => {
     if (!hash || !iframeRef.current) return;
 
     const iframe = iframeRef.current;
 
     const scrollToHash = () => {
-      const id = hash.slice(1);
-      const doc = iframe.contentDocument || iframe.contentWindow?.document;
+      const doc = iframe.contentDocument;
       if (!doc) return;
 
-      const el = doc.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
+      const el = doc.getElementById(hash.slice(1));
+      el?.scrollIntoView({ behavior: "smooth" });
     };
 
     iframe.addEventListener("load", scrollToHash);
