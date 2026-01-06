@@ -2,8 +2,9 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import fs from 'fs'
+import path from 'path'
 
-// https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const VITE_PROXY_TARGET = env.VITE_PROXY_TARGET
@@ -11,8 +12,12 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), tailwindcss()],
     server: {
-      host: true, 
+      host: 'localhost',
       port: 5173,
+      https: {
+        key: fs.readFileSync(path.resolve(__dirname, 'localhost+1-key.pem')),
+        cert: fs.readFileSync(path.resolve(__dirname, 'localhost+1.pem')),
+      },
       ...(VITE_PROXY_TARGET && {
         proxy: {
           '/api': {
