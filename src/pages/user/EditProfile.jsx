@@ -290,8 +290,8 @@ const MyProfile = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-primary-bg p-2">
-      <div className="bg-white rounded-lg border border-slate-200">
+    <div className="relative min-h-screen bg-primary-bg dark:bg-neutral-950 p-2">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg border border-slate-200 dark:border-neutral-700">
         <div className="p-6 space-y-6">
           <ImageUploadManager
             currentAvatarData={userData?.data?.avatar}
@@ -310,13 +310,13 @@ const MyProfile = () => {
 
           {/* Name Field */}
           <div className="flex flex-col">
-            <label className="font-medium text-neutral-800">Full Name *</label>
+            <label className="font-medium text-neutral-800 dark:text-neutral-100">Full Name *</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., John Doe"
-              className="w-full px-3 py-2 mt-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400 transition-all duration-200"
+              className="w-full px-3 py-2 mt-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
               required
             />
             {isFieldModified("name") && (
@@ -325,7 +325,7 @@ const MyProfile = () => {
                   type="button"
                   onClick={() => handleCancelField("name")}
                   disabled={savingField === "name"}
-                  className="px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 rounded-md transition-colors disabled:opacity-50"
+                  className="px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -360,7 +360,7 @@ const MyProfile = () => {
                   type="button"
                   onClick={() => handleSaveInput("username")}
                   disabled={savingField === "username"}
-                  className="px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 rounded-md transition-colors disabled:opacity-50"
+                  className="px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -378,12 +378,12 @@ const MyProfile = () => {
 
           {/* Biography Field */}
           <div className="flex flex-col gap-2">
-            <label className="font-medium text-neutral-800">Biography</label>
+            <label className="font-medium text-neutral-800 dark:text-neutral-100">Biography</label>
             <textarea
               value={biography}
               onChange={(e) => setBiography(e.target.value)}
               placeholder="Tell us about yourself..."
-              className="w-full min-h-[120px] px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400 resize-y"
+              className="w-full min-h-[120px] px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-y"
               rows={4}
             />
             {isFieldModified("biography") && (
@@ -392,7 +392,7 @@ const MyProfile = () => {
                   type="button"
                   onClick={() => handleCancelField("biography")}
                   disabled={savingField === "biography"}
-                  className="px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 rounded-md transition-colors disabled:opacity-50"
+                  className="px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -410,12 +410,12 @@ const MyProfile = () => {
 
           {/* Birth Date Field */}
           <div className="flex flex-col">
-            <label className="font-medium text-neutral-800">Birth Date</label>
+            <label className="font-medium text-neutral-800 dark:text-neutral-100">Birth Date</label>
             <input
               type="date"
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
-              className="w-full px-3 py-2 mt-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-200"
+              className="w-full px-3 py-2 mt-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
             />
             {isFieldModified("birthDate") && (
               <div className="flex gap-2 mt-2">
@@ -423,7 +423,7 @@ const MyProfile = () => {
                   type="button"
                   onClick={() => handleCancelField("birthDate")}
                   disabled={savingField === "birthDate"}
-                  className="px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 rounded-md transition-colors disabled:opacity-50"
+                  className="px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -441,11 +441,11 @@ const MyProfile = () => {
 
           {/* Sex Field */}
           <div className="flex flex-col">
-            <label className="font-medium text-neutral-800">Sex</label>
+            <label className="font-medium text-neutral-800 dark:text-neutral-100">Sex</label>
             <select
               value={sex}
               onChange={(e) => setSex(e.target.value)}
-              className="w-full px-3 py-2 mt-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-200"
+              className="w-full px-3 py-2 mt-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
             >
               <option value="">Select...</option>
               <option value="male">Male</option>
@@ -457,7 +457,7 @@ const MyProfile = () => {
                   type="button"
                   onClick={() => handleCancelField("sex")}
                   disabled={savingField === "sex"}
-                  className="px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 rounded-md transition-colors disabled:opacity-50"
+                  className="px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -475,13 +475,13 @@ const MyProfile = () => {
 
           {/* Enrollment Year Field */}
           <div className="flex flex-col">
-            <label className="font-medium text-neutral-800">
+            <label className="font-medium text-neutral-800 dark:text-neutral-100">
               Enrollment Year
             </label>
             <select
               value={enrollmentYearId}
               onChange={(e) => setEnrollmentYearId(e.target.value)}
-              className="w-full px-3 py-2 mt-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-200"
+              className="w-full px-3 py-2 mt-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
             >
               <option value="">Select year...</option>
               {enrollmentYearsData?.data?.map((year) => (
@@ -496,7 +496,7 @@ const MyProfile = () => {
                   type="button"
                   onClick={() => handleCancelField("enrollmentYearId")}
                   disabled={savingField === "enrollmentYearId"}
-                  className="px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 rounded-md transition-colors disabled:opacity-50"
+                  className="px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>

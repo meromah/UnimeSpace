@@ -90,23 +90,23 @@ const ReportPostModal = ({ isOpen, onClose, post }) => {
       onClick={handleClose}
     >
       <div
-        className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative"
+        className="bg-white dark:bg-neutral-900 rounded-lg shadow-xl max-w-md w-full mx-4 relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={handleClose}
           disabled={isSubmitting}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full p-1 cursor-pointer disabled:opacity-50"
+          className="absolute top-4 right-4 text-gray-400 dark:text-neutral-500 hover:text-gray-600 dark:hover:text-neutral-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-neutral-600 rounded-full p-1 cursor-pointer disabled:opacity-50"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-gray-900">Report post</h2>
-          <p className="text-sm text-gray-500 mt-1">
+        <div className="px-6 pt-6 pb-4 border-b border-gray-200 dark:border-neutral-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-neutral-100">Report post</h2>
+          <p className="text-sm text-gray-500 dark:text-neutral-400 mt-1">
             Help us understand what's wrong with this post
           </p>
         </div>
@@ -128,7 +128,7 @@ const ReportPostModal = ({ isOpen, onClose, post }) => {
                   disabled={isSubmitting}
                   className="w-4 h-4 text-blue-600 cursor-pointer"
                 />
-                <span className="text-sm text-gray-700 flex-1">{reason}</span>
+                <span className="text-sm text-gray-700 dark:text-neutral-200 flex-1">{reason}</span>
               </label>
             ))}
           </div>
@@ -137,7 +137,7 @@ const ReportPostModal = ({ isOpen, onClose, post }) => {
           {isOtherSelected && (
             <div className="mt-4">
               <label className="flex flex-col gap-2">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-gray-700 dark:text-neutral-200">
                   Please provide more details
                 </span>
                 <input
@@ -145,7 +145,7 @@ const ReportPostModal = ({ isOpen, onClose, post }) => {
                   value={otherReason}
                   onChange={(e) => setOtherReason(e.target.value)}
                   placeholder="Describe the issue..."
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-gray-400"
+                  className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
                   disabled={isSubmitting}
                   required={isOtherSelected}
                 />
@@ -154,12 +154,12 @@ const ReportPostModal = ({ isOpen, onClose, post }) => {
           )}
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+          <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-200 dark:border-neutral-700">
             <button
               type="button"
               onClick={handleClose}
               disabled={isSubmitting}
-              className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors disabled:opacity-50 cursor-pointer"
+              className="px-4 py-2 text-gray-700 dark:text-neutral-200 hover:text-gray-900 dark:hover:text-neutral-100 font-medium transition-colors disabled:opacity-50 cursor-pointer"
             >
               Cancel
             </button>

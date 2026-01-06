@@ -175,8 +175,8 @@ const ImageUploadManager = ({
         <div
           className={`relative w-full h-20 md:h-32 rounded-lg overflow-hidden border transition-colors group ${
             bannerImage?.error
-              ? "border-red-500"
-              : "border-neutral-300 hover:border-primary-blue"
+              ? "border-red-500 dark:border-red-600"
+              : "border-neutral-300 dark:border-neutral-700 hover:border-primary-blue dark:hover:border-primary-blue"
           } ${bannerImage?.isUploading && "animate-pulse"}`}
         >
           {currentBannerUrl ? (
@@ -192,7 +192,7 @@ const ImageUploadManager = ({
                   onClick={() =>
                     handleImageReUpload(bannerImage, "banner", setBannerImage)
                   }
-                  className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                  className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 dark:bg-red-600 text-white rounded-full hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
                 >
                   <RotateCw className="w-5 h-5" />
                 </button>
@@ -202,13 +202,13 @@ const ImageUploadManager = ({
                   <button
                     type="button"
                     onClick={() => setMobileMenu("banner")}
-                    className="md:hidden absolute inset-0 bg-black/20 active:bg-black/30 transition-colors"
+                    className="md:hidden absolute inset-0 bg-black/20 dark:bg-black/40 active:bg-black/30 dark:active:bg-black/50 transition-colors"
                   />
                   {/* Desktop: Remove button on hover */}
                   <button
                     type="button"
                     onClick={removeBanner}
-                    className="hidden md:block absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                    className="hidden md:block absolute top-2 right-2 z-10 p-1.5 bg-red-500 dark:bg-red-600 text-white rounded-full hover:bg-red-600 dark:hover:bg-red-700 transition-colors opacity-0 group-hover:opacity-100"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -274,8 +274,8 @@ const ImageUploadManager = ({
         <div className="md:hidden relative">
           <div className="absolute -top-8 left-4 w-20 h-20">
             <div
-              className={`relative w-full h-full rounded-full overflow-hidden border-4 bg-white ${
-                avatarImage?.error ? "border-red-500" : "border-white"
+              className={`relative w-full h-full rounded-full overflow-hidden border-4 bg-white dark:bg-neutral-800 ${
+                avatarImage?.error ? "border-red-500 dark:border-red-600" : "border-white dark:border-neutral-800"
               } ${avatarImage?.isUploading && "animate-pulse"}`}
             >
               {currentAvatarUrl ? (
@@ -291,7 +291,7 @@ const ImageUploadManager = ({
                       onClick={() =>
                         handleImageReUpload(avatarImage, "avatar", setAvatarImage)
                       }
-                      className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors z-50"
+                      className="absolute -top-1 -right-1 p-1 bg-red-500 dark:bg-red-600 text-white rounded-full hover:bg-red-600 dark:hover:bg-red-700 transition-colors z-50"
                     >
                       <RotateCw className="w-3 h-3" />
                     </button>
@@ -299,7 +299,7 @@ const ImageUploadManager = ({
                     <button
                       type="button"
                       onClick={() => setMobileMenu("avatar")}
-                      className="absolute inset-0 bg-black/20 active:bg-black/30 transition-colors"
+                      className="absolute inset-0 bg-black/20 dark:bg-black/40 active:bg-black/30 dark:active:bg-black/50 transition-colors"
                     />
                   )}
                   {avatarImage?.isUploading && (
@@ -326,8 +326,8 @@ const ImageUploadManager = ({
         <div className="hidden md:block relative">
           <div className="absolute -top-14 left-4 w-28 h-28 group">
             <div
-              className={`relative w-full h-full rounded-full overflow-hidden border-4 bg-white ${
-                avatarImage?.error ? "border-red-500" : "border-white"
+              className={`relative w-full h-full rounded-full overflow-hidden border-4 bg-white dark:bg-neutral-800 ${
+                avatarImage?.error ? "border-red-500 dark:border-red-600" : "border-white dark:border-neutral-800"
               } ${avatarImage?.isUploading && "animate-pulse"}`}
             >
               {currentAvatarUrl ? (
@@ -370,7 +370,7 @@ const ImageUploadManager = ({
                 onClick={() =>
                   handleImageReUpload(avatarImage, "avatar", setAvatarImage)
                 }
-                className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors z-50"
+                className="absolute -top-1 -right-1 p-1 bg-red-500 dark:bg-red-600 text-white rounded-full hover:bg-red-600 dark:hover:bg-red-700 transition-colors z-50"
               >
                 <RotateCw className="w-4 h-4" />
               </button>
@@ -379,7 +379,7 @@ const ImageUploadManager = ({
               <button
                 type="button"
                 onClick={removeAvatar}
-                className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors z-50 opacity-0 group-hover:opacity-100"
+                className="absolute -top-1 -right-1 p-1 bg-red-500 dark:bg-red-600 text-white rounded-full hover:bg-red-600 dark:hover:bg-red-700 transition-colors z-50 opacity-0 group-hover:opacity-100"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -415,11 +415,11 @@ const ImageUploadManager = ({
           />
 
           {/* Menu */}
-          <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 animate-slide-up">
+          <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 rounded-t-2xl z-50 animate-slide-up">
             <div className="p-4 space-y-2">
-              <div className="w-12 h-1 bg-neutral-300 rounded-full mx-auto mb-4" />
+              <div className="w-12 h-1 bg-neutral-300 dark:bg-neutral-700 rounded-full mx-auto mb-4" />
 
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
                 {mobileMenu === "banner" ? "Banner Image" : "Avatar Image"}
               </h3>
 
@@ -434,9 +434,9 @@ const ImageUploadManager = ({
                   }
                   setMobileMenu(null);
                 }}
-                className="w-full px-4 py-3 text-left text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors flex items-center gap-3"
+                className="w-full px-4 py-3 text-left text-neutral-900 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors flex items-center gap-3"
               >
-                <Image className="w-5 h-5 text-primary-blue" />
+                <Image className="w-5 h-5 text-primary-blue dark:text-blue-400" />
                 <span className="font-medium">
                   {(mobileMenu === "banner" && currentBannerUrl) ||
                   (mobileMenu === "avatar" && currentAvatarUrl)
@@ -458,7 +458,7 @@ const ImageUploadManager = ({
                     }
                     setMobileMenu(null);
                   }}
-                  className="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center gap-3"
+                  className="w-full px-4 py-3 text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex items-center gap-3"
                 >
                   <X className="w-5 h-5" />
                   <span className="font-medium">Remove image</span>
@@ -469,7 +469,7 @@ const ImageUploadManager = ({
               <button
                 type="button"
                 onClick={() => setMobileMenu(null)}
-                className="w-full px-4 py-3 text-center text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors font-medium border border-neutral-200"
+                className="w-full px-4 py-3 text-center text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors font-medium border border-neutral-200 dark:border-neutral-700"
               >
                 Cancel
               </button>

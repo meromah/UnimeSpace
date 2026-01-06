@@ -23,9 +23,9 @@ const ProfileComments = ({ isLoading, comments }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg p-8 text-center shadow-sm">
+    <div className="bg-white rounded-lg p-8 text-center shadow-sm dark:bg-neutral-800">
       <MessageCircle className="mx-auto text-4xl text-neutral-400 mb-4" />
-      <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noComments}</p>
+      <p className="text-neutral-600 dark:text-neutral-400">{DEFAULT_PLACEHOLDERS.noComments}</p>
     </div>
   );
 }

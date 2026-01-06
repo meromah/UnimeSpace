@@ -119,7 +119,7 @@ const NameAvailabilityInput = ({
 
   return (
     <div className="flex flex-col">
-      <label className="font-medium text-neutral-800 dark:text-neutral-200">{`${label} *`}</label>
+      <label className="font-medium text-neutral-800 dark:text-neutral-100">{`${label} *`}</label>
       <input
         ref={inputRef}
         type="text"
@@ -127,16 +127,16 @@ const NameAvailabilityInput = ({
         onChange={handleChange}
         placeholder={placeholder}
         required
-        className={`w-full px-3 py-2 mt-2 rounded-lg border focus:outline-none focus:ring-2 transition-all duration-200 ${
+        className={`w-full px-3 py-2 mt-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 rounded-lg focus:outline-none transition ${
           errorMessage
-            ? "border-red-500 focus:ring-red-500/30 focus:border-red-500"
-            : "border-slate-200 focus:ring-blue-500/30 focus:border-blue-500"
-        } placeholder-slate-400`}
+            ? "border border-red-500 dark:border-red-600 focus:border-red-500 dark:focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-0"
+            : "border border-neutral-200 dark:border-neutral-700 focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0"
+        }`}
       />
       {/* Preview URL (animated) - only if urlPrefix provided */}
       {urlPrefix && (
         <div
-          className={`text-xs text-slate-500 transition-all duration-300 ease-in-out ${
+          className={`text-xs text-slate-500 dark:text-neutral-400 transition-all duration-300 ease-in-out ${
             showPreview
               ? "mt-1.5 max-h-10 opacity-100 translate-y-0"
               : "mt-0 max-h-0 opacity-0 -translate-y-1 overflow-hidden"

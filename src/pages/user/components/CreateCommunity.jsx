@@ -62,22 +62,22 @@ const CreateCommunity = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-primary/50">
+    <div className="relative min-h-screen bg-primary/50 dark:bg-neutral-950">
       <div className="max-w-2xl w-full mx-auto px-4 py-8">
         <div className="text-center p-2 md:p-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2 dark:from-blue-400 dark:to-indigo-400">
             Create a new community
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 dark:text-neutral-300">
             Organize posts and ideas or tests under a shared theme
           </p>
         </div>
 
-        <div className="bg-white rounded-lg border border-slate-200">
-          <div className="flex gap-4 p-4 border-b border-slate-100">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-slate-200 dark:border-neutral-700">
+          <div className="flex gap-4 p-4 border-b border-slate-100 dark:border-neutral-700">
             <label
               htmlFor="board"
-              className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-md hover:bg-slate-50"
+              className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-md hover:bg-slate-50 dark:hover:bg-neutral-800"
             >
               <input
                 id="board"
@@ -86,18 +86,18 @@ const CreateCommunity = () => {
                 value="board"
                 checked={communityType === "board"}
                 onChange={() => setCommunityType("board")}
-                className="h-4 w-4 text-blue-600 accent-blue-600"
+                className="h-4 w-4 text-blue-600 accent-blue-600 dark:accent-blue-400"
               />
               <div className="flex flex-col">
-                <span className="font-medium text-neutral-800">Board</span>
-                <span className="text-xs text-slate-500">
+                <span className="font-medium text-neutral-800 dark:text-neutral-100">Board</span>
+                <span className="text-xs text-slate-500 dark:text-neutral-400">
                   Create a new board to collect posts
                 </span>
               </div>
             </label>
             <label
               htmlFor="desc"
-              className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-md hover:bg-slate-50"
+              className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-md hover:bg-slate-50 dark:hover:bg-neutral-800"
             >
               <input
                 id="desc"
@@ -106,17 +106,17 @@ const CreateCommunity = () => {
                 value="desc"
                 checked={communityType === "desc"}
                 onChange={() => setCommunityType("desc")}
-                className="h-4 w-4 text-blue-600 accent-blue-600"
+                className="h-4 w-4 text-blue-600 accent-blue-600 dark:accent-blue-400"
               />
               <div className="flex flex-col">
-                <span className="font-medium text-neutral-800">Desc</span>
-                <span className="text-xs text-slate-500">
+                <span className="font-medium text-neutral-800 dark:text-neutral-100">Desc</span>
+                <span className="text-xs text-slate-500 dark:text-neutral-400">
                   Create a new desc to collect tests
                 </span>
               </div>
             </label>
           </div>
-          <div className="p-6 border-b border-slate-100">
+          <div className="p-6 border-b border-slate-100 dark:border-neutral-700">
             <div className="grid gap-5">
               <NameAvailabilityInput
                 value={communityName}
@@ -133,31 +133,31 @@ const CreateCommunity = () => {
                 onSpecialCharDetected={setHasSpecialChar}
               />
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800">
+                <span className="font-medium text-neutral-800 dark:text-neutral-100">
                   Description
                 </span>
                 <AutoResizeTextarea 
                   value={communityDescription}
                   onChange={(e) => setCommunityDescription(e.target.value)}
                   placeholder={`What is this ${communityTypes[communityType].name} about? Who is it for?`}
-                  className="w-full min-h-[120px] px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400 resize-y"
+                  className="w-full min-h-[120px] px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-y"
                 />
               </label>
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between gap-2 pt-2 border-t border-neutral-200">
+        <div className="flex items-center justify-between gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-700">
           <button
             type="button"
             onClick={onResetCommunityForm}
-            className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer"
+            className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             disabled={isCreateDisabled}
             onClick={finalSubmission}
-            className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-medium"
+            className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-colors font-medium"
           >
             Create
           </button>

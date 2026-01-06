@@ -321,10 +321,10 @@ const Register = () => {
                     setEmail(e.target.value);
                     if (errors.email) setErrors({ ...errors, email: "" });
                   }}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
+                  className={`px-2 pt-1 pb-1.5 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 rounded-md focus:outline-none transition ${
                     errors.email
-                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
-                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
+                      ? "border border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-0"
+                      : "border border-neutral-200 dark:border-neutral-700 focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0"
                   }`}
                   required
                 />
@@ -370,10 +370,10 @@ const Register = () => {
                     if (errors.otp) setErrors({ ...errors, otp: "" });
                   }}
                   maxLength={6}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
+                  className={`px-2 pt-1 pb-1.5 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 rounded-md focus:outline-none transition ${
                     errors.otp
-                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
-                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
+                      ? "border border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-0"
+                      : "border border-neutral-200 dark:border-neutral-700 focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0"
                   }`}
                   required
                 />
@@ -436,10 +436,10 @@ const Register = () => {
                     setForm({ ...form, name: e.target.value });
                     if (errors.name) setErrors({ ...errors, name: "" });
                   }}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
+                  className={`px-2 pt-1 pb-1.5 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 rounded-md focus:outline-none transition ${
                     errors.name
-                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
-                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
+                      ? "border border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-0"
+                      : "border border-neutral-200 dark:border-neutral-700 focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0"
                   }`}
                   required
                 />
@@ -488,10 +488,10 @@ const Register = () => {
                     setForm({ ...form, password: e.target.value });
                     if (errors.password) setErrors({ ...errors, password: "" });
                   }}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
+                  className={`px-2 pt-1 pb-1.5 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 rounded-md focus:outline-none transition ${
                     errors.password
-                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
-                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
+                      ? "border border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-0"
+                      : "border border-neutral-200 dark:border-neutral-700 focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0"
                   }`}
                   required
                 />
@@ -511,10 +511,10 @@ const Register = () => {
                   placeholder="••••••••"
                   value={form.password_confirmation}
                   onChange={handlePasswordVerificationChange}
-                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 ${
+                  className={`px-2 pt-1 pb-1.5 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 rounded-md focus:outline-none transition ${
                     !isPasswordMatch || errors.password_confirmation
-                      ? "border-red-300 dark:border-red-600 focus:outline-red-500 dark:focus:outline-red-500"
-                      : "border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:focus:outline-primary-yellow"
+                      ? "border border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-0"
+                      : "border border-neutral-200 dark:border-neutral-700 focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0"
                   }`}
                   required
                 />

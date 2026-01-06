@@ -214,7 +214,7 @@ const CodePreview = ({
                     value={pythonCode}
                     onChange={(e) => setPythonCode(e.target.value)}
                     placeholder="# Write your Python code here"
-                    className="flex-1 w-full p-4 rounded-lg font-mono text-sm bg-white border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue resize-none"
+                    className="flex-1 w-full p-4 rounded-lg font-mono text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-none"
                     style={{ minHeight: "200px" }}
                     onKeyDown={handleKeyDown}
                   />

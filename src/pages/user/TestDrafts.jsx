@@ -63,11 +63,11 @@ const TestDrafts = () => {
     }).unwrap();
   };
   return (
-    <section className="flex flex-col justify-between bg-white h-full gap-4 p-6 w-full">
+    <section className="flex flex-col justify-between bg-white dark:bg-neutral-900 h-full gap-4 p-6 w-full">
       <div className="w-full flex flex-col gap-4">
         <button
           type="button"
-          className="flex items-center gap-2 text-neutral-700 hover:text-neutral-900 focus:outline-none w-fit transition-colors"
+          className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-100 focus:outline-none w-fit transition-colors"
           onClick={()=>navigate(-1)}
         >
           <ChevronLeft className="text-2xl cursor-pointer" />
@@ -75,10 +75,10 @@ const TestDrafts = () => {
         </button>
 
         <header>
-          <h3 className="text-lg font-semibold text-neutral-900">
+          <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
             Select a draft test
           </h3>
-          <p className="mt-1 text-sm text-neutral-500">
+          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             Choose one of your saved drafts to load into the form
           </p>
         </header>
@@ -92,7 +92,7 @@ const TestDrafts = () => {
                 role="option"
                 aria-selected="false"
                 data-draft-id={d.id}
-                className={`flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-lg border border-neutral-200 hover:border-neutral-300 transition-all
+                className={`flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 transition-all
                   ${processingItemId === d.id && "animate-pulse"}
                   `}
               >
@@ -100,15 +100,15 @@ const TestDrafts = () => {
                   <div className="flex items-start gap-3">
                     <div className="min-w-0 flex-1">
                       <p className="flex items-baseline gap-1 justify-between md:justify-start">
-                        <span className="text-base font-semibold text-neutral-900 truncate">
+                        <span className="text-base font-semibold text-neutral-900 dark:text-neutral-100 truncate">
                           {d.title}
                         </span>
                         <RelativeTime
                           date={d.created_at}
-                          className="text-xs font-light opacity-50 whitespace-nowrap"
+                          className="text-xs font-light opacity-50 dark:opacity-60 whitespace-nowrap"
                         />
                       </p>
-                      <p className="text-sm text-neutral-500 line-clamp-2 mt-1">
+                      <p className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 mt-1">
                         {d.description}
                       </p>
                     </div>
@@ -120,7 +120,7 @@ const TestDrafts = () => {
                     type="button"
                     disabled = {processingItemId === d.id }
                     onClick={(e) => onDraftRemove(e, d)}
-                    className="text-sm font-medium text-red-500 hover:text-red-600 hover:underline focus:outline-none transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50"
+                    className="text-sm font-medium text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-500 hover:underline focus:outline-none transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50"
                   >
                     Remove
                   </button>

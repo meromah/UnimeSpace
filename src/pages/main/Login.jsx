@@ -62,7 +62,7 @@ const Login = () => {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 dark:focus:outline-neutral-200"
+              className="px-2 pt-1 pb-1.5 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
               required
             />
           </label>
@@ -74,7 +74,7 @@ const Login = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 dark:border-neutral-700 focus:outline-primary-yellow dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-400 dark:focus:outline-neutral-200"
+                className="px-2 pt-1 pb-1.5 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
                 required
               />
             </label>

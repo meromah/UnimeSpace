@@ -43,17 +43,17 @@ const PostFiles = ({ files }) => {
           key={file.hash}
           onClick={(e) => handleDownload(file, e, downloadRef.current)}
           ref={downloadRef}
-          className="w-full flex items-center gap-3 p-3 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center gap-3 p-3 bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700 rounded-lg border border-gray-200 dark:border-neutral-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <div className="flex-shrink-0">{getFileIcon(file.mimetype)}</div>
           <div className="flex-1 text-left min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-medium text-gray-900 dark:text-neutral-100 truncate">
               {file.filename}
             </p>
-            <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+            <p className="text-xs text-gray-500 dark:text-neutral-400">{formatFileSize(file.size)}</p>
           </div>
           <div className="flex-shrink-0">
-            <File className="w-4 h-4 text-gray-400" />
+            <File className="w-4 h-4 text-gray-400 dark:text-neutral-500" />
           </div>
         </button>
       ))}

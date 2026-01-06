@@ -159,7 +159,7 @@ const CreateTestHeader = ({
           />
         )}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-neutral-800">
+          <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
             Test Title *
           </label>
           <input
@@ -168,11 +168,11 @@ const CreateTestHeader = ({
             type="text"
             placeholder="Test title"
             onChange={checkFormValidity}
-            className="w-full px-3 py-2 text-sm text-neutral-900 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors disabled:text-neutral-500"
+            className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition disabled:text-neutral-500 dark:disabled:text-neutral-500"
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-neutral-800">
+          <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
             Test Description *
           </label>
           <textarea
@@ -181,24 +181,24 @@ const CreateTestHeader = ({
             placeholder="Describe your test..."
             rows={4}
             onChange={checkFormValidity}
-            className="w-full px-3 py-2 text-sm text-neutral-900 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors resize-y disabled:text-neutral-500"
+            className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-y disabled:text-neutral-500 dark:disabled:text-neutral-500"
           />
         </div>
       </div>
 
       {/* Test Details Display */}
       {testId !== null && !isEditMode && draftTest && (
-        <div className="bg-white rounded-lg border border-neutral-200 p-4">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
           <div className="flex items-start justify-between gap-3 mb-4">
             <div className="flex-1 min-w-0">
-              <span className="inline-block px-2.5 py-1 text-xs font-medium text-primary-blue bg-primary-blue/10 border border-primary-blue/20 rounded-md">
+              <span className="inline-block px-2.5 py-1 text-xs font-medium text-primary-blue dark:text-blue-400 bg-primary-blue/10 dark:bg-blue-400/20 border border-primary-blue/20 dark:border-blue-400/30 rounded-md">
                 d/{draftTest.desc || selectedDescNameRef.current}
               </span>
             </div>
             <button
               type="button"
               onClick={handleEnterEditMode}
-              className="flex-shrink-0 p-1.5 text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-blue/20"
+              className="flex-shrink-0 p-1.5 text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 dark:focus:ring-primary-blue/30"
               aria-label="Edit test details"
             >
               <Pencil className="w-4 h-4" />
@@ -207,13 +207,13 @@ const CreateTestHeader = ({
           
           <div className="space-y-3">
             <div>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-1">
+              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
                 {draftTest.title}
               </h3>
             </div>
             
-            <div className="pt-2 border-t border-neutral-100">
-              <p className="text-sm text-neutral-600 leading-relaxed whitespace-pre-wrap">
+            <div className="pt-2 border-t border-neutral-100 dark:border-neutral-700">
+              <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed whitespace-pre-wrap">
                 {draftTest.description}
               </p>
             </div>
@@ -226,7 +226,7 @@ const CreateTestHeader = ({
             <button
               type="button"
               onClick={handleCancel}
-              className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
             >
               Cancel
             </button>
@@ -234,7 +234,7 @@ const CreateTestHeader = ({
               type="button"
               disabled={!isFormValidForTestInit}
               onClick={handleInitializeTest}
-              className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-medium cursor-pointer"
+              className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-colors font-medium cursor-pointer"
             >
               Initialize Test
             </button>
@@ -244,7 +244,7 @@ const CreateTestHeader = ({
             <button
               type="button"
               onClick={handleCancel}
-              className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
             >
               Cancel
             </button>
@@ -252,7 +252,7 @@ const CreateTestHeader = ({
               type="button"
               disabled={!isFormValidForTestInit}
               onClick={handleUpdateTest}
-              className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-medium cursor-pointer"
+              className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-colors font-medium cursor-pointer"
             >
               Update Test
             </button>

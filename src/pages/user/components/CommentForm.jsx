@@ -36,7 +36,7 @@ const CommentForm = ({ onSubmit, isLoading }) => {
           }}
           placeholder="Add a comment..."
           rows={1}
-          className="flex-1 px-4 py-2.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue dark:focus:ring-0 dark:focus:border-neutral-200 placeholder-neutral-400 resize-none overflow-hidden"
+          className="flex-1 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-none overflow-hidden"
           style={{
             minHeight: "40px",
             maxHeight: "120px",

@@ -54,28 +54,28 @@ const Contact = () => {
     return () => clearTimeout(timer);
   }, [formData]);
   return (
-    <main className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 py-20 px-6">
+    <main className="min-h-screen bg-neutral-100 dark:bg-neutral-950 py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <header className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 dark:text-neutral-100 mb-6 tracking-tight">
             Get in Touch
           </h1>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
-            We’d love to hear from you. Whether it’s a question, feedback, or
-            just a hello — drop us a line and we’ll respond promptly.
+          <p className="text-lg text-neutral-600 dark:text-neutral-200 max-w-2xl mx-auto leading-relaxed">
+            We'd love to hear from you. Whether it's a question, feedback, or
+            just a hello — drop us a line and we'll respond promptly.
           </p>
         </header>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-2xl shadow-lg border border-neutral-200 p-8 md:p-10"
+          className="bg-white dark:bg-neutral-900 rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-700 p-8 md:p-10"
         >
           <div className="space-y-7">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-semibold text-neutral-800 mb-2"
+                  className="block text-sm font-semibold text-neutral-800 dark:text-neutral-100 mb-2"
                 >
                   Your Name
                 </label>
@@ -87,7 +87,7 @@ const Contact = () => {
                   onChange={handleChange}
                   required
                   autoComplete="off"
-                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition"
+                  className="w-full px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
                   placeholder="John Doe"
                 />
               </div>
@@ -95,7 +95,7 @@ const Contact = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-semibold text-neutral-800 mb-2"
+                  className="block text-sm font-semibold text-neutral-800 dark:text-neutral-100 mb-2"
                 >
                   Email Address
                 </label>
@@ -107,7 +107,7 @@ const Contact = () => {
                   onChange={handleChange}
                   required
                   autoComplete="off"
-                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition"
+                  className="w-full px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
                   placeholder="john@example.com"
                 />
               </div>
@@ -116,7 +116,7 @@ const Contact = () => {
             <div>
               <label
                 htmlFor="subject"
-                className="block text-sm font-semibold text-neutral-800 mb-2"
+                className="block text-sm font-semibold text-neutral-800 dark:text-neutral-100 mb-2"
               >
                 Subject
               </label>
@@ -126,7 +126,7 @@ const Contact = () => {
                 value={formData.subject}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition"
+                className="w-full px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
               >
                 <option value="">Choose one...</option>
                 <option value="general">General Inquiry</option>
@@ -139,7 +139,7 @@ const Contact = () => {
             <div>
               <label
                 htmlFor="body"
-                className="block text-sm font-semibold text-neutral-800 mb-2"
+                className="block text-sm font-semibold text-neutral-800 dark:text-neutral-100 mb-2"
               >
                 Your Message
               </label>
@@ -149,7 +149,7 @@ const Contact = () => {
                 value={formData.body}
                 onChange={handleChange}
                 required
-                className="w-full min-h-[33vh] px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent resize-none transition"
+                className="w-full min-h-[33vh] px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-none"
                 placeholder="Tell us more about how we can help..."
               />
             </div>
@@ -157,7 +157,7 @@ const Contact = () => {
             <button
               type="submit"
               disabled={!isValid || isLoading}
-              className="w-full bg-primary-blue text-white font-semibold py-4 px-6 rounded-lg hover:bg-primary-blue/90 focus:outline-none focus:ring-4 focus:ring-primary-blue/30 transition disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-primary-blue text-white font-semibold py-4 px-6 rounded-lg hover:bg-primary-blue/90 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 border border-primary-blue dark:border-neutral-100 focus:outline-none focus:ring-4 focus:ring-primary-blue/30 transition-colors disabled:opacity-70 dark:disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Sending Message..." : "Send Message"}
             </button>
@@ -165,7 +165,7 @@ const Contact = () => {
         </form>
       </div>
       <button className="absolute top-4 left-4 cursor-pointer" onClick={()=> navigate(-1)}>
-        <ChevronLeft className="w-7 h-7 text-neutral-800 hover:text-neutral-600"/>
+        <ChevronLeft className="w-7 h-7 text-neutral-800 dark:text-neutral-200 hover:text-neutral-600 dark:hover:text-neutral-400"/>
       </button>
       {submitted && (
         <Toast

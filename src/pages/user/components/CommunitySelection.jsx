@@ -27,22 +27,22 @@ const SearchBarButton = ({ community, onSelectCommunity, communityType }) => {
     <button
       type="button"
       onClick={() => onSelectCommunity(community)}
-      className="w-full px-3 py-2 text-left hover:bg-neutral-50 transition-colors flex items-center gap-3"
+      className="w-full px-3 py-2 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors flex items-center gap-3"
     >
       <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-xs flex-shrink-0">
         {community?.name?.charAt(0).toUpperCase()}
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-sm font-medium text-neutral-900">
+        <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
           {communityType === "board" ? "b/" : "d/"}
           {community?.name}
         </div>
         {community?.description && (
-          <div className="text-xs text-neutral-500 truncate">
+          <div className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
             {community?.description}
           </div>
         )}
-        <div className="flex items-center gap-1 text-xs text-neutral-400 mt-0.5">
+        <div className="flex items-center gap-1 text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">
           <p>{community?.subscribers_count || 0} members</p>
           <PostCount />
         </div>
@@ -211,13 +211,13 @@ const CommunitySelection = ({
   };
   return (
     <div className="flex flex-col gap-2">
-      <label className="flex items-center gap-1 text-sm font-medium text-neutral-800">
+      <label className="flex items-center gap-1 text-sm font-medium text-neutral-800 dark:text-neutral-100">
         <span>Select</span>
         <span>{communityType === "board" ? "Board *" : "Desc *"}</span>
       </label>
       <div className="relative">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 dark:text-neutral-500 w-4 h-4" />
           <input
             ref={communitySearchRef}
             type="text"
@@ -227,18 +227,18 @@ const CommunitySelection = ({
             onChange={handleCommunitySearch}
             onFocus={() => setShowCommunityDropdown(true)}
             placeholder={`Search for a ${communityType}...`}
-            className="w-full pl-10 pr-3 py-2 text-sm text-neutral-900 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors disabled:text-neutral-500"
+            className="w-full pl-10 pr-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition disabled:text-neutral-500 dark:disabled:text-neutral-500"
           />
         </div>
         {showCommunityDropdown && (
           <div
             ref={communityDropdownRef}
-            className="absolute z-50 w-full mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg max-h-64 overflow-y-auto"
+            className="absolute z-50 w-full mt-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg max-h-64 overflow-y-auto"
           >
             {/* Show filtered subscriptions */}
             {filteredSubscriptions?.length > 0 && (
-              <div className="p-2 border-b border-neutral-100">
-                <h2 className="flex items-center gap-1 px-2 py-1 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+              <div className="p-2 border-b border-neutral-100 dark:border-neutral-700">
+                <h2 className="flex items-center gap-1 px-2 py-1 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">
                   <span>Subscribed</span>{" "}
                   <span>{communityType === "board" ? "Boards" : "Descs"}</span>
                 </h2>
@@ -260,14 +260,14 @@ const CommunitySelection = ({
             {communitySearchQuery.trim() !== "" && (
               <div className={filteredSubscriptions.length > 0 ? "p-2" : ""}>
                 {isCommunityLoading && (
-                  <div className="p-3 text-sm text-neutral-500 text-center">
+                  <div className="p-3 text-sm text-neutral-500 dark:text-neutral-400 text-center">
                     Searching...
                   </div>
                 )}
 
                 {!isCommunityLoading &&
                   (!communityData || communityData?.length === 0) && (
-                    <div className="flex items-center gap-1 p-3 text-sm text-neutral-500 text-center">
+                    <div className="flex items-center gap-1 p-3 text-sm text-neutral-500 dark:text-neutral-400 text-center">
                       <span>
                         {communityType === "board"
                           ? "No Board found"
@@ -281,7 +281,7 @@ const CommunitySelection = ({
                   communityData?.length > 0 && (
                     <>
                       {filteredSubscriptions.length > 0 && (
-                        <h2 className="px-2 py-1 text-xs font-semibold text-neutral-500 uppercase tracking-wide mt-2">
+                        <h2 className="px-2 py-1 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mt-2">
                           Search Results
                         </h2>
                       )}
@@ -303,7 +303,7 @@ const CommunitySelection = ({
             {/* Show message when no subscriptions and no search query */}
             {communitySearchQuery.trim() === "" &&
               filteredSubscriptions.length === 0 && (
-                <div className="p-3 text-sm text-neutral-500 text-center">
+                <div className="p-3 text-sm text-neutral-500 dark:text-neutral-400 text-center">
                   {communityType === "board"
                     ? "No subscribed boards"
                     : "No subscribed descs"}

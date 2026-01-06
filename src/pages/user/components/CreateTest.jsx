@@ -283,14 +283,14 @@ const CreateTest = ({ onCancel = undefined }) => {
       onSubmit={handleTestSubmit}
       className={
         isPopUp
-          ? "flex flex-col items-center gap-4 fixed inset-0 z-50 p-4 bg-white/50 md:bg-black/30 backdrop-blur-lg"
+          ? "flex flex-col items-center gap-4 fixed inset-0 z-50 p-4 bg-white/50 dark:bg-black/50 md:bg-black/30 backdrop-blur-lg"
           : ""
       }
     >
       <div
-        className={`flex flex-col justify-between bg-white h-full gap-4 p-6 ${
+        className={`flex flex-col justify-between bg-white dark:bg-neutral-900 h-full gap-4 p-6 ${
           isPopUp
-            ? "w-full md:max-w-3/4 overflow-y-auto rounded-lg border border-neutral-200 md:m-6"
+            ? "w-full md:max-w-3/4 overflow-y-auto rounded-lg border border-neutral-200 dark:border-neutral-700 md:m-6"
             : "w-full"
         }`}
       >
@@ -306,11 +306,11 @@ const CreateTest = ({ onCancel = undefined }) => {
           <>
               <div className="flex items-center justify-between mb-2 select-none">
                 {isPopUp ? (
-                  <p className="font-medium opacity-50">d/{descName}</p>
+                  <p className="font-medium opacity-50 dark:text-neutral-400">d/{descName}</p>
                 ) : (
                   <button
                     type="button"
-                    className="flex items-center gap-2 text-neutral-700 hover:text-neutral-900 focus:outline-none w-fit transition-colors"
+                    className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-100 focus:outline-none w-fit transition-colors"
                     onClick={() => navigate(-1)}
                   >
                     <ChevronLeft className="text-2xl cursor-pointer" />
@@ -321,7 +321,7 @@ const CreateTest = ({ onCancel = undefined }) => {
                   type="button"
                   disabled={isPopUp && !draftTests?.data?.length}
                   onClick={onShowDrafts}
-                  className="font-medium text-primary-blue rounded hover:underline focus:outline-none disabled:text-neutral-400 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="font-medium text-primary-blue dark:text-blue-400 rounded hover:underline focus:outline-none disabled:text-neutral-400 dark:disabled:text-neutral-600 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   Drafts
                 </button>
@@ -346,7 +346,7 @@ const CreateTest = ({ onCancel = undefined }) => {
                 <>
                   {/* Questions Collector */}
                   <div className="flex flex-col gap-4 mt-6">
-                    <label className="text-sm font-medium text-neutral-800">
+                    <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
                       Questions
                     </label>
 
@@ -428,18 +428,18 @@ const CreateTest = ({ onCancel = undefined }) => {
                               setIsEditMode={setIsEditMode}
                             />
                           ) : (
-                            <div className="p-4 border border-neutral-200 rounded-lg bg-neutral-50">
+                            <div className="p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg bg-neutral-50 dark:bg-neutral-800">
                               <div className="flex flex-col gap-3">
-                                <span className="text-sm font-medium text-neutral-700">
+                                <span className="text-sm font-medium text-neutral-700 dark:text-neutral-200">
                                   New Question - Multiple Choice
                                 </span>
-                                <p className="text-sm text-neutral-600">
+                                <p className="text-sm text-neutral-600 dark:text-neutral-300">
                                   Question Body
                                 </p>
                                 <div className="flex justify-end gap-2 mt-2">
                                   <button
                                     type="button"
-                                    className="px-4 py-2 rounded text-neutral-700 border border-neutral-300 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-neutral-200 transition-colors"
+                                    className="px-4 py-2 rounded text-neutral-700 dark:text-neutral-200 border border-neutral-300 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:focus:ring-neutral-600 transition-colors"
                                     onClick={() => setCurrentQuestion(null)}
                                   >
                                     Cancel
@@ -466,9 +466,9 @@ const CreateTest = ({ onCancel = undefined }) => {
 
                     {/* Question Type Selector */}
                     {showQuestionTypeSelector && (
-                      <div className="border border-neutral-200 rounded-lg p-4 bg-neutral-50">
+                      <div className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 bg-neutral-50 dark:bg-neutral-800">
                         <div className="flex flex-col gap-3">
-                          <label className="text-sm font-medium text-neutral-700">
+                          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-200">
                             {questions.length === 0
                               ? "Question 1 - Select question type"
                               : `Question ${
@@ -483,11 +483,11 @@ const CreateTest = ({ onCancel = undefined }) => {
                                 e.target.value = "";
                               }
                             }}
-                            className="w-full px-3 py-2 text-sm text-neutral-900 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors cursor-pointer"
+                            className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition cursor-pointer"
                           >
-                            <option value="">Select question type...</option>
+                            <option value="" className="bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100">Select question type...</option>
                             {questionTypes?.data.map((item) => (
-                              <option key={item.type} value={item.type}>
+                              <option key={item.type} value={item.type} className="bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100">
                                 {item.label}
                               </option>
                             ))}
@@ -495,7 +495,7 @@ const CreateTest = ({ onCancel = undefined }) => {
                           <button
                             type="button"
                             onClick={() => setShowQuestionTypeSelector(false)}
-                            className="text-sm text-neutral-500 hover:text-neutral-700 focus:outline-none self-start transition-colors"
+                            className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 focus:outline-none self-start transition-colors"
                           >
                             Cancel
                           </button>
@@ -508,7 +508,7 @@ const CreateTest = ({ onCancel = undefined }) => {
                       <button
                         type="button"
                         onClick={() => setShowQuestionTypeSelector(true)}
-                        className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary-blue border border-primary-blue rounded-lg hover:bg-primary-blue/5 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-colors"
+                        className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary-blue dark:text-blue-400 border border-primary-blue dark:border-blue-400 rounded-lg hover:bg-primary-blue/5 dark:hover:bg-blue-400/10 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 dark:focus:ring-blue-400/30 transition-colors"
                       >
                         <span>+ Add Question</span>
                       </button>
@@ -519,18 +519,18 @@ const CreateTest = ({ onCancel = undefined }) => {
             </div>
 
             {testId !== null && (
-              <div className="flex items-center justify-between gap-3 pt-4 mt-4 border-t border-neutral-200">
+              <div className="flex items-center justify-between gap-3 pt-4 mt-4 border-t border-neutral-200 dark:border-neutral-700">
                 <button
                   type="button"
                   onClick={onResetTestForm}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-200 transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:focus:ring-neutral-700 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={questions.length === 0}
-                  className="px-6 py-2 text-sm font-medium bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-blue/30 transition-colors"
+                  className="px-6 py-2 text-sm font-medium bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-blue/30 transition-colors"
                 >
                   Save Test
                 </button>

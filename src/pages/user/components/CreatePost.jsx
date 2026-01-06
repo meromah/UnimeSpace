@@ -209,7 +209,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
       onSubmit={handlePostSubmit}
       className={`p-4 space-y-4 ${
         !boardId &&
-        "bg-white rounded-lg shadow-sm border border-neutral-200 m-6"
+        "bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 m-6"
       }`}
     >
       {/* Board Selection - only show when boardId is not provided */}
@@ -225,7 +225,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
       )}
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-neutral-800">
+        <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
           Post Title *
         </label>
         <input
@@ -233,18 +233,18 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
           type="text"
           placeholder="Post title"
           onChange={checkFormValidity}
-          className="w-full px-3 py-2 text-sm text-neutral-900 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue transition-colors"
+          className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-neutral-800">
+        <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
           Post Body *
         </label>
         <AutoResizeTextarea
           placeholder="What's on your mind?"
           onChange={handleBodyChange}
-          className="w-full min-h-[120px] px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400 resize-y"
+          className="w-full min-h-[120px] px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-y"
         />
       </div>
 
@@ -253,7 +253,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
         <button
           type="button"
           onClick={() => imageInputRef.current?.click()}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors"
+          className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
         >
           <Image className="w-4 h-4" />
           <span>Image</span>
@@ -270,7 +270,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors"
+          className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
         >
           <Paperclip className="w-4 h-4" />
           <span>File</span>
@@ -290,8 +290,8 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
           {uploadedImages.map((image, i) => (
             <div
               key={image.id}
-              className={`relative group rounded-lg overflow-hidden border border-neutral-200 ${
-                image.error && "ring-2 ring-red-500"
+              className={`relative group rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700 ${
+                image.error && "ring-2 ring-red-500 dark:ring-red-600"
               }`}
             >
               <img
@@ -303,7 +303,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
                 <button
                   type="button"
                   onClick={() => handleReUpload(image, i, setUploadedImages)}
-                  className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full"
+                  className="absolute top-2 right-2 p-1 bg-red-500 dark:bg-red-600 text-white rounded-full hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
                 >
                   <RotateCw className="w-7 h-7" />
                 </button>
@@ -311,12 +311,12 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
                 <button
                   type="button"
                   onClick={() => removeImage(image.id)}
-                  className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 right-2 p-1 bg-red-500 dark:bg-red-600 text-white rounded-full md:opacity-0 md:group-hover:opacity-100 hover:bg-red-600 dark:hover:bg-red-700 transition-all"
                 >
                   <X className="w-4 h-4" />
                 </button>
               )}
-              <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2 truncate">
+              <div className="absolute bottom-0 left-0 right-0 bg-black/50 dark:bg-black/70 text-white text-xs p-2 truncate">
                 {image.name}
               </div>
             </div>
@@ -330,16 +330,16 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
           {uploadedFiles.map((file, i) => (
             <div
               key={file.id}
-              className={`flex items-center justify-between p-2 bg-neutral-50 rounded-lg border border-neutral-200 ${
+              className={`flex items-center justify-between p-2 bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 ${
                 file.isUploading && "animate-pulse"
-              } ${file.error && "ring-2 ring-red-500"}`}
+              } ${file.error && "ring-2 ring-red-500 dark:ring-red-600"}`}
             >
               <div className="flex items-center gap-2 flex-1 min-w-0">
-                <FileText className="w-4 h-4 text-neutral-400 flex-shrink-0" />
-                <span className="text-sm text-neutral-700 truncate">
+                <FileText className="w-4 h-4 text-neutral-400 dark:text-neutral-500 flex-shrink-0" />
+                <span className="text-sm text-neutral-700 dark:text-neutral-200 truncate">
                   {file.name}
                 </span>
-                <span className="block text-xs text-neutral-500 whitespace-nowrap">
+                <span className="block text-xs text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
                   {(file.size / 1024).toFixed(1)} KB
                 </span>
               </div>
@@ -347,7 +347,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
                 <button
                   type="button"
                   onClick={() => handleReUpload(file, i, setUploadedFiles)}
-                  className="p-1 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
+                  className="p-1 text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-500 transition-colors cursor-pointer"
                 >
                   <RotateCw className="w-4 h-4" />
                 </button>
@@ -355,7 +355,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
                 <button
                   type="button"
                   onClick={() => removeFile(file.id)}
-                  className="p-1 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
+                  className="p-1 text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-500 transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -366,18 +366,18 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
       )}
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between gap-2 pt-2 border-t border-neutral-200">
+      <div className="flex items-center justify-between gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-700">
         <button
           type="button"
           onClick={onResetPostForm}
-          className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+          className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={!isFormValid}
-          className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-medium"
+          className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-colors font-medium"
         >
           Post
         </button>
