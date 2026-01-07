@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import PostCardWithErrorBoundary from "../ErrorBoundary/PostCardWithErrorBoundary";
 import { useSelector } from "react-redux";
-
+import Loading from "../../../../components/Loading";
 const getKey = (item, layoutKey) => {
   return `${layoutKey}-${item.id}`;
 };
@@ -187,7 +187,7 @@ export default function InfiniteItemCards({
 
   const INITIAL_MEASURE_COUNT = useMemo(
     () => Math.max(1, Math.min(20, items.length)),
-    [items?.length]
+    [items.length]
   );
 
   const layoutKey = useMemo(
@@ -198,6 +198,10 @@ export default function InfiniteItemCards({
   const containerRef = useRef(null);
   const headerRef = useRef([]);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [windowSize, setWindowSize] = useState(() => ({
+    width: typeof window !== "undefined" ? window.innerWidth : 768,
+    height: typeof window !== "undefined" ? window.innerHeight : 0,
+  }));
 
   useLayoutEffect(() => {
     if (!headerRef.current.length) return;
@@ -224,6 +228,33 @@ export default function InfiniteItemCards({
   const OVERSCAN = 5;
   const BOTTOM_THRESHOLD = 1000; // pixels from bottom to trigger fetch
   const heightStore = useMemo(() => getHeightStore(layoutKey), [layoutKey]);
+
+  // Window size tracking with resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    // Set initial size
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Calculate container height based on window size
+  const containerHeight = useMemo(() => {
+    if (windowSize.width < 768) {
+      // Mobile: use calculated pixel height
+      const calculatedHeight = windowSize.height - sidebarMobileHeight;
+      return calculatedHeight > 0 ? `${calculatedHeight}px` : "100vh";
+    }
+    // Desktop: use viewport height
+    return "100dvh";
+  }, [windowSize.width, windowSize.height, sidebarMobileHeight]);
 
   // Reset measuring phase when items change significantly
   useEffect(() => {
@@ -253,19 +284,16 @@ export default function InfiniteItemCards({
   }, [heightStore]);
 
   // Handle initial measurements
-  const handleItemMeasured = useCallback(
-    (key, height) => {
-      setMeasuredCount((prev) => {
-        const newCount = prev + 1;
-        const target = Math.min(INITIAL_MEASURE_COUNT, items.length);
-        if (newCount >= target && target > 0) {
-          setMeasuringPhase(false);
-        }
-        return newCount;
-      });
-    },
-    [INITIAL_MEASURE_COUNT, items.length]
-  );
+  const handleItemMeasured = useCallback(() => {
+    setMeasuredCount((prev) => {
+      const newCount = prev + 1;
+      const target = Math.min(INITIAL_MEASURE_COUNT, items.length);
+      if (newCount >= target && target > 0) {
+        setMeasuringPhase(false);
+      }
+      return newCount;
+    });
+  }, [INITIAL_MEASURE_COUNT, items.length]);
 
   // Compute prefix sums with better height estimation
   const prefixSums = useMemo(() => {
@@ -485,7 +513,7 @@ export default function InfiniteItemCards({
         className="flex flex-col gap-4"
         style={{
           overflow: "auto",
-          height: window.innerWidth < 768? window.innerHeight - sidebarMobileHeight: "100dvh",
+          height: containerHeight,
         }}
       >
         {(() => {
@@ -498,20 +526,23 @@ export default function InfiniteItemCards({
         <div
           style={{ visibility: "hidden", position: "absolute", width: "100%" }}
         >
-          {items.slice(0, INITIAL_MEASURE_COUNT).map((item) => (
-            <ItemMeasurer
-              key={getKey(item, layoutKey)}
-              itemKey={getKey(item, layoutKey)}
-              item={item}
-              onMeasured={handleItemMeasured}
-              heightStore={heightStore}
-            />
-          ))}
+          {items.slice(0, INITIAL_MEASURE_COUNT).map((item) => {
+            const isBoard = item?.board_id || false;
+            const itemType = isBoard ? "post" : "test";
+
+            return (
+              <ItemMeasurer
+                key={`${itemType}-${item.id}-${item.title}`}
+                itemKey={getKey(item, layoutKey)}
+                item={item}
+                onMeasured={handleItemMeasured}
+                heightStore={heightStore}
+              />
+            );
+          })}
         </div>
 
-        <div className="flex items-center justify-center py-8">
-          <div className="text-gray-500">Loading feed...</div>
-        </div>
+        <Loading />
       </div>
     );
   }
@@ -530,7 +561,7 @@ export default function InfiniteItemCards({
       ref={containerRef}
       style={{
         overflow: "auto",
-        height:window.innerWidth < 768? window.innerHeight - sidebarMobileHeight: "100dvh",
+        height: containerHeight,
       }}
       className="flex flex-col gap-4"
     >
@@ -546,23 +577,24 @@ export default function InfiniteItemCards({
           <div style={{ height: topSpacerHeight }} aria-hidden="true" />
         )}
 
-        {items.length > 0 && !error.hasError
-          ? items.slice(range.start, range.end).map((item, idx) => {
-              const globalIndex = range.start + idx;
-              return (
-                <VirtualItem
-                  key={getKey(item, layoutKey)}
-                  itemKey={getKey(item, layoutKey)}
-                  item={item}
-                  index={globalIndex}
-                  onResize={handleResize}
-                  likedData={likedData}
-                  heightStore={heightStore}
-                  tab={tab}
-                />
-              );
-            })
-          : null}
+        {items.length > 0 &&
+          !error.hasError &&
+          items.slice(range.start, range.end).map((item, idx) => {
+            const globalIndex = range.start + idx;
+            const isBoard = item?.board_id || false;
+            const itemType = isBoard ? "post" : "test";
+            return (
+              <VirtualItem
+                key={`${itemType}-${item.id}-${item.title}`}
+                itemKey={getKey(item, layoutKey)}
+                item={item}
+                index={globalIndex}
+                onResize={handleResize}
+                likedData={likedData}
+                heightStore={heightStore}
+              />
+            );
+          })}
 
         {bottomSpacerHeight > 0 && (
           <div style={{ height: bottomSpacerHeight }} aria-hidden="true" />
