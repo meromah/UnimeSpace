@@ -42,7 +42,7 @@ const HomeSortBy = ({
 
   return (
     <div ref={ref ?? null} className={`flex items-center justify-between ${className}`}>
-      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 dark:hover:text-neutral-400 cursor-pointer select-none " oClick={() => setShowSortDropdown(!showSortDropdown)}>{labelByType}</h2>
+      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 dark:hover:text-neutral-400 cursor-pointer select-none " onClick={() => setShowSortDropdown(!showSortDropdown)}>{labelByType}</h2>
 
       <div ref={menuRef} className="relative">
         <button
