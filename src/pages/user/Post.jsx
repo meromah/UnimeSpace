@@ -171,8 +171,9 @@ const Post = ({ itemType = "post" }) => {
       <EditPostModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        post={itemData.data}
-        boardName={community}
+        item={itemData.data}
+        community={community}
+        itemType={itemType}
       />
 
       {/* Report Post */}
@@ -180,7 +181,7 @@ const Post = ({ itemType = "post" }) => {
         isOpen={isReportModalOpen}
         onClose={() => setIsReportModalOpen(false)}
         item={itemData.data}
-        itemType="post"
+        itemType={itemType}
       />
 
       {/* Report Comment */}
@@ -189,7 +190,6 @@ const Post = ({ itemType = "post" }) => {
           isOpen={isCommentReportModalOpen}
           onClose={() => {
             setIsCommentReportModalOpen(false);
-            setSelectedComment(null);
           }}
           item={selectedComment}
           itemType="comment"
@@ -201,7 +201,6 @@ const Post = ({ itemType = "post" }) => {
         isOpen={isCommentDeleteModalOpen}
         onClose={() => {
           setIsCommentDeleteModalOpen(false);
-          setSelectedCommentId(null);
         }}
         community={community}
         itemId={itemId}

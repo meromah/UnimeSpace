@@ -58,10 +58,10 @@ const PrivateTestsApi = baseApi.injectEndpoints({
 
     // PUT /descs/{desc}/tests/{test}
     updateTest: builder.mutation({
-      query: ({ desc, test, bodyData }) => ({
+      query: ({ desc, test, testData }) => ({
         url: `/descs/${desc}/tests/${test}`,
         method: "PUT",
-        body: bodyData,
+        body: testData,
       }),
       invalidatesTags: (result, error, { desc }) => [
         { type: "Desc", id: `draft-tests-${desc}` },

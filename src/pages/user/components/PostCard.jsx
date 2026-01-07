@@ -274,8 +274,9 @@ const PostCard = ({
       <EditPostModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        post={item}
-        boardName={item[communityType].name}
+        item={item}
+        community={item[communityType].name}
+        itemType={itemType}
       />
 
       <ReportModal
