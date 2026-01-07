@@ -121,6 +121,7 @@ const PostCard = ({
         className={`block bg-white dark:bg-neutral-900 border-x border-b border-neutral-200 dark:border-neutral-700 p-4 hover:bg-primary-bg dark:hover:bg-neutral-800 transition-colors duration-200 ${
           isFirst ? "rounded-t-lg border-t" : isLast ? "rounded-b-lg" : ""
         }`}
+        key={`${itemType}-${item.id}-${item.title}`}
       >
         {/* Header */}
         <div className="relative flex items-start justify-between mb-3">
