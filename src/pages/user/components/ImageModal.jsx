@@ -70,7 +70,7 @@ const downloadRef = useRef(null)
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm cursor-default"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 dark:bg-black/90 backdrop-blur-sm cursor-default"
       onClick={onClose}
     >
       <div className="relative w-full h-full mx-4">
