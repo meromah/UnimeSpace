@@ -272,7 +272,9 @@ export default function InfiniteItemCards({
       setMeasuringPhase(true);
       setMeasuredCount(0);
     } else {
+      // If all items are already measured, exit measuring phase immediately
       setMeasuringPhase(false);
+      setMeasuredCount(INITIAL_MEASURE_COUNT);
     }
   }, [items.length, layoutKey, heightStore, INITIAL_MEASURE_COUNT]);
 
@@ -280,8 +282,20 @@ export default function InfiniteItemCards({
   useEffect(() => {
     return heightStore.subscribe(() => {
       setHeightsVersion((v) => v + 1);
+      
+      // Check if all items are now measured and exit measuring phase if so
+      if (measuringPhase && items.length > 0) {
+        const allMeasured = items
+          .slice(0, INITIAL_MEASURE_COUNT)
+          .every((item) => heightStore.has(getKey(item, layoutKey)));
+        
+        if (allMeasured) {
+          setMeasuringPhase(false);
+          setMeasuredCount(INITIAL_MEASURE_COUNT);
+        }
+      }
     });
-  }, [heightStore]);
+  }, [heightStore, measuringPhase, items, INITIAL_MEASURE_COUNT, layoutKey]);
 
   // Handle initial measurements
   const handleItemMeasured = useCallback(() => {
