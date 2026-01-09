@@ -48,10 +48,11 @@ const PostCard = ({
     if (!item.files || item.files.length === 0) {
       return { images: [], files: [] };
     }
-    const imageFiles = item.files.filter((file) =>
+    const validFiles = item.files.filter((file) => file && file.mimetype);
+    const imageFiles = validFiles.filter((file) =>
       file.mimetype.startsWith("image/")
     );
-    const nonImageFiles = item.files.filter(
+    const nonImageFiles = validFiles.filter(
       (file) => !file.mimetype.startsWith("image/")
     );
     return { images: imageFiles, files: nonImageFiles };

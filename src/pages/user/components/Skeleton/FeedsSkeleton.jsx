@@ -23,8 +23,8 @@ const FeedsSkeleton = () => {
       </div>
 
       {Array.from(Array(20).keys()).map((_, i) => (
-        <div className="px-4 md:px-6">
-          <PostCardSkeleton key={i} isFirst={i === 0} isLast={i === 19} />
+        <div key={i} className="px-4 md:px-6">
+          <PostCardSkeleton isFirst={i === 0} isLast={i === 19} />
         </div>
       ))}
     </div>
