@@ -43,7 +43,7 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
                 />
               ) : (
                 <p className="w-11 h-11 flex items-center justify-center rounded-full">
-                  {itemData?.data?.author? getInitials(itemData.data[community].names):""}
+                  {itemData?.data?.author? getInitials(itemData.data[community].name):""}
                 </p>
               )}
             </div>
