@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-const API_BASE_URL = import.meta.env.DEV
-  ? "/api/terms"
-  : import.meta.env.VITE_API_BASE_URL || "/api/terms";
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Terms = () => {
   const { hash } = useLocation();
@@ -11,7 +9,7 @@ const Terms = () => {
   const iframeRef = useRef(null);
 
   useEffect(() => {
-    fetch(API_BASE_URL)
+    fetch(`${VITE_API_BASE_URL}/api/terms`)
       .then((res) => res.text())
       .then((rawHtml) => {
         const isDark = document.documentElement.classList.contains("dark");
