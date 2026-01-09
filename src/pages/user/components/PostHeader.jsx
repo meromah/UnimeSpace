@@ -35,7 +35,7 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
                 itemData?.data?.author && handleAuthorClick(e, `/user/${itemData.data.author.username}`)
               }
             >
-              {itemData?.data?.author?.avatar ? (
+              {itemData?.data?.[community].avatar ? (
                 <img
                   src={getFileUrl(itemData?.data?.author?.avatar)}
                   alt="Board avatar"
@@ -43,7 +43,7 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
                 />
               ) : (
                 <p className="w-11 h-11 flex items-center justify-center rounded-full">
-                  {itemData?.data?.author? getInitials(itemData.data.author.username):""}
+                  {itemData?.data?.author? getInitials(itemData.data[community].names):""}
                 </p>
               )}
             </div>
