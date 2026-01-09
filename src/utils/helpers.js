@@ -44,10 +44,8 @@ export const getInitials = (name) => {
     .slice(0, 2);
 };
 export const getFileUrl = (hash) => {
-  const API_BASE_URL = import.meta.env.DEV
-    ? "/api"
-    : import.meta.env.VITE_API_BASE_URL || "/api";
-  return `${API_BASE_URL}/files/${hash}`;
+  const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  return `${VITE_API_BASE_URL}/api/files/${hash}`;
 };
 export const handleDownload = async (file, e, downloadElement) => {
   e.preventDefault();
