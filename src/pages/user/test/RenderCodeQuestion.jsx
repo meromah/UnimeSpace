@@ -114,7 +114,7 @@ const RenderCodeQuestion = ({ onError }) => {
       const start = el.selectionStart;
       const end = el.selectionEnd;
 
-      const TAB = "    ";
+      const TAB = "\t";
 
       const newValue =
         pythonCode.substring(0, start) + TAB + pythonCode.substring(end);
