@@ -208,7 +208,7 @@ const CreateTest = ({ onCancel = undefined }) => {
       await updateTest({
         desc: Boolean(descName) ? descName : draftTest.desc,
         test: testId,
-        bodyData: {
+        testData: {
           status: "published",
         },
       }).unwrap();
