@@ -1,5 +1,6 @@
 import React from "react";
 import PreviewActionsMenu from "./PreviewActionsMenu";
+import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
 
 const McqPreview = ({
   question,
@@ -23,9 +24,10 @@ const McqPreview = ({
 
       {/* Question Body */}
       <div className="mb-4">
-        <p className="text-sm text-neutral-900 dark:text-neutral-100 whitespace-pre-wrap">
+        <MarkdownViewer>{question.body || "No question body"}</MarkdownViewer>
+        {/* <p className="text-sm text-neutral-900 dark:text-neutral-100 whitespace-pre-wrap">
           {question.body || "No question body"}
-        </p>
+        </p> */}
       </div>
 
       {/* Options */}

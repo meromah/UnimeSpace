@@ -3,6 +3,7 @@ import { useCheckOldDsaQuestionApiMutation } from "../../../../services/solution
 import { X } from "lucide-react";
 import Toast from "../../../../components/Toast";
 import PreviewActionsMenu from "../PreviewActionsMenu";
+import MarkdownViewer from "../../../../components/markdownViewer/MarkdownViewer";
 
 const CodePreview = ({
   question,
@@ -140,9 +141,10 @@ const CodePreview = ({
                     <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-200 mb-2">
                       Problem Description
                     </h3>
-                    <p className="text-sm text-neutral-900 dark:text-neutral-100 whitespace-pre-wrap">
+                    <MarkdownViewer>{question.body || "No description provided"}</MarkdownViewer>
+                    {/* <p className="text-sm text-neutral-900 dark:text-neutral-100 whitespace-pre-wrap">
                       {question.body || "No description provided"}
-                    </p>
+                    </p> */}
                   </div>
                   {/* Function Signature */}
                   {question.signature && (

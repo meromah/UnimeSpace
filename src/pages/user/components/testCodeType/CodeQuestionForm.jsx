@@ -40,7 +40,7 @@ const CodeQuestionForm = ({
             {/* Question Body */}
             <div className="w-full md:w-1/2 flex flex-col gap-2">
               <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
-                Question Body <span className="text-red-500">*</span>
+                Question Body <span className="text-red-500">*</span> <small className="text-xs text-neutral-400">(Markdown supported)</small>
               </label>
               <AutoResizeTextarea
                 value={body || ""}

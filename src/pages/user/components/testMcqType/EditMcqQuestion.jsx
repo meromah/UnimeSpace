@@ -110,7 +110,6 @@ const EditMcqQuestion = ({
         currentQuestion.originalOptionIds || []
       );
       const newOptionIds = new Set(options.map((option) => option.id));
-      console.log({ originalOptionIds, currentQuestion, options });
       for (const optionId of originalOptionIds) {
         if (!optionId || newOptionIds.has(optionId)) continue;
         await deleteOption({

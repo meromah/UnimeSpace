@@ -7,6 +7,7 @@ import { CheckCircle, Edit3 } from "lucide-react";
 import { completeTest, jumpToQuestion } from "../../../app/testSessionSlice";
 import { usePostTestSubmitMutation } from "../../../services/testsApi";
 import { useParams } from "react-router-dom";
+import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
 
 export const ReviewAnswers = () => {
   const { descId, testId } = useParams();
@@ -82,9 +83,10 @@ export const ReviewAnswers = () => {
                     <span className="w-8 h-8 flex items-center justify-center text-sm font-medium rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
                       {index + 1}
                     </span>
-                    <h2 className="text-base font-medium leading-snug">
+                    <MarkdownViewer>{question.body}</MarkdownViewer>
+                    {/* <h2 className="text-base font-medium leading-snug">
                       {question.body}
-                    </h2>
+                    </h2> */}
                   </div>
                   <button
                     onClick={() => handleEdit(question.id, index)}

@@ -1,6 +1,7 @@
 import React from "react";
+import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
 
-const McqResult = ({question, questionNum, result, selectedOptions}) => {
+const McqResult = ({ question, questionNum, result, selectedOptions }) => {
   return (
     <div
       key={question.id}
@@ -8,12 +9,18 @@ const McqResult = ({question, questionNum, result, selectedOptions}) => {
     >
       {/* Question header */}
       <div className="flex items-start justify-between mb-4">
-        <h2 className="text-base font-medium leading-snug">
+        {/* <h2 className="text-base font-medium leading-snug">
           <span className="pr-4 font-medium text-neutral-600 dark:text-neutral-300">
             {questionNum}.
           </span>
           {question.body}
-        </h2>
+        </h2> */}
+        <div className="text-base font-medium leading-snug">
+          <span className="pr-4 font-medium text-neutral-600 dark:text-neutral-300">
+            {questionNum}.
+          </span>
+          <MarkdownViewer>{question.body}</MarkdownViewer>
+        </div>
         {Array.isArray(result.missed_options) &&
         result.missed_options.length > 0 ? (
           <p className="font-semibold text-red-500 select-none">Missed</p>
@@ -29,7 +36,9 @@ const McqResult = ({question, questionNum, result, selectedOptions}) => {
         <div className="space-y-2">
           {question.options.map((option) => {
             const isSelected = selectedOptions.has(option.id);
-            const isCorrect = Array.isArray(result.correct_options) && result.correct_options.includes(option.id);
+            const isCorrect =
+              Array.isArray(result.correct_options) &&
+              result.correct_options.includes(option.id);
             const isIncorrect = Object.values(
               result.incorrect_options
             ).includes(option.id);

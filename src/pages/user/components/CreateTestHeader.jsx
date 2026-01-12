@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useMemo, useCallback } from "react"
 import CommunitySelection from "./CommunitySelection";
 import { useCreateTestMutation, useUpdateTestMutation } from "../../../services/testsApi";
 import { Pencil } from "lucide-react";
+import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
 
 const CreateTestHeader = ({
   descId,
@@ -173,7 +174,7 @@ const CreateTestHeader = ({
         </div>
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
-            Test Description *
+            Test Description * <small className="text-xs text-neutral-400">(Markdown supported)</small>
           </label>
           <textarea
             ref={testDescriptionRef}
@@ -213,9 +214,9 @@ const CreateTestHeader = ({
             </div>
             
             <div className="pt-2 border-t border-neutral-100 dark:border-neutral-700">
-              <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed whitespace-pre-wrap">
-                {draftTest.description}
-              </p>
+                <MarkdownViewer>{draftTest.description}</MarkdownViewer>
+              {/* <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed whitespace-pre-wrap">
+              </p> */}
             </div>
           </div>
         </div>

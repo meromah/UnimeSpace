@@ -34,7 +34,7 @@ const McqQuestionForm = ({
           <div className="flex flex-col gap-6 flex-1 min-h-0 md:max-h-[calc(90vh-180px)] md:overflow-y-auto">
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
-                Question Body <span className="text-red-500">*</span>
+                Question Body <span className="text-red-500">*</span> <small className="text-xs text-neutral-400">(Markdown supported)</small>
               </label>
               <AutoResizeTextarea
                 value={body || ""}
