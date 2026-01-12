@@ -292,7 +292,7 @@ const PostCard = ({
       <ShareModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
-        itemUrl={`${window.location.origin}/b/${item[communityType].name}/${itemType}/${item.id}`}
+        itemUrl={`${window.location.origin}/${communityType[0]}/${item[communityType].name}/${itemType}/${item.id}`}
         itemTitle={item.title}
       />
 
