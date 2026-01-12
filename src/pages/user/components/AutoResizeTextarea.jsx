@@ -1,18 +1,22 @@
-import { useRef } from "react";
+import { useRef, useLayoutEffect } from "react";
 
-const AutoResizeTextarea = ({ value, onChange, ...props }) => {
+const AutoResizeTextarea = ({ value, onChange, style, ...props }) => {
   const ref = useRef(null);
 
-  const handleInput = (e) => {
+  const resize = () => {
     const el = ref.current;
     if (!el) return;
 
-    // Reset height so shrinking works too
     el.style.height = "auto";
-
-    // Set height to the scroll height
     el.style.height = `${el.scrollHeight}px`;
+  };
 
+  useLayoutEffect(() => {
+    resize();
+  }, [value]);
+
+  const handleInput = (e) => {
+    resize();
     onChange(e);
   };
 
@@ -23,7 +27,11 @@ const AutoResizeTextarea = ({ value, onChange, ...props }) => {
       value={value}
       onInput={handleInput}
       rows={1}
-      style={{ overflow: "hidden", resize: "none" }}
+      style={{
+        overflow: "hidden",
+        resize: "none",
+        ...style,
+      }}
     />
   );
 };
