@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FileText, Image, X, Paperclip, RotateCw } from "lucide-react";
 import { getFile, getImage } from "../../../utils";
 import { useUploadPostFilesMutation } from "../../../services/fileApi";
@@ -6,6 +6,7 @@ import { useCreatePostMutation } from "../../../services/postsApi";
 import CommunitySelection from "./CommunitySelection";
 import { useNavigate } from "react-router-dom";
 import AutoResizeTextarea from "./AutoResizeTextarea";
+import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
 
 // Helper function to extract error message from API error response
 const extractErrorMessage = (error) => {
@@ -23,16 +24,17 @@ const extractErrorMessage = (error) => {
 
 const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
   const navigate = useNavigate();
-  const postTitleRef = useRef(null);
-  const postBodyRef = useRef(null);
   const imageInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const selectedBoardNameRef = useRef(null);
   const boardSelectionResetRef = useRef(null);
 
+  const [postTitle, setPostTitle] = useState("");
+  const [postBody, setPostBody] = useState("");
   const [uploadedImages, setUploadedImages] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isPreviewOn, setIsPreviewOn] = useState(false);
   const uploadingIds = useRef(new Set());
   const fileHashes = useRef(new Array());
 
@@ -132,12 +134,12 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
     setUploadedFiles((prev) => prev.filter((file) => file.id !== fileId));
   };
 
-  const checkFormValidity = () => {
-    const postTitle = postTitleRef.current?.value?.trim() || "";
-    const postBody = postBodyRef.current?.value?.trim() || "";
+  const checkFormValidity = useCallback(() => {
     const hasBoard = boardId || selectedBoardNameRef.current;
-    setIsFormValid(postTitle.length > 0 && postBody.length > 0 && hasBoard);
-  };
+    setIsFormValid(
+      postTitle.trim().length > 0 && postBody.trim().length > 0 && hasBoard
+    );
+  }, [postTitle, postBody, boardId]);
 
   const handleSelectBoard = (board) => {
     selectedBoardNameRef.current = board.name;
@@ -151,8 +153,6 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-    const postTitle = postTitleRef.current?.value || "";
-    const postBody = postBodyRef.current?.value || "";
     const targetBoardId = boardId || selectedBoardNameRef.current;
 
     if (!postTitle.trim() || !postBody.trim() || !targetBoardId) {
@@ -165,10 +165,10 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
 
     const postData = {
       title: postTitle,
-      body: postBody,
+      body: JSON.stringify(postBody),
       file_hashes,
     };
-
+    console.log(postBody)
     try {
       await createPost({ board: targetBoardId, postData }).unwrap();
       // Reset form
@@ -182,12 +182,13 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
   };
 
   const onResetPostForm = () => {
-    if (postTitleRef.current) postTitleRef.current.value = "";
-    if (postBodyRef.current) postBodyRef.current.value = "";
+    setPostTitle("");
+    setPostBody("");
     uploadedImages.forEach((img) => URL.revokeObjectURL(img.url));
     setUploadedImages([]);
     setUploadedFiles([]);
     setIsFormValid(false);
+    setIsPreviewOn(false);
     selectedBoardNameRef.current = null;
     uploadingIds.current.clear();
     fileHashes.current = [];
@@ -200,10 +201,16 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
       navigate("/home");
     }
   };
-  const handleBodyChange = (e)=>{
-    postBodyRef.current = {value: e.target.value || ""}
-    checkFormValidity()
-  }
+
+  const handleTitleChange = (e) => {
+    setPostTitle(e.target.value || "");
+    checkFormValidity();
+  };
+
+  const handleBodyChange = (e) => {
+    setPostBody(e.target.value || "");
+    checkFormValidity();
+  };
   return (
     <form
       onSubmit={handlePostSubmit}
@@ -224,29 +231,74 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
         />
       )}
 
+      {/* Preview/Edit Toggle */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-medium text-neutral-900/50 dark:text-neutral-100">
+          Markdown supported
+        </h3>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => setIsPreviewOn(false)}
+            className={`px-3 py-1.5 text-xs font-medium rounded-lg focus:outline-none transition-colors ${
+              !isPreviewOn
+                ? "text-primary-blue dark:text-blue-400 border border-primary-blue dark:border-blue-400 bg-primary-blue/5 dark:bg-blue-400/10"
+                : "text-neutral-700 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+            }`}
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsPreviewOn(true)}
+            className={`px-3 py-1.5 text-xs font-medium rounded-lg focus:outline-none transition-colors ${
+              isPreviewOn
+                ? "text-primary-blue dark:text-blue-400 border border-primary-blue dark:border-blue-400 bg-primary-blue/5 dark:bg-blue-400/10"
+                : "text-neutral-700 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+            }`}
+          >
+            Preview
+          </button>
+        </div>
+      </div>
+
+      {!isPreviewOn ? (
+        <>
       <div className="flex flex-col gap-2">
         <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
           Post Title *
         </label>
         <input
-          ref={postTitleRef}
           type="text"
+              value={postTitle}
           placeholder="Post title"
-          onChange={checkFormValidity}
+              onChange={handleTitleChange}
           className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
-          Post Body *
-        </label>
+          <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
+            Post Body *
+          </label>
         <AutoResizeTextarea
+        value={postBody}
           placeholder="What's on your mind?"
           onChange={handleBodyChange}
           className="w-full min-h-[120px] px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-y"
-        />
+            />
+          </div>
+        </>
+      ) : (
+        <div className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 bg-neutral-50 dark:bg-neutral-800">
+          {postTitle && (
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-3 pb-3 border-b border-neutral-200 dark:border-neutral-700">
+              {postTitle}
+            </h2>
+          )}
+          <MarkdownViewer>{postBody || "*No content yet*"}</MarkdownViewer>
       </div>
+      )}
 
       {/* Attachment Buttons */}
       <div className="flex gap-2">
