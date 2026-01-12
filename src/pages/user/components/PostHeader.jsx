@@ -5,7 +5,14 @@ import { getFileUrl, getInitials } from "../../../utils";
 import PostMenu from "./PostMenu";
 import { useMemo } from "react";
 
-const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, community }) => {
+const PostHeader = ({
+  itemData,
+  onEdit,
+  onDelete,
+  onReport,
+  communityUrl,
+  community,
+}) => {
   const navigate = useNavigate();
   const handleAuthorClick = (e, path) => {
     e.stopPropagation();
@@ -30,21 +37,28 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
           {/* Author */}
           <div className="flex items-center gap-3">
             <div
-              className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white dark:ring-neutral-900"
+              className="w-12 h-12 rounded-full overflow-hidden border-4 border-white bg-white dark:border-neutral-900 dark:bg-neutral-900"
               onClick={(e) =>
-                itemData?.data?.author && handleAuthorClick(e, `/user/${itemData.data.author.username}`)
+                itemData?.data?.author &&
+                handleAuthorClick(e, `/user/${itemData.data.author.username}`)
               }
             >
-              {itemData?.data?.[community].avatar ? (
+              {itemData?.data?.[community]?.avatar?.file_hash ? (
                 <img
-                  src={getFileUrl(itemData?.data?.author?.avatar)}
+                  src={getFileUrl(
+                    itemData?.data?.[community].avatar?.file_hash
+                  )}
                   alt="Board avatar"
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <p className="w-11 h-11 flex items-center justify-center rounded-full">
-                  {itemData?.data?.author? getInitials(itemData.data[community].name):""}
-                </p>
+                <div
+                  className="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                >
+                  {itemData?.data?.author
+                    ? getInitials(itemData.data[community].name)
+                    : ""}
+                </div>
               )}
             </div>
             <div>
@@ -70,23 +84,23 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
                 {itemData.data[community].name}
               </p>
               <p className="text-[12px] flex items-center gap-1 text-neutral-600 dark:text-neutral-400">
-                {itemData?.data?.author?<span
-                  onClick={(e) =>
-                    handleAuthorClick(
-                      e,
-                      `/user/${itemData.data.author.username}`
-                    )
-                  }
-                  className="cursor-pointer hover:underline"
-                  role="link"
-                  tabIndex={0}
-                >
-                  u/{itemData.data.author.username}
-                </span>:
-                <span
-                >
-                  [deleted]
-                </span>}
+                {itemData?.data?.author ? (
+                  <span
+                    onClick={(e) =>
+                      handleAuthorClick(
+                        e,
+                        `/user/${itemData.data.author.username}`
+                      )
+                    }
+                    className="cursor-pointer hover:underline"
+                    role="link"
+                    tabIndex={0}
+                  >
+                    u/{itemData.data.author.username}
+                  </span>
+                ) : (
+                  <span>[deleted]</span>
+                )}
                 <RelativeTime
                   date={itemData.data.created_at}
                   className="flex items-center text-neutral-700 dark:text-neutral-400 ml-1 "
@@ -109,4 +123,3 @@ const PostHeader = ({ itemData, onEdit, onDelete, onReport, communityUrl, commun
 };
 
 export default PostHeader;
-

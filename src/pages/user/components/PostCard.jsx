@@ -134,16 +134,16 @@ const PostCard = ({
               }
               className="w-10 h-10 rounded-full overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
             >
-              {item?.author?.avatar ? (
+              {item[communityType]?.avatar?.file_hash ? (
                 <img
-                  src={getFileUrl(item.author.avatar.file_hash)}
+                  src={getFileUrl(item[communityType].avatar.file_hash)}
                   alt={`${item.author.username}'s profile picture`}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
               ) : (
                 <span className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
-                  {item.author ? getInitials(item.author.username) : ""}
+                  {item.author ? getInitials(item[communityType].name) : ""}
                 </span>
               )}
             </button>
