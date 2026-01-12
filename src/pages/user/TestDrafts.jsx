@@ -50,7 +50,7 @@ const TestDrafts = () => {
       dispatch(setDraftTestId(test.id));
       dispatch(setDraftTestData(test));
       dispatch(setDescName(null));
-      navigate("/create/test?from=drafts");
+      navigate("/create/test?from=drafts", {replace: true});
     } catch (err) {
       console.error(err);
     }

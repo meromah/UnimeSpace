@@ -275,7 +275,7 @@ const CreateTest = ({ onCancel = undefined }) => {
       setIsDraftsOpen((prev) => !prev);
       return
     }
-    navigate("/test/drafts")
+    navigate("/test/drafts", {replace: true})
   };
   if (!isAuthenticated) return <NotFound />;
   return (
