@@ -14,6 +14,7 @@ import ReportModal from "./ReportModal";
 import DeletePostModal from "./DeletePostModal";
 import { useToggleTestLikeMutation } from "../../../services/testsApi";
 import { resetSession } from "../../../app/testSessionSlice";
+import PostCardMarkdownViewer from "../../../components/markdownViewer/PostCardMarkdownViewer";
 const preventNavigation = (e) => {
   e.preventDefault();
   e.stopPropagation();
@@ -74,7 +75,7 @@ const PostCard = ({
       navigate("/login");
       return;
     }
-    if(isLoading) return
+    if (isLoading) return;
     try {
       const community = item[communityType].name;
       const itemId = item.id;
@@ -109,7 +110,7 @@ const PostCard = ({
   };
   const onStartTest = (e) => {
     preventNavigation(e);
-    dispatch(resetSession())
+    dispatch(resetSession());
     navigate(
       `/${communityUrl}${item[communityType].name}/${itemType}s/${item.id}/start`
     );
@@ -199,8 +200,9 @@ const PostCard = ({
         {itemType === "test" ? (
           <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 dark:bg-neutral-800 p-3 rounded hover:bg-blue-100 dark:hover:bg-neutral-700 transition-colors duration-200">
             <div className="flex-1 overflow-hidden flex flex-col gap-0.5">
-              <p className="font-medium text-neutral-900 dark:text-neutral-100">{item.title}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-200 truncate">{item.body}</p>
+              <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                {item.title}
+              </p>
             </div>
             <button
               className="px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-neutral-100 dark:text-neutral-900 active:scale-95 font-medium whitespace-nowrap cursor-pointer dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
@@ -212,8 +214,12 @@ const PostCard = ({
         ) : (
           <div className="mb-3 flex flex-col gap-2">
             <div>
-              <p className="font-medium text-neutral-900 dark:text-neutral-100 mb-1">{item.title}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{item.body}</p>
+              <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-3 pb-3 border-b border-neutral-200 dark:border-neutral-700">
+                {item.title}
+              </h2>
+              <PostCardMarkdownViewer isExpanded={false} maxLines={10}>
+                {item.body}
+              </PostCardMarkdownViewer>
             </div>
 
             {images.length > 0 && <PostImages images={images} />}
@@ -228,7 +234,7 @@ const PostCard = ({
             title="Comments"
             aria-label={`${item.comments_count} comments`}
           >
-            <MessageCircle  size={18} /> {item.comments_count}
+            <MessageCircle size={18} /> {item.comments_count}
           </button>
 
           <button
@@ -241,7 +247,10 @@ const PostCard = ({
             } this item`}
             title={liked ? "Unlike" : "Like"}
           >
-            <Heart  size={18} className={liked ? "text-red-500 fill-red-500" : ""} />
+            <Heart
+              size={18}
+              className={liked ? "text-red-500 fill-red-500" : ""}
+            />
             <span
               ref={postLikesCountRef}
               className={liked ? "text-red-500" : ""}
@@ -258,7 +267,7 @@ const PostCard = ({
               setIsShareModalOpen(true);
             }}
           >
-            <Share2 size={18}/>
+            <Share2 size={18} />
           </button>
         </div>
       </Link>
