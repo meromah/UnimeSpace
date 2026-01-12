@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initializeSession, startSession } from "../../../app/testSessionSlice";
 import { useGetQuestionTypesQuery } from "../../../services/questionTypesApi";
 import Toast from "../../../components/Toast";
+import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
 
 export const TestInstructions = () => {
   const { descId, testId } = useParams();
@@ -121,7 +122,7 @@ export const TestInstructions = () => {
               {testInfo.data.description !== null ? (
                 <p className="flex flex-col gap-1 text-neutral-600 dark:text-neutral-400 leading-relaxed">
                   <strong>Description</strong>
-                  <span>{testInfo.data.description}</span>
+                  <MarkdownViewer>{testInfo.data.description}</MarkdownViewer>
                 </p>
               ) : (
                 <p>No description.</p>
