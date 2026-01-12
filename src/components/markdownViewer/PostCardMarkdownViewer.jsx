@@ -3,7 +3,6 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const PostCardMarkdownViewer = ({ children, maxLines = 10, isExpanded = false, onReadMore }) => {
-  console.log(children)
   const containerRef = useRef(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
