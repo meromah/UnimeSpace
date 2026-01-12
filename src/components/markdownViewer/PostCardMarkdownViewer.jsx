@@ -2,11 +2,10 @@ import React, { useRef, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-const PostCardMarkdownViewer = ({ children, maxLines = 10, isExpanded = false }) => {
+const PostCardMarkdownViewer = ({ children, maxLines = 10, isExpanded = false, onReadMore }) => {
   console.log(children)
   const containerRef = useRef(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
-  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -237,7 +236,7 @@ const PostCardMarkdownViewer = ({ children, maxLines = 10, isExpanded = false })
       </div>
       {isOverflowing && !isExpanded && (
         <button
-          onClick={() => setExpanded(true)}
+          onClick={onReadMore}
           className="mt-2 text-sm font-medium text-primary-blue dark:text-blue-400 hover:text-primary-blue/90 dark:hover:text-blue-500 focus:outline-none transition-colors cursor-pointer"
         >
           Read More
