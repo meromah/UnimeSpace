@@ -15,7 +15,7 @@ const actions = {
 
 const CreateAction = () => {
   const { action } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { descName } = useSelector((state) => state.testMetadata);
   const dispatch = useDispatch();
   const ActionComponent = actions[action];
@@ -24,13 +24,10 @@ const CreateAction = () => {
     return <h2>Unknown action: {action}</h2>;
   }
   useEffect(() => {
-    if (descName === null && searchParams.get("from") === "drafts") {
-      setSearchParams({});
-    }
     if (action === "test" && searchParams.get("from") !== "drafts") {
       dispatch(resetTestSlice());
     }
-}, [descName, searchParams, setSearchParams, action]);
+}, [descName, searchParams, action]);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ActionComponent />
