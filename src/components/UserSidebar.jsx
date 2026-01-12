@@ -47,28 +47,37 @@ const MenuLink = ({ to, label, icon: Icon, onClick }) => {
     </Link>
   );
 };
-const resourcesSection = {
-  id: "resources",
-  title: "Resources",
-  path: "",
-  icon: Info,
-  items: [
-    {
-      id: "playground",
-      name: "Python Playground",
-      path: "/playground",
-    },
-    {
-      id: "about",
-      name: "About Us",
-      path: "/about",
-    },
-    {
-      id: "contact",
-      path: "/contact",
-      name: "Contact Us",
-    },
-  ],
+const getResourcesSection = (profileData) => {
+  const resourcesSection = {
+    id: "resources",
+    title: "Resources",
+    path: "",
+    icon: Info,
+    items: [
+      {
+        id: "playground",
+        name: "Python Playground",
+        path: "/playground",
+      },
+      {
+        id: "about",
+        name: "About Us",
+        path: "/about",
+      },
+      {
+        id: "contact",
+        path: "/contact",
+        name: "Contact Us",
+      },
+    ],
+  };
+  if (!profileData || !profileData?.has_privileges) return resourcesSection;
+  resourcesSection.items.unshift({
+    id: "system",
+    path: "/system",
+    name: "System",
+  });
+  return resourcesSection;
 };
 const exploreData = [
   {
@@ -241,8 +250,12 @@ const UserSidebar = () => {
           <Link to="/home" className="flex-shrink-0 px-4 py-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 flex items-center justify-center">
-                <img src={logo} alt="UnimeSpace logo" className="dark:hidden"/>
-                <img src={logoDark} alt="UnimeSpace logo" className="hidden dark:inline" />
+                <img src={logo} alt="UnimeSpace logo" className="dark:hidden" />
+                <img
+                  src={logoDark}
+                  alt="UnimeSpace logo"
+                  className="hidden dark:inline"
+                />
               </div>
               <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 select-none">
                 UnimeSpace
@@ -276,8 +289,12 @@ const UserSidebar = () => {
           >
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 flex items-center justify-center">
-                <img src={logo} alt="UnimeSpace logo" className="dark:hidden"/>
-                <img src={logoDark} alt="UnimeSpace logo" className="hidden dark:inline" />
+                <img src={logo} alt="UnimeSpace logo" className="dark:hidden" />
+                <img
+                  src={logoDark}
+                  alt="UnimeSpace logo"
+                  className="hidden dark:inline"
+                />
               </div>
               <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 select-none">
                 UnimeSpace
@@ -371,7 +388,7 @@ const UserSidebar = () => {
             <div className="h-px bg-neutral-200 dark:bg-neutral-700" />
             <div>
               <ExpandableSection
-                section={resourcesSection}
+                section={getResourcesSection(profileData)}
                 isExpanded={expandedSections["resources"]}
                 toggleSection={toggleSection}
                 closeMobileMenu={closeMobileMenu}
