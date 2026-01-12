@@ -281,7 +281,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
               <div className="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300">
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">Author:</span>
                 <Link
-                  to={`/user/${board.author.username}`}
+                  to={`/u/${board.author.username}`}
                   className="hover:underline hover:text-blue-600 cursor-pointer transition-colors"
                 >
                   u/{board.author.username}

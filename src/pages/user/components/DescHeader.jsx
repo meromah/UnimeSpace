@@ -287,7 +287,7 @@ const DescHeader = ({ desc, isSubscribed = false }) => {
                     Author:
                   </span>
                   <Link
-                    to={`/user/${desc.author.username}`}
+                    to={`/u/${desc.author.username}`}
                     className="hover:underline hover:text-purple-600 cursor-pointer transition-colors"
                   >
                     u/{desc.author.username}

@@ -130,7 +130,7 @@ const PostCard = ({
             <button
               onClick={(e) =>
                 item.author &&
-                handleAuthorClick(e, `/user/${item.author.username}`)
+                handleAuthorClick(e, `/u/${item.author.username}`)
               }
               className="w-10 h-10 rounded-full overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
             >
@@ -166,7 +166,7 @@ const PostCard = ({
                 {item?.author ? (
                   <button
                     onClick={(e) =>
-                      handleAuthorClick(e, `/user/${item.author.username}`)
+                      handleAuthorClick(e, `/u/${item.author.username}`)
                     }
                     className="cursor-pointer hover:underline focus:outline-none"
                   >

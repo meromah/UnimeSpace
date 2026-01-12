@@ -53,7 +53,7 @@ const App = () => {
         <Route path="profile" element={<Profile isMyProfile={true} />} />
         <Route path="profile/edit" element={<EditProfile />} />
         <Route
-          path="user/:username"
+          path="u/:username"
           element={<Profile isMyProfile={false} />}
         />
         <Route path="/" element={<Feeds />} />

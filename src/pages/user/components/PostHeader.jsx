@@ -40,7 +40,7 @@ const PostHeader = ({
               className="w-12 h-12 rounded-full overflow-hidden border-4 border-white bg-white dark:border-neutral-900 dark:bg-neutral-900"
               onClick={(e) =>
                 itemData?.data?.author &&
-                handleAuthorClick(e, `/user/${itemData.data.author.username}`)
+                handleAuthorClick(e, `/u/${itemData.data.author.username}`)
               }
             >
               {itemData?.data?.[community]?.avatar?.file_hash ? (
@@ -89,7 +89,7 @@ const PostHeader = ({
                     onClick={(e) =>
                       handleAuthorClick(
                         e,
-                        `/user/${itemData.data.author.username}`
+                        `/u/${itemData.data.author.username}`
                       )
                     }
                     className="cursor-pointer hover:underline"
