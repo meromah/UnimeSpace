@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Send, Plus, Minus, Heart } from "lucide-react";
 import { useSelector } from "react-redux";
 import RelativeTime from "../../../components/RelativeTime";
-import { getInitials, extractErrorMessage } from "../../../utils";
+import { getInitials, extractErrorMessage, getFileUrl } from "../../../utils";
 import CommentMenu from "./CommentMenu";
 import {
   useToggleCommentLikeByCommentIdMutation,
@@ -36,7 +36,7 @@ const CommentCard = ({
     setIsEditing(false);
     setEditText(comment.body);
   }, [comment.id, comment.body]);
-  
+
   const commentLikeCountRef = useRef(null);
   const [toggleCommentLike, { error: toggleCommentLikeError }] =
     useToggleCommentLikeByCommentIdMutation();
@@ -75,7 +75,7 @@ const CommentCard = ({
       setActiveReplyId(null);
     }
   };
-  
+
   const onToggleCommentLike = async () => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -144,16 +144,29 @@ const CommentCard = ({
       onReportComment(comment);
     }
   };
-  
+
   return (
     <div>
       <div className="flex gap-3">
         {/* Avatar and Thread Line Column */}
         <div className="flex flex-col items-center gap-2">
           {/* Avatar */}
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-            {getInitials(comment.author.username)}
-          </div>
+          <button
+            className="w-10 h-10 rounded-full overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+          >
+            {comment?.author?.avatar?.file_hash ? (
+              <img
+                src={getFileUrl(comment.author.avatar.file_hash)}
+                alt={`${comment.author.username}'s profile picture`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <span className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
+                {comment?.author ? getInitials(comment?.author.username) : ""}
+              </span>
+            )}
+          </button>
 
           {/* Vertical Line for nested comments */}
           {comment.direct_children_count > 0 && (
@@ -240,7 +253,9 @@ const CommentCard = ({
                   onClick={onToggleCommentLike}
                   className="flex items-center gap-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 px-1 py-0.5 rounded transition-colors"
                 >
-                  <Heart className={isLiked ? "text-red-500 fill-red-500" : ""} />
+                  <Heart
+                    className={isLiked ? "text-red-500 fill-red-500" : ""}
+                  />
                   <span
                     ref={commentLikeCountRef}
                     className={isLiked ? "text-red-500" : ""}
