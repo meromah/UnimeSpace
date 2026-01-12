@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { useUpdatePostMutation } from "../../../services/postsApi";
 import { useUpdateTestMutation } from "../../../services/testsApi";
+import AutoResizeTextarea from "./AutoResizeTextarea";
 
 const EditPostModal = ({ isOpen, onClose, item, community, itemType }) => {
   const [title, setTitle] = useState("");
@@ -131,12 +132,11 @@ const EditPostModal = ({ isOpen, onClose, item, community, itemType }) => {
               <span className="font-medium text-neutral-800 dark:text-neutral-100">
                 {itemType === "post" ? "Post Body *" : "Test Description *"}
               </span>
-              <textarea
+              <AutoResizeTextarea
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
                 placeholder="What's on your mind?"
-                rows={4}
-                className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-none overflow-auto"
+                className="w-full min-h-[33vh] px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-none overflow-auto"
                 required
                 disabled={isPostUpdating || isTestUpdating}
                 maxLength={1000}
