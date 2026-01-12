@@ -134,7 +134,7 @@ const CreateCommunity = () => {
               />
               <label className="flex flex-col gap-2">
                 <span className="font-medium text-neutral-800 dark:text-neutral-100">
-                  Description
+                  Description <small className="text-xs text-neutral-400">(Markdown supported)</small>
                 </span>
                 <AutoResizeTextarea 
                   value={communityDescription}

@@ -12,6 +12,7 @@ import BoardMenu from "../pages/user/components/BoardMenu";
 import DeleteBoardModal from "../pages/user/components/DeleteBoardModal";
 import ReportModal from "../pages/user/components/ReportModal";
 import { getFileUrl, getInitials } from "../utils";
+import MarkdownViewer from "./markdownViewer/MarkdownViewer";
 
 // Helper function to extract error message from API error response
 const extractErrorMessage = (error) => {
@@ -275,7 +276,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                   Description:{" "}
                 </span>
-                <span className="text-neutral-600 dark:text-neutral-300">{board.description}</span>
+                <MarkdownViewer>{board.description || "No description provided."}</MarkdownViewer>
               </div>
               <div className="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300">
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">Author:</span>

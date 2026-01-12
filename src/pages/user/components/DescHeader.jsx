@@ -12,6 +12,7 @@ import { getFileUrl, getInitials } from "../../../utils";
 import DescMenu from "./DescMenu";
 import DeleteDescModal from "./DeleteDescModal";
 import ReportModal from "./ReportModal";
+import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
 
 // Helper function to extract error message from API error response
 const extractErrorMessage = (error) => {
@@ -278,9 +279,7 @@ const DescHeader = ({ desc, isSubscribed = false }) => {
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                 Description:{" "}
               </span>
-                <span className="text-neutral-600 dark:text-neutral-300">
-                  {desc.description || "No description provided."}
-                </span>
+              <MarkdownViewer>{desc.description || "No description provided."}</MarkdownViewer>
               </div>
               {desc.author && (
                 <div className="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300">
