@@ -59,7 +59,7 @@ const Profile = ({ isMyProfile = false }) => {
     isLoading: isPostsLoading,
     isSuccess: isPostsSuccess,
   } = useGetPostsByFilterQuery(
-    { queryParams: `author=${currentUsername}` },
+    { queryParams: {username: currentUsername, latest: 1}},
     { skip: !currentUsername }
   );
   // Fetch posts
@@ -68,7 +68,7 @@ const Profile = ({ isMyProfile = false }) => {
     isLoading: isTestsLoading,
     isSuccess: isTestsSuccess,
   } = useGetTestsByFilterQuery(
-    { queryParams: `author=${currentUsername}` },
+    { queryParams: {username: currentUsername, latest: 1} },
     { skip: !currentUsername }
   );
 
