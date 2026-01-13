@@ -15,6 +15,7 @@ import { useMemo, useState } from "react";
 import RecommendedCommunitySkeleton from "../pages/user/components/Skeleton/RecommendedCommunitySkeleton";
 import { AnnouncementsSkeleton } from "../pages/user/components/Skeleton/AnnouncementsSkeleton";
 import Toast from "./Toast";
+import RelativeTime from "./RelativeTime";
 const CommunityElement = ({ community, subscribed, setError }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -184,9 +185,7 @@ const AsidePanel = () => {
                     <h3 className="text-base font-medium text-neutral-900 dark:text-neutral-100 mb-1">
                       {announcement.title}
                     </h3>
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                      {announcement.created_at}
-                    </p>
+                    <RelativeTime date={announcement.created_at} className="text-xs text-neutral-400"/>
                     <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
                       {announcement.body}
                     </p>
