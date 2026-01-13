@@ -83,12 +83,15 @@ const NameAvailabilityInput = ({
       return;
     }
 
-    const validationRegex = /^[a-zA-Z0-9 _]+$/;
-    const isValid = validationRegex.test(inputValue);
+    // Convert to lowercase
+    const lowercasedValue = inputValue.toLowerCase();
+    
+    const validationRegex = /^[a-z0-9 _]+$/;
+    const isValid = validationRegex.test(lowercasedValue);
     setHasSpecialChar(!isValid);
 
     if (isValid) {
-      onChange(inputValue.replace(/\s+/g, "_"));
+      onChange(lowercasedValue.replace(/\s+/g, "_"));
     }
   };
   // Notify parent of availability changes
