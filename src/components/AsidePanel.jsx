@@ -83,8 +83,8 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       key={community.id}
       className={
         location.pathname === "/explore/"
-          ? "flex flex-col sm:flex-row sm:items-start lg:flex-col lg:items-stretch gap-3 flex-1 bg-white dark:bg-neutral-900 w-full lg:min-w-[30%] lg:max-w-2/5 p-4 border border-neutral-100 dark:border-neutral-800 rounded-lg shadow"
-          : "flex items-start justify-between gap-3 p-2 hover:bg-neutral-50 dark:bg-neutral-800 dark:hover:bg-neutral-900 rounded-lg transition-colors"
+          ? "flex items-start lg:flex-col lg:items-stretch gap-3 flex-1 bg-white dark:bg-neutral-900 w-full lg:min-w-[30%] lg:max-w-2/5 p-4 border border-neutral-100 dark:border-neutral-800 rounded-lg shadow"
+          : "flex flex-col items-start justify-between gap-3 p-2 hover:bg-neutral-50 dark:bg-neutral-800 dark:hover:bg-neutral-900 rounded-lg transition-colors"
       }
     >
       <div className="flex-1 min-w-0">
@@ -103,7 +103,7 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       {isSubscribed ? (
         <button
           className={
-            "bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 px-2 py-1.5 rounded-full text-xs font-bold hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900 border border-red-500 dark:border-neutral-100 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
+            "w-full bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 px-2 py-1.5 rounded-full text-xs font-bold hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900 border border-red-500 dark:border-neutral-100 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
           }
           onClick={(e) =>
             onUnsubscribe(e, isBoard, community.name, community.id)
@@ -115,7 +115,7 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       ) : (
         <button
           className={
-            "bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 border border-primary-blue dark:border-neutral-100 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
+          "w-full bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 border border-primary-blue dark:border-neutral-100 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
           }
           onClick={(e) => onSubscribe(e, isBoard, community.name, community.id)}
           disabled={isSubscribing}
