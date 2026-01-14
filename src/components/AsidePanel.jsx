@@ -19,6 +19,7 @@ import RelativeTime from "./RelativeTime";
 const CommunityElement = ({ community, subscribed, setError }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const { profileData } = useSelector((state) => state.myProfile);
   const [subscribeToBoard, { isLoading: isBoardSubscribing }] =
     useSubscribeToBoardMutation();
   const [subscribeToDesc, { isLoading: isDescSubscribing }] =
@@ -46,6 +47,7 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       navigate("/login");
       return;
     }
+    if (profileData?.id === community.author.id) return;
     try {
       if (isBoard) {
         await subscribeToBoard({ board: communityName }).unwrap();
@@ -55,7 +57,7 @@ const CommunityElement = ({ community, subscribed, setError }) => {
         subscribed.descs.add(id);
       }
     } catch (err) {
-      setError({hasError: true, message: err.data.message})
+      setError({ hasError: true, message: err.data.message });
     }
   };
   const onUnsubscribe = async (e, isBoard, communityName, id) => {
@@ -65,6 +67,7 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       navigate("/login");
       return;
     }
+    if (profileData?.id === community.author.id) return;
     try {
       if (isBoard) {
         await unsubscribeFromBoard({ board: communityName }).unwrap();
@@ -74,7 +77,7 @@ const CommunityElement = ({ community, subscribed, setError }) => {
         subscribed.descs.delete(id);
       }
     } catch (err) {
-      setError({hasError: true, message: err.data.message})
+      setError({ hasError: true, message: err.data.message });
     }
   };
 
@@ -88,7 +91,10 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       }
     >
       <div className="flex-1 min-w-0">
-        <Link to={path} className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-0.5">
+        <Link
+          to={path}
+          className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-0.5"
+        >
           {path}
         </Link>
         <p className="text-xs text-neutral-600 dark:text-neutral-300 line-clamp-1">
@@ -100,7 +106,7 @@ const CommunityElement = ({ community, subscribed, setError }) => {
             : `${community.subscribers_count} member`}
         </p>
       </div>
-      {isSubscribed ? (
+      {profileData?.id !== community.author.id ? (isSubscribed ? (
         <button
           className={
             "w-full bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 px-2 py-1.5 rounded-full text-xs font-bold hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900 border border-red-500 dark:border-neutral-100 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
@@ -115,14 +121,14 @@ const CommunityElement = ({ community, subscribed, setError }) => {
       ) : (
         <button
           className={
-          "w-full bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 border border-primary-blue dark:border-neutral-100 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
+            "w-full bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 border border-primary-blue dark:border-neutral-100 transition-colors cursor-pointer flex-shrink-0 disabled:opacity-100 disabled:animate-pulse"
           }
           onClick={(e) => onSubscribe(e, isBoard, community.name, community.id)}
           disabled={isSubscribing}
         >
           <span>Join</span>
         </button>
-      )}
+      )): null}
     </div>
   );
 };
@@ -185,7 +191,10 @@ const AsidePanel = () => {
                     <h3 className="text-base font-medium text-neutral-900 dark:text-neutral-100 mb-1">
                       {announcement.title}
                     </h3>
-                    <RelativeTime date={announcement.created_at} className="text-xs text-neutral-400"/>
+                    <RelativeTime
+                      date={announcement.created_at}
+                      className="text-xs text-neutral-400"
+                    />
                     <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
                       {announcement.body}
                     </p>

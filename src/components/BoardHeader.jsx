@@ -34,6 +34,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const { profileData } = useSelector((state) => state.myProfile);
   const navigate = useNavigate();
   const avatarUrl = useMemo(
     () => (board?.avatar ? getFileUrl(board?.avatar?.file_hash) : null),
@@ -76,6 +77,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
       navigate("/login");
       return;
     }
+    if (profileData?.id === board.author.id) return;
     try {
       await subscribeToBoard({ board: board.name }).unwrap();
     } catch (error) {
@@ -87,6 +89,7 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
       navigate("/login");
       return;
     }
+    if (profileData?.id === board.author.id) return;
     try {
       await unsubscribeFromBoard({ board: board.name }).unwrap();
     } catch (error) {
@@ -198,33 +201,35 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
                 b/{board.name}
               </h1>
             </div>
-            <div
-              className={`flex w-fit items-center justify-center rounded-full border overflow-hidden ${
-                isSubscribed
-                  ? "border-red-500 dark:border-neutral-100"
-                  : "border-primary-blue dark:border-neutral-100"
-              }
+            {profileData?.id !== board.author.id && (
+              <div
+                className={`flex w-fit items-center justify-center rounded-full border overflow-hidden ${
+                  isSubscribed
+                    ? "border-red-500 dark:border-neutral-100"
+                    : "border-primary-blue dark:border-neutral-100"
+                }
               ${(isSubscribing || isUnsubscribing) && "animate-pulse"}
               `}
-            >
-              {isSubscribed ? (
-                <button
-                  className="px-5 py-2.5 bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900"
-                  onClick={onUnSubscribe}
-                  disabled={isUnsubscribing}
-                >
-                  <span>Joined</span>
-                </button>
-              ) : (
-                <button
-                  className="px-5 py-2.5 bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
-                  onClick={onSubscribe}
-                  disabled={isSubscribing}
-                >
-                  <span>Join</span>
-                </button>
-              )}
-            </div>
+              >
+                {isSubscribed ? (
+                  <button
+                    className="px-5 py-2.5 bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900"
+                    onClick={onUnSubscribe}
+                    disabled={isUnsubscribing}
+                  >
+                    <span>Joined</span>
+                  </button>
+                ) : (
+                  <button
+                    className="px-5 py-2.5 bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
+                    onClick={onSubscribe}
+                    disabled={isSubscribing}
+                  >
+                    <span>Join</span>
+                  </button>
+                )}
+              </div>
+            )}
           </div>
           <div className="h-14" />
         </div>
@@ -276,10 +281,14 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                   Description:{" "}
                 </span>
-                <MarkdownViewer>{board.description || "No description provided."}</MarkdownViewer>
+                <MarkdownViewer>
+                  {board.description || "No description provided."}
+                </MarkdownViewer>
               </div>
               <div className="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300">
-                <span className="font-semibold text-neutral-900 dark:text-neutral-100">Author:</span>
+                <span className="font-semibold text-neutral-900 dark:text-neutral-100">
+                  Author:
+                </span>
                 <Link
                   to={`/u/${board.author.username}`}
                   className="hover:underline hover:text-blue-600 cursor-pointer transition-colors"
@@ -288,7 +297,9 @@ const BoardHeader = ({ board, isSubscribed = false }) => {
                 </Link>
               </div>
               <div className="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300">
-                <span className="font-semibold text-neutral-900 dark:text-neutral-100">Created:</span>
+                <span className="font-semibold text-neutral-900 dark:text-neutral-100">
+                  Created:
+                </span>
                 <RelativeTime date={board.created_at} />
               </div>
             </div>

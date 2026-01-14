@@ -9,6 +9,7 @@ import { useSubscribeToDescMutation, useUnsubscribeFromDescMutation } from "../.
 
 const SearchPageDescs = ({ query, activeTab, onSelectTab }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const { profileData } = useSelector((state) => state.myProfile);
   const navigate = useNavigate();
   const {
     data: items,
@@ -32,6 +33,7 @@ const SearchPageDescs = ({ query, activeTab, onSelectTab }) => {
       navigate("/login");
       return;
     }
+    if (profileData?.id === desc.author.id) return;
     try {
       await subscribeToDesc({ desc: desc.name }).unwrap();
       subscribedIds.add(desc.id)
@@ -47,6 +49,7 @@ const SearchPageDescs = ({ query, activeTab, onSelectTab }) => {
       navigate("/login");
       return;
     }
+    if (profileData?.id === desc.author.id) return;
     try {
       await unsubscribeFromDesc({ desc: desc.name }).unwrap();
       subscribedIds.add(desc.id)
@@ -105,32 +108,34 @@ const SearchPageDescs = ({ query, activeTab, onSelectTab }) => {
                 </p>
               </div>
             </Link>
-            <div
-              className={`flex items-center gap-2  rounded-full border overflow-hidden ${
-                subscribedIds.has(element.id)
-                  ? "border-red-500 dark:border-neutral-100"
-                  : "border-primary-blue dark:border-neutral-100"
-              }
+            {profileData?.id !== element.author.id && (
+              <div
+                className={`flex items-center gap-2  rounded-full border overflow-hidden ${
+                  subscribedIds.has(element.id)
+                    ? "border-red-500 dark:border-neutral-100"
+                    : "border-primary-blue dark:border-neutral-100"
+                }
                      `}
-            >
-              {subscribedIds.has(element.id) ? (
-                <button
-                  className="px-3 py-2 bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900"
-                  onClick={(e) => onUnSubscribe(e, element)}
-                  disabled={isUnsubscribing}
-                >
-                  <span>Joined</span>
-                </button>
-              ) : (
-                <button
-                  className="px-5 py-2 bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
-                  onClick={(e) => onSubscribe(e, element)}
-                  disabled={isSubscribing}
-                >
-                  <span>Join</span>
-                </button>
-              )}
-            </div>
+              >
+                {subscribedIds.has(element.id) ? (
+                  <button
+                    className="px-3 py-2 bg-white dark:bg-neutral-900 text-red-500 dark:text-neutral-100 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-red-500/10 dark:hover:bg-neutral-100 dark:hover:text-neutral-900"
+                    onClick={(e) => onUnSubscribe(e, element)}
+                    disabled={isUnsubscribing}
+                  >
+                    <span>Joined</span>
+                  </button>
+                ) : (
+                  <button
+                    className="px-5 py-2 bg-white dark:bg-neutral-100 text-primary-blue dark:text-neutral-900 active:scale-95 transition-all duration-200 font-medium text-sm whitespace-nowrap cursor-pointer hover:bg-primary-blue/10 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
+                    onClick={(e) => onSubscribe(e, element)}
+                    disabled={isSubscribing}
+                  >
+                    <span>Join</span>
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </main>
