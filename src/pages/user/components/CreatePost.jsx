@@ -28,7 +28,6 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
   const fileInputRef = useRef(null);
   const selectedBoardNameRef = useRef(null);
   const boardSelectionResetRef = useRef(null);
-
   const [postTitle, setPostTitle] = useState("");
   const [postBody, setPostBody] = useState("");
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -134,22 +133,19 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
     setUploadedFiles((prev) => prev.filter((file) => file.id !== fileId));
   };
 
-  const checkFormValidity = useCallback(() => {
-    const hasBoard = boardId || selectedBoardNameRef.current;
-    setIsFormValid(
-      postTitle.trim().length > 0 && postBody.trim().length > 0 && hasBoard
-    );
-  }, [postTitle, postBody, boardId]);
-
   const handleSelectBoard = (board) => {
     selectedBoardNameRef.current = board.name;
-    checkFormValidity();
   };
 
   const handleClearBoardSelection = () => {
     selectedBoardNameRef.current = null;
-    checkFormValidity();
   };
+  useEffect(() => {
+    const hasBoard = boardId || selectedBoardNameRef.current;
+    setIsFormValid(
+      postTitle.trim().length > 0 && postBody.trim().length > 0 && hasBoard
+    );
+  }, [selectedBoardNameRef.current, postTitle, postBody, boardId]);
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
@@ -165,10 +161,9 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
 
     const postData = {
       title: postTitle,
-      body: JSON.stringify(postBody),
+      body: postBody,
       file_hashes,
     };
-    console.log(postBody)
     try {
       await createPost({ board: targetBoardId, postData }).unwrap();
       // Reset form
@@ -204,12 +199,10 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
 
   const handleTitleChange = (e) => {
     setPostTitle(e.target.value || "");
-    checkFormValidity();
   };
 
   const handleBodyChange = (e) => {
     setPostBody(e.target.value || "");
-    checkFormValidity();
   };
   return (
     <form
@@ -264,28 +257,28 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
 
       {!isPreviewOn ? (
         <>
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
-          Post Title *
-        </label>
-        <input
-          type="text"
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
+              Post Title *
+            </label>
+            <input
+              type="text"
               value={postTitle}
-          placeholder="Post title"
+              placeholder="Post title"
               onChange={handleTitleChange}
-          className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
-        />
-      </div>
+              className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition"
+            />
+          </div>
 
-      <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
-            Post Body *
-          </label>
-        <AutoResizeTextarea
-        value={postBody}
-          placeholder="What's on your mind?"
-          onChange={handleBodyChange}
-          className="w-full min-h-[120px] px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-y"
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
+              Post Body *
+            </label>
+            <AutoResizeTextarea
+              value={postBody}
+              placeholder="What's on your mind?"
+              onChange={handleBodyChange}
+              className="w-full min-h-[120px] px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-y"
             />
           </div>
         </>
@@ -297,7 +290,7 @@ const CreatePost = ({ boardId, onCancel = undefined, onError }) => {
             </h2>
           )}
           <MarkdownViewer>{postBody || "*No content yet*"}</MarkdownViewer>
-      </div>
+        </div>
       )}
 
       {/* Attachment Buttons */}
