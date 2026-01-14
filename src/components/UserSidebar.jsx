@@ -86,14 +86,14 @@ const getResourcesSection = (profileData) => {
 };
 const exploreData = [
   {
-    id: "boards",
-    title: "Boards",
+    id: "all-boards",
+    title: "All Boards",
     path: "b/all",
     icon: Grid,
   },
   {
-    id: "Descs",
-    title: "Descs",
+    id: "all-descs",
+    title: "All Descs",
     path: "d/all",
     icon: Book,
   },
