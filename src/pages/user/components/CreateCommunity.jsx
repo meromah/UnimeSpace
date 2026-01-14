@@ -131,6 +131,7 @@ const CreateCommunity = () => {
                 urlPrefix={`${communityTypes[communityType].path}/`}
                 onValidationChange={(isValid) => setIsNameValid(isValid)}
                 onSpecialCharDetected={setHasSpecialChar}
+                allowUppercase={true}
               />
               <label className="flex flex-col gap-2">
                 <span className="font-medium text-neutral-800 dark:text-neutral-100">
