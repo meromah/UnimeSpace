@@ -55,6 +55,11 @@ const getResourcesSection = (profileData) => {
     icon: Info,
     items: [
       {
+        id: "faq",
+        name: "FAQ",
+        path: "/faq",
+      },
+      {
         id: "playground",
         name: "Python Playground",
         path: "/playground",
@@ -344,6 +349,9 @@ const UserSidebar = () => {
                 {/* Divider */}
                 <div className="h-px bg-neutral-200 dark:bg-neutral-700 my-2" />
                 {/* Section that displays user-followed boards, descs */}
+                <p className="text-sm font-medium text-neutral-700 dark:text-neutral-200">
+                  Joined Communities
+                </p>
                 <ExpandableSection
                   section={subscribedBoards}
                   isExpanded={expandedSections[subscribedBoards.id]}

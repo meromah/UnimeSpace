@@ -6,6 +6,7 @@ import AboutUs from "./pages/main/AboutUs";
 import Contact from "./pages/main/Contact";
 import Login from "./pages/main/Login";
 import Register from "./pages/main/Register";
+import FAQ from "./pages/main/FAQ.jsx";
 import Profile from "./pages/user/Profile";
 import EditProfile from "./pages/user/EditProfile";
 import Feeds from "./pages/user/Feeds";
@@ -78,6 +79,7 @@ const App = () => {
         <Route path="d/:descId" element={<DescPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/explore" element={<AsidePanel />} />
+        <Route path="/faq" element={<FAQ />} />
       </Route>
       <Route path="/terms" element={<Terms />} />
       <Route path="d/:descId/tests/:testId/start" element={<TestPage />} />
