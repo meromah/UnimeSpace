@@ -16,6 +16,10 @@ const DescMenu = ({ desc, onDelete, onReport, className = "" }) => {
       profileData.username === desc.author?.username ||
       profileData.id === desc.author?.id);
 
+  // Check if current user has privileges
+  const hasPrivileges =
+    profileData && profileData?.has_privileges;
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -108,6 +112,13 @@ const DescMenu = ({ desc, onDelete, onReport, className = "" }) => {
                 Delete desc
               </button>
             </>
+          ) : hasPrivileges ? (
+            <button
+              onClick={(e) => handleMenuAction(e, onDelete)}
+              className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150 cursor-pointer"
+            >
+              Delete desc
+            </button>
           ) : (
             <button
               onClick={(e) => handleMenuAction(e, onReport)}

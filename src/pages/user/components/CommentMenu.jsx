@@ -21,6 +21,10 @@ const CommentMenu = ({
       profileData.username === comment.author?.username ||
       profileData.id === comment.author?.id);
 
+  // Check if current user has privileges
+  const hasPrivileges =
+    profileData && profileData?.has_privileges;
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -100,6 +104,13 @@ const CommentMenu = ({
                 Delete comment
               </button>
             </>
+          ) : hasPrivileges ? (
+            <button
+              onClick={(e) => handleMenuAction(e, onDelete)}
+              className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-600 dark:hover:text-neutral-100 transition-colors duration-150 cursor-pointer"
+            >
+              Delete comment
+            </button>
           ) : (
             <button
               onClick={(e) => handleMenuAction(e, onReport)}

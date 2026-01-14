@@ -3,12 +3,7 @@ import { MoreVertical } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const BoardMenu = ({
-  board,
-  onDelete,
-  onReport,
-  className = "",
-}) => {
+const BoardMenu = ({ board, onDelete, onReport, className = "" }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
@@ -21,6 +16,10 @@ const BoardMenu = ({
     (profileData.id === board.author_id ||
       profileData.username === board.author?.username ||
       profileData.id === board.author?.id);
+
+  // Check if current user has privileges
+  const hasPrivileges =
+    profileData && profileData?.has_privileges
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -72,7 +71,7 @@ const BoardMenu = ({
     e.preventDefault();
     e.stopPropagation();
     setIsOpen(false);
-    navigate(`/b/${board.name}/edit`, {replace: true});
+    navigate(`/b/${board.name}/edit`, { replace: true });
   };
 
   return (
@@ -114,6 +113,13 @@ const BoardMenu = ({
                 Delete board
               </button>
             </>
+          ) : hasPrivileges ? (
+            <button
+              onClick={(e) => handleMenuAction(e, onDelete)}
+              className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-600 dark:hover:text-neutral-100 transition-colors duration-150 cursor-pointer"
+            >
+              Delete board
+            </button>
           ) : (
             <button
               onClick={(e) => handleMenuAction(e, onReport)}
@@ -129,4 +135,3 @@ const BoardMenu = ({
 };
 
 export default BoardMenu;
-

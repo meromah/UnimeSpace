@@ -22,6 +22,10 @@ const PostMenu = ({
       profileData.username === item.author?.username ||
       profileData.id === item.author?.id);
 
+  // Check if current user has privileges
+  const hasPrivileges =
+    profileData && profileData?.has_privileges;
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -108,6 +112,14 @@ const PostMenu = ({
                 Delete {itemType}
               </button>
             </>
+          ) : hasPrivileges ? (
+            <button
+              role="menuitem"
+              onClick={(e) => handleMenuAction(e, onDelete)}
+              className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors duration-150"
+            >
+              Delete {itemType}
+            </button>
           ) : (
             <button
               role="menuitem"
