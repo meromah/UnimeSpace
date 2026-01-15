@@ -13,9 +13,7 @@ import {
 } from "../services/descSubscriptionsApi";
 import { useMemo, useState } from "react";
 import RecommendedCommunitySkeleton from "../pages/user/components/Skeleton/RecommendedCommunitySkeleton";
-import { AnnouncementsSkeleton } from "../pages/user/components/Skeleton/AnnouncementsSkeleton";
 import Toast from "./Toast";
-import RelativeTime from "./RelativeTime";
 import Announcements from "../pages/user/components/Announcements";
 const CommunityElement = ({ community, subscribed, setError }) => {
   const navigate = useNavigate();
@@ -84,7 +82,6 @@ const CommunityElement = ({ community, subscribed, setError }) => {
 
   return (
     <div
-      key={community.id}
       className={
         `flex flex-col justify-between gap-3 p-2 rounded-lg ${location.pathname === "/explore/"
           ? "items-stretch bg-white dark:bg-neutral-900 w-full sm:min-w-96 xl:max-w-2/5 p-4 border border-neutral-100 dark:border-neutral-800 rounded-lg shadow"
