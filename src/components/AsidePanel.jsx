@@ -86,15 +86,15 @@ const CommunityElement = ({ community, subscribed, setError }) => {
     <div
       key={community.id}
       className={
-        location.pathname === "/explore/"
-          ? "flex items-start lg:flex-col lg:items-stretch gap-3 flex-1 bg-white dark:bg-neutral-900 w-full lg:min-w-[30%] lg:max-w-2/5 p-4 border border-neutral-100 dark:border-neutral-800 rounded-lg shadow"
-          : "flex flex-col items-start justify-between gap-3 p-2 hover:bg-neutral-50 dark:bg-neutral-800 dark:hover:bg-neutral-900 rounded-lg transition-colors"
+        `flex flex-col justify-between gap-3 p-2 rounded-lg ${location.pathname === "/explore/"
+          ? "items-stretch bg-white dark:bg-neutral-900 w-full sm:min-w-96 xl:max-w-2/5 p-4 border border-neutral-100 dark:border-neutral-800 rounded-lg shadow"
+          : "items-start hover:bg-neutral-50 dark:bg-neutral-800 dark:hover:bg-neutral-900 transition-colors"}`
       }
     >
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0">
         <Link
-          to={path}
-          className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-0.5"
+          to={`/${path}`}
+          className="block text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-0.5 line-clamp-1 w-full cursor-pointer"
         >
           {path}
         </Link>
@@ -176,7 +176,7 @@ const AsidePanel = () => {
             <div
               className={
                 location.pathname === "/explore/"
-                  ? "flex flex-col lg:flex-row items-center gap-2 p-4 overflow-x-scroll"
+                  ? "flex flex-col sm:flex-row items-center gap-2 p-4 overflow-x-scroll"
                   : "space-y-3"
               }
             >
