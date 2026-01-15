@@ -122,6 +122,11 @@ const PostCard = ({
           isFirst ? "rounded-t-lg border-t" : isLast ? "rounded-b-lg" : ""
         }`}
         key={`${itemType}-${item.id}-${item.title}`}
+        onClick={() =>
+            navigate(
+              `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`
+            )
+          }
       >
         {/* Header */}
         <header className="relative flex items-start justify-between mb-3">
@@ -132,9 +137,10 @@ const PostCard = ({
                 item.author &&
                 handleAuthorClick(e, `/u/${item.author.username}`)
               }
-              className="w-10 h-10 rounded-full overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+              className="w-10 h-10 rounded-full overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 cursor-pointer"
             >
-              {item.author !== null && item[communityType]?.avatar?.file_hash ? (
+              {item.author !== null &&
+              item[communityType]?.avatar?.file_hash ? (
                 <img
                   src={getFileUrl(item[communityType].avatar.file_hash)}
                   alt={`${item.author.username}'s profile picture`}
@@ -143,7 +149,7 @@ const PostCard = ({
                 />
               ) : (
                 <span className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
-                  {getInitials(item[communityType].name) }
+                  {getInitials(item[communityType].name)}
                 </span>
               )}
             </button>
@@ -196,57 +202,49 @@ const PostCard = ({
         </header>
 
         {/* Content */}
-        <div
-          onClick={() =>
-            navigate(
-              `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`
-            )
-          }
-        >
-          {itemType === "test" ? (
-            <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 dark:bg-neutral-800 p-3 rounded hover:bg-blue-100 dark:hover:bg-neutral-700 transition-colors duration-200">
-              <div className="flex-1 overflow-hidden flex flex-col gap-0.5">
-                <p className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {item.title}
-                </p>
-              </div>
-              <button
-                className="px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-neutral-100 dark:text-neutral-900 active:scale-95 font-medium whitespace-nowrap cursor-pointer dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
-                onClick={onStartTest}
+        {itemType === "test" ? (
+          <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 dark:bg-neutral-800 p-3 rounded hover:bg-blue-100 dark:hover:bg-neutral-700 transition-colors duration-200">
+            <div className="flex-1 overflow-hidden flex flex-col gap-0.5">
+              <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                {item.title}
+              </p>
+            </div>
+            <button
+              className="px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-neutral-100 dark:text-neutral-900 active:scale-95 font-medium whitespace-nowrap cursor-pointer dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
+              onClick={onStartTest}
+            >
+              Start
+            </button>
+          </div>
+        ) : (
+          <div className="mb-3 flex flex-col gap-2">
+            <div>
+              <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-3 pb-3 border-b border-neutral-200 dark:border-neutral-700">
+                {item.title}
+              </h2>
+              <PostCardMarkdownViewer
+                isExpanded={false}
+                maxLines={10}
+                onReadMore={(e) => {
+                  preventNavigation(e);
+                  navigate(
+                    `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`
+                  );
+                }}
               >
-                Start
-              </button>
+                {item.body}
+              </PostCardMarkdownViewer>
             </div>
-          ) : (
-            <div className="mb-3 flex flex-col gap-2">
-              <div>
-                <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-3 pb-3 border-b border-neutral-200 dark:border-neutral-700">
-                  {item.title}
-                </h2>
-                <PostCardMarkdownViewer
-                  isExpanded={false}
-                  maxLines={10}
-                  onReadMore={(e) => {
-                    preventNavigation(e);
-                    navigate(
-                      `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`
-                    );
-                  }}
-                >
-                  {item.body}
-                </PostCardMarkdownViewer>
-              </div>
 
-              {images.length > 0 && <PostImages images={images} />}
-              {files.length > 0 && <PostFiles files={files} />}
-            </div>
-          )}
-        </div>
+            {images.length > 0 && <PostImages images={images} />}
+            {files.length > 0 && <PostFiles files={files} />}
+          </div>
+        )}
 
         {/* Actions */}
         <footer className="flex items-center gap-4 text-neutral-600 dark:text-neutral-200 text-sm">
           <button
-            className="flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
+            className="flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer"
             title="Comments"
             aria-label={`${item.comments_count} comments`}
           >
