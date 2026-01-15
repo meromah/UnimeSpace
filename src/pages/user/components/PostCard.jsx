@@ -134,7 +134,7 @@ const PostCard = ({
               }
               className="w-10 h-10 rounded-full overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
             >
-              {item[communityType]?.avatar?.file_hash ? (
+              {item.author !== null && item[communityType]?.avatar?.file_hash ? (
                 <img
                   src={getFileUrl(item[communityType].avatar.file_hash)}
                   alt={`${item.author.username}'s profile picture`}
@@ -143,7 +143,7 @@ const PostCard = ({
                 />
               ) : (
                 <span className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold w-full h-full">
-                  {item.author ? getInitials(item[communityType].name) : ""}
+                  {getInitials(item[communityType].name) }
                 </span>
               )}
             </button>
@@ -163,7 +163,7 @@ const PostCard = ({
               </button>
 
               <p className="text-xs text-neutral-600 dark:text-neutral-400 flex items-center gap-1">
-                {item?.author ? (
+                {item?.author !== null ? (
                   <button
                     onClick={(e) =>
                       handleAuthorClick(e, `/u/${item.author.username}`)
