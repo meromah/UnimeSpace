@@ -120,3 +120,7 @@ body::-webkit-scrollbar {
 .virtual-item-padding {
   @apply p-4 md:p-6
 }
+.virtual-item-margin-x {
+  @apply mx-4 md:mx-6
+
+}
