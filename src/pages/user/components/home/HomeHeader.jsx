@@ -15,7 +15,7 @@ const HomeHeader = ({onTabChange, tab, ref=null }) => {
                 py-5 mx-auto font-semibold transition-all duration-150
                 ${
                   tab === value
-                    ? "border-b-4 text-neutral-950 dark:text-neutral-100 border-primary-blue dark:border-primary-blue"
+                    ? "border-b-4 text-neutral-950 dark:text-neutral-100 border-primary-blue dark:border-neutral-100"
                     : "text-neutral-600 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-100"
                 }
                 focus:outline-none cursor-pointer
