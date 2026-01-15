@@ -16,6 +16,7 @@ import RecommendedCommunitySkeleton from "../pages/user/components/Skeleton/Reco
 import { AnnouncementsSkeleton } from "../pages/user/components/Skeleton/AnnouncementsSkeleton";
 import Toast from "./Toast";
 import RelativeTime from "./RelativeTime";
+import Announcements from "../pages/user/components/Announcements";
 const CommunityElement = ({ community, subscribed, setError }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -136,7 +137,7 @@ const AsidePanel = () => {
   const location = useLocation();
   const [error, setError] = useState({ hasError: false, message: null });
   const {
-    data: announcements,
+    data: announcementsResult,
     isSuccess,
     isFetching: isAnnouncementsFetching,
   } = useGetAnnouncementsQuery();
@@ -156,53 +157,7 @@ const AsidePanel = () => {
         {/* Search Panel */}
         <SearchPanel className="pt-4" />
         {/* Announcements Panel */}
-        {isAnnouncementsFetching ? (
-          <AnnouncementsSkeleton
-            isExplorePage={location.pathname === "/explore/"}
-          />
-        ) : (
-          <div
-            className={
-              location.pathname === "/explore/"
-                ? ""
-                : "bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4"
-            }
-          >
-            <h2 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
-              Announcements
-            </h2>
-            <div
-              className={
-                location.pathname === "/explore/"
-                  ? "flex flex-col gap-2 p-4 text-lg"
-                  : "space-y-4"
-              }
-            >
-              {isSuccess &&
-                announcements?.data?.map((announcement) => (
-                  <div
-                    key={announcement.id}
-                    className={
-                      location.pathname === "/explore/"
-                        ? "bg-white dark:bg-neutral-900 w-full p-4 border border-neutral-100 dark:border-neutral-700 rounded-lg shadow"
-                        : "pb-4 border-b border-neutral-100 dark:border-neutral-700 last:border-b-0 last:pb-0"
-                    }
-                  >
-                    <h3 className="text-base font-medium text-neutral-900 dark:text-neutral-100 mb-1">
-                      {announcement.title}
-                    </h3>
-                    <RelativeTime
-                      date={announcement.created_at}
-                      className="text-xs text-neutral-400"
-                    />
-                    <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
-                      {announcement.body}
-                    </p>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
+        <Announcements announcements={announcementsResult?.data} isExplorePage={location.pathname === "/explore/"} isLoading={isAnnouncementsFetching} isSuccess={isSuccess}/>
         {isCommunitiesFetching ? (
           <RecommendedCommunitySkeleton
             isExplorePage={location.pathname === "/explore/"}
