@@ -85,14 +85,18 @@ const Feeds = () => {
             <>
               <HomeHeader tab={tab} onTabChange={handleTabChange} />
 
-              <HomeSortBy
-                SortByTimeComponent={SortByTimeComponent}
-                SortByTypeComponent={SortByTypeComponent}
-                labelByTime={labelByTime}
-                labelByType={labelByType}
-                className="p-4 md:p-6"
-              />
-              <CreateCTASection />
+              {tab === firstTab && (
+                <>
+                  <HomeSortBy
+                    SortByTimeComponent={SortByTimeComponent}
+                    SortByTypeComponent={SortByTypeComponent}
+                    labelByTime={labelByTime}
+                    labelByType={labelByType}
+                    className="p-4 md:p-6"
+                  />
+                  <CreateCTASection />
+                </>
+              )}
               <div className="flex flex-col items-center justify-center py-16 px-4">
                 <div className="bg-neutral-100 dark:bg-neutral-800 rounded-full p-6 mb-4">
                   <Inbox className="text-4xl text-neutral-400 dark:text-neutral-500" />
