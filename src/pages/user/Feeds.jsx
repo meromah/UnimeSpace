@@ -14,6 +14,7 @@ import InfiniteItemCards from "./components/Virtualized/InfiniteItemCards.jsx";
 import FeedsSkeleton from "./components/Skeleton/FeedsSkeleton.jsx";
 import LoginWarning from "../../components/LoginWarning.jsx";
 import { setHasFetchRequest } from "../../app/homeFeedSlice.js";
+import CreateCTASection from "./components/home/CreateCTASection.jsx";
 
 const tabFilters = new TabFilters();
 const firstTab = tabFilters.firstValue();
@@ -91,6 +92,7 @@ const Feeds = () => {
                 labelByType={labelByType}
                 className="p-4 md:p-6"
               />
+              <CreateCTASection />
               <div className="flex flex-col items-center justify-center py-16 px-4">
                 <div className="bg-neutral-100 dark:bg-neutral-800 rounded-full p-6 mb-4">
                   <Inbox className="text-4xl text-neutral-400 dark:text-neutral-500" />
@@ -135,6 +137,7 @@ const Feeds = () => {
                         className="virtual-item-padding-x"
                       />
                     ),
+                    (ref) => <CreateCTASection ref={ref} />,
                   ]}
                   onNearBottom={fetchRequest}
                 />
