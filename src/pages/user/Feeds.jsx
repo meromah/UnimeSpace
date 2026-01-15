@@ -15,6 +15,8 @@ import FeedsSkeleton from "./components/Skeleton/FeedsSkeleton.jsx";
 import LoginWarning from "../../components/LoginWarning.jsx";
 import { setHasFetchRequest } from "../../app/homeFeedSlice.js";
 import CreateCTASection from "./components/home/CreateCTASection.jsx";
+import { useGetAnnouncementsQuery } from "../../services/announcementApi.js";
+import Announcements from "./components/Announcements.jsx";
 
 const tabFilters = new TabFilters();
 const firstTab = tabFilters.firstValue();
@@ -45,13 +47,20 @@ const Feeds = () => {
     emptyStateMessages: emptyStateMessagesByTime,
     resetSortBy,
   } = useSortBy({ isAuthenticated, sortOptionsConfig: SORT_BY });
-  //API call hook
+  //API call hook to get posts/tests details
   const { data, likedData, error, hasMore } = useGetHomeData({
     sortBy,
     sortByType,
     tab,
     username,
   });
+
+  const {
+    data: announcementsResult,
+    isSuccess: isAnnouncementsSuccess,
+    isFetching: isAnnouncementsFetching,
+  } = useGetAnnouncementsQuery();
+
   const handleTabChange = (newTab) => {
     setTab(newTab);
   };
@@ -95,6 +104,15 @@ const Feeds = () => {
                     className="p-4 md:p-6"
                   />
                   <CreateCTASection />
+                  <div className="sm:hidden virtual-item-margin-x" ref={ref}>
+                    <Announcements
+                      announcements={announcementsResult?.data}
+                      isExplorePage={true}
+                      isLoading={isAnnouncementsFetching}
+                      isSuccess={isAnnouncementsSuccess}
+                      className="flex gap-4 overflow-x-auto"
+                    />
+                  </div>
                 </>
               )}
               <div className="flex flex-col items-center justify-center py-16 px-4">
@@ -142,6 +160,20 @@ const Feeds = () => {
                       />
                     ),
                     (ref) => <CreateCTASection ref={ref} />,
+                    (ref) => (
+                      <div
+                        className="sm:hidden virtual-item-margin-x"
+                        ref={ref}
+                      >
+                        <Announcements
+                          announcements={announcementsResult?.data}
+                          isExplorePage={true}
+                          isLoading={isAnnouncementsFetching}
+                          isSuccess={isAnnouncementsSuccess}
+                          className="flex gap-4 overflow-x-auto"
+                        />
+                      </div>
+                    ),
                   ]}
                   onNearBottom={fetchRequest}
                 />
