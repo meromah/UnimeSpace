@@ -198,20 +198,20 @@ const EditCommunity = ({
   }
 
   return (
-    <div className="relative min-h-screen bg-primary-bg">
+    <div className="relative min-h-screen bg-primary-bg dark:bg-neutral-950">
       <div className="max-w-2xl w-full mx-auto px-4 py-8">
         <div className="text-center p-2 md:p-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent mb-2">
             Edit {communityTypeLabel}
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 dark:text-neutral-300">
             Update {communityTypeLabel.toLowerCase()} information and images
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-lg border border-slate-200"
+          className="bg-white dark:bg-neutral-900 rounded-lg border border-slate-200 dark:border-neutral-700"
         >
           <div className="p-6 space-y-6">
             <ImageUploadManager
@@ -250,7 +250,7 @@ const EditCommunity = ({
 
             {/* Community Description Field */}
             <div className="flex flex-col gap-2">
-              <label className="font-medium text-neutral-800">
+              <label className="font-medium text-neutral-800 dark:text-neutral-100">
                 Description *
               </label>
               <textarea
@@ -270,19 +270,19 @@ const EditCommunity = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-between gap-2 px-6 py-4 border-t border-neutral-200">
+          <div className="flex items-center justify-between gap-2 px-6 py-4 border-t border-neutral-200 dark:border-neutral-700">
             <button
               type="button"
               onClick={handleCancel}
               disabled={isUpdating || isImageUploading}
-              className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!isFormValid || isUpdating || isImageUploading}
-              className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-medium"
+              className="px-4 py-2 text-sm bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-colors font-medium"
             >
               Save
             </button>

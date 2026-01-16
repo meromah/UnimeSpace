@@ -137,13 +137,13 @@ const CommunityMembers = ({
     return <ErrorDisplay error={community || member} />;
   }
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-primary-bg dark:bg-neutral-950">
       {isLoading ? (
         <div className="max-w-4xl mx-auto px-4 py-8 min-h-screen flex flex-col animate-pulse">
           {/* Header Skeleton */}
           <div className="mb-6 shrink-0">
-            <div className="h-8 w-1/3 bg-gray-300 rounded mb-2"></div>
-            <div className="h-4 w-1/5 bg-gray-300 rounded"></div>
+            <div className="h-8 w-1/3 bg-neutral-200 dark:bg-neutral-700 rounded mb-2"></div>
+            <div className="h-4 w-1/5 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
           </div>
 
           {/* Members List Skeleton */}
@@ -151,10 +151,10 @@ const CommunityMembers = ({
             {Array.from({ length: 5 }).map((_, idx) => (
               <div
                 key={idx}
-                className="rounded-lg border border-gray-200 p-4 bg-gray-200 flex flex-col gap-2"
+                className="rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 bg-white dark:bg-neutral-900 flex flex-col gap-2"
               >
-                <div className="h-4 w-2/5 bg-gray-300 rounded"></div>
-                <div className="h-3 w-1/3 bg-gray-300 rounded"></div>
+                <div className="h-4 w-2/5 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
+                <div className="h-3 w-1/3 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
               </div>
             ))}
           </div>
@@ -163,8 +163,10 @@ const CommunityMembers = ({
         <div className="max-w-4xl mx-auto px-4 py-8 min-h-screen flex flex-col">
           {/* Header */}
           <div className="mb-6 shrink-0">
-            <h1 className="text-2xl font-semibold text-gray-900">Members</h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+              Members
+            </h1>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
               {totalMembers || 0} total member{totalMembers > 1 ? "s" : ""}
             </p>
           </div>
@@ -183,8 +185,10 @@ const CommunityMembers = ({
                 ))}
               </div>
             ) : (
-              <div className="bg-white rounded-lg border border-gray-200 p-12 text-center h-full flex items-center justify-center">
-                <p className="text-gray-500 text-sm">No members yet</p>
+              <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-12 text-center h-full flex items-center justify-center">
+                <p className="text-neutral-500 dark:text-neutral-400 text-sm">
+                  No members yet
+                </p>
               </div>
             )}
           </div>
@@ -195,19 +199,19 @@ const CommunityMembers = ({
               <button
                 onClick={handlePreviousPage}
                 disabled={page === 1}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-40"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-md hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
 
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-neutral-600 dark:text-neutral-400">
                 Page {page} of {totalPage}
               </span>
 
               <button
                 onClick={handleNexPage}
                 disabled={page === totalPage}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-40"
+                className="px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-md hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Next
               </button>
