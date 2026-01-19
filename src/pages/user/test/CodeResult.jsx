@@ -6,9 +6,9 @@ const CodeResult = ({ question, questionNum, result, currentSubmission }) => {
   useEffect(() => {
     const isSuccess = new Set();
     for (const item of result) {
-      const { error } = item;
-      const hasError = error.length > 0;
-      const itemSuccess = item.stdout && item.stdout.success
+      const { error = "" } = item ?? {};
+      const hasError = error?.length > 0;
+      const itemSuccess = item?.stdout && item?.stdout?.success
       isSuccess.add(Boolean(itemSuccess && !hasError))
     }
     setSuccess(!isSuccess.has(false))
@@ -47,7 +47,7 @@ const CodeResult = ({ question, questionNum, result, currentSubmission }) => {
           const testcase = question.testcases[i];
           const args = testcase.arguments;
           const stdout = item.stdout;
-          const hasError = item.error.length > 0;
+          const hasError = item?.error?.length > 0;
           const stdSuccess = stdout && stdout.success;
           return hasError ? (
             <div className="flex flex-col gap-2 p-3 border rounded-lg bg-red-100 dark:text-neutral-200 dark:bg-red-800/20 dark:border-red-600 border-red-300 text-red-600">

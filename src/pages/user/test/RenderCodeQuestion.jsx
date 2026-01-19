@@ -42,8 +42,8 @@ const RenderCodeQuestion = ({ onError }) => {
       initializeSubmission({
         question_id: question.id,
         question_type: "code",
-        value: `def ${question.signature.signature}(${Array.from({
-          length: question.signature.arg_nums,
+        value: `def ${question?.signature?.signature}(${Array.from({
+          length: question?.signature?.arg_nums,
         })
           .map((_, i) => `arg${i + 1}`)
           .join(", ")}):\n\t# Write your solution here`,
@@ -89,16 +89,12 @@ const RenderCodeQuestion = ({ onError }) => {
       const { data } = await playPython({
         bodyData: { user_solution: pythonCode, question_id: question.id },
       }).unwrap();
-      const result = [];
+      let temp = [];
       for (let i = 0; i < data.length; i++) {
         const element = data[i];
-        if (element.error.length > 0) {
-          throw new Error(element.error);
-        }
-        const testcase = question.testcases[i];
-        result.push({ ...element.stdout, testcase });
+        temp.push({ stdout: element.stdout, stderr: element.stderr, cmpinfo: element.cmpinfo, testcase: question.testcases[i] });
       }
-      setPythonOutput(result || []);
+      setPythonOutput(temp);
       setError({hasError: false, message: null})
     } catch (err) {
       setError({
@@ -131,6 +127,7 @@ const RenderCodeQuestion = ({ onError }) => {
       }, 0);
     }
   };
+
   return (
     <div
       className={`w-full bg-white flex flex-col overflow-hidden dark:bg-neutral-950 ${
@@ -215,7 +212,7 @@ const RenderCodeQuestion = ({ onError }) => {
                         {args.length > 0 && (
                           <div className="mb-2">
                             <span className="text-xs text-neutral-600 dark:text-neutral-300">
-                              Input:{" "}
+                              Input: 
                             </span>
                             <code className="text-xs text-neutral-900 dark:text-neutral-100 font-mono">
                               {args.map((a) => a.body).join(", ")}
@@ -274,11 +271,25 @@ const RenderCodeQuestion = ({ onError }) => {
                   {pythonOutput.length > 1 ? "Outputs" : "Output"}
                 </h2>
                 {pythonOutput.map((item, i) => {
-                  const { testcase, success } = item;
-                  const args = testcase.arguments;
+                  const { stdout, stderr, cmpinfo, testcase } = item;
+                  // sometimes when user makes syntax error, stdout is empty string, so is stderr
+                  // the error is delivered in cmpinfo
+                  const hasSyntaxError = cmpinfo && cmpinfo.trim() !== "";
+                  const success = stdout?.success ?? false;
+                  const hasRuntimeError = stdout?.error;
+                  const args = testcase?.arguments ?? [];
+                  
+                  // Format output arrays for display
+                  const formatOutput = (output) => {
+                    if (Array.isArray(output)) {
+                      return `(${output.join(", ")})`;
+                    }
+                    return output?.toString() || "";
+                  };
+                  
                   return (
                     <div
-                      key={testcase.id || i}
+                      key={testcase?.id || i}
                       className={`flex flex-col gap-2 p-3 border rounded-lg ${
                         success
                           ? "bg-green-100 dark:text-neutral-200 dark:bg-green-800/20 border-green-300 text-green-600"
@@ -289,37 +300,43 @@ const RenderCodeQuestion = ({ onError }) => {
                         Test Case {i + 1}
                       </div>
                       <div className="flex flex-col gap-1">
-                        {args.length > 0 && (
+                        {hasSyntaxError ? (
                           <div>
-                            <span className="text-xs">Input:</span>
+                            <span className="text-xs">Error: </span>
                             <code className="text-xs font-semibold font-mono">
-                              {args.map((a) => a.body).join(", ")}
+                              {cmpinfo}
                             </code>
                           </div>
-                        )}
-                        {success && testcase.expected_output ? (
+                        ) : hasRuntimeError ? (
                           <div>
-                            <span className="text-xs">Your Output:</span>
+                            <span className="text-xs">Runtime Error: </span>
                             <code className="text-xs font-semibold font-mono">
-                              {testcase.expected_output}
+                              {stdout.error}
                             </code>
                           </div>
-                        ) : !success && testcase.expected_output ? (
+                        ) : success ? (
+                          <div>
+                            <span className="text-xs">Your Output: </span>
+                            <code className="text-xs font-semibold font-mono">
+                              Correct
+                            </code>
+                          </div>
+                        ) : (
                           <>
                             <div>
-                              <span className="text-xs">Your Output:</span>
+                              <span className="text-xs">Your Output: </span>
                               <code className="text-xs font-semibold font-mono">
-                                {item.output}
+                                {formatOutput(stdout?.output)}
                               </code>
                             </div>
                             <div>
-                              <span className="text-xs">Expected Output:</span>
+                              <span className="text-xs">Expected Output: </span>
                               <code className="text-xs font-semibold font-mono">
-                                {item.expected}
+                                {formatOutput(stdout?.expected)}
                               </code>
                             </div>
                           </>
-                        ) : null}
+                        )}
                       </div>
                     </div>
                   );

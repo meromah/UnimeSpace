@@ -245,6 +245,7 @@ const EditCommunity = ({
               originalName={communityData?.data?.name}
               onValidationChange={(isValid) => setIsNameValid(isValid)}
               onSpecialCharDetected={setHasSpecialChar}
+              allowUppercase={true}
               required
             />
 

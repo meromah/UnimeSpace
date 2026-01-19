@@ -31,10 +31,11 @@ const CommunityElement = ({ community, subscribed, setError }) => {
     unsubscribeFromDesc,
     { isLoading: isDescUnsubscribing, error: unsubscribeDescError },
   ] = useUnsubscribeFromDescMutation();
-  const isBoard = Object.hasOwn(community, "posts_count");
+  if (!community) return null;
+  const isBoard = community ? Object.hasOwn(community, "posts_count") : false;
   const path = isBoard ? `b/${community.name}` : `d/${community.name}`;
   const communityType = isBoard ? "boards" : "descs";
-  const isSubscribed = subscribed[communityType].has(community.id);
+  const isSubscribed = subscribed?.[communityType]?.has(community.id) ?? false;
   const isSubscribing = isBoard ? isBoardSubscribing : isDescSubscribing;
   const isUnsubscribing = isBoard ? isBoardUnsubscribing : isDescUnsubscribing;
   const location = useLocation();
@@ -177,11 +178,12 @@ const AsidePanel = () => {
                   : "space-y-3"
               }
             >
-              {communities?.data.map((community) => (
+              {communities?.data?.filter(community => community != null && community != undefined )
+              .map((community) => (
                 <CommunityElement
                   community={community}
                   subscribed={subscribed}
-                  key={community.name}
+                  key={community?.name}
                   setError={setError}
                 />
               ))}

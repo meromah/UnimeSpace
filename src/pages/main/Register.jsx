@@ -452,7 +452,7 @@ const Register = () => {
                 <NameAvailabilityInput
                   value={form.username}
                   onChange={(value ) => {
-                    setForm({ ...form, username: value.toLowerCase() });
+                    setForm({ ...form, username: value });
                     if (errors.username) setErrors({ ...errors, username: "" });
                   }}
                   useCheckAvailabilityQuery={useCheckIsUsernameAvailableQuery}

@@ -15,6 +15,7 @@ const NameAvailabilityInput = ({
   placeholder = "e.g., My-Name",
   urlPrefix = null, // "b/" | "d/" | "u/" - if null, no preview shown
   originalName = null, // Original name for edit mode (skips API check if unchanged)
+  allowUppercase = false, // If true, allows uppercase letters (for boards/descs); if false, forces lowercase (for usernames)
   // Callbacks
   onValidationChange, // (isValid, errorMessage) => void
   onSpecialCharDetected, // (hasSpecialChar) => void - for parent to show toast
@@ -83,12 +84,24 @@ const NameAvailabilityInput = ({
       return;
     }
 
-    const validationRegex = /^[a-zA-Z0-9 _]+$/;
-    const isValid = validationRegex.test(inputValue);
+    // Apply validation based on allowUppercase prop
+    let processedValue = inputValue;
+    let validationRegex;
+    
+    if (allowUppercase) {
+      // Allow uppercase letters for boards/descs
+      validationRegex = /^[a-zA-Z0-9 _]+$/;
+    } else {
+      // Force lowercase for usernames
+      processedValue = inputValue.toLowerCase();
+      validationRegex = /^[a-z0-9 _]+$/;
+    }
+    
+    const isValid = validationRegex.test(processedValue);
     setHasSpecialChar(!isValid);
 
     if (isValid) {
-      onChange(inputValue.replace(/\s+/g, "_"));
+      onChange(processedValue.replace(/\s+/g, "_"));
     }
   };
   // Notify parent of availability changes

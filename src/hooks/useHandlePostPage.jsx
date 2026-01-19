@@ -86,7 +86,11 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
       board: community,
       postId: itemId,
     },
-    { skip: itemType === "test" }
+    {
+      skip: itemType === "test",
+      pollingInterval: 15_000, // poll comments every 15 seconds
+      refetchOnFocus: true, // refresh when tab regains focus
+    }
   );
   const {
     data: testComments,
@@ -98,7 +102,11 @@ const useHandlePostPage = ({ community, itemId, itemType }) => {
       desc: community,
       test: itemId,
     },
-    { skip: itemType === "post" }
+    {
+      skip: itemType === "post",
+      pollingInterval: 15_000, // poll test comments every 15 seconds
+      refetchOnFocus: true, // refresh when tab regains focus
+    }
   );
 
   // Memoized file separation
