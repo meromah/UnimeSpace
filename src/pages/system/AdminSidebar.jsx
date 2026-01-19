@@ -5,6 +5,7 @@ import {
   useCallback,
 } from "react";
 import {
+  Bug,
   ChevronRight,
   FileEdit,
   Menu,
@@ -70,6 +71,7 @@ const AdminSidebar = () => {
 
   const adminMenuItems = [
     { label: "Create Test", path: "/system/create/test", icon: FileEdit },
+    { label: "Reports", path: "/system/reports", icon: Bug },
   ];
 
   return (
