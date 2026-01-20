@@ -29,6 +29,7 @@ import ResetPassword from "./pages/main/ResetPassword";
 import EditDesc from "./pages/user/EditDesc";
 import CreateTestAsAdmin from "./pages/system/CreateTestAsAdmin";
 import { useSelector } from "react-redux";
+import ReportsPage from "./pages/system/ReportsPage.jsx";
 
 const App = () => {
   const theme = useSelector((state) => state.ui.theme);
@@ -86,6 +87,8 @@ const App = () => {
       <Route path="/system" element={<AdminPage />}>
         <Route index element={<div className="p-6"><h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Admin Dashboard</h1></div>} />
         <Route path="create/test" element={<CreateTestAsAdmin />} />
+        <Route path="reports" element={<ReportsPage />} />
+
       </Route>
       <Route path="/contact" element={<Contact />} />
       <Route path="/about" element={<AboutUs />} />
