@@ -50,7 +50,7 @@ const RenderMultiSelectMcqQuestion = () => {
         </h2> */}
       </div>
       <main className="grid gap-3">
-        <p className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
+        <p className="text-sm text-indigo-600 dark:text-indigo-400 font-medium select-none">
           Select all that apply
         </p>
         {question.options?.map((opt) => {
@@ -102,7 +102,7 @@ const RenderMultiSelectMcqQuestion = () => {
                 className="sr-only"
               />
               <span
-                className={`ml-4 text-base select-none ${
+                className={`ml-4 text-base ${
                   isSelected
                     ? "text-indigo-900 dark:text-indigo-100 font-medium"
                     : "text-neutral-800 dark:text-neutral-200"
