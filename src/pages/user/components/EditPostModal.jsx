@@ -139,11 +139,11 @@ const EditPostModal = ({ isOpen, onClose, item, community, itemType }) => {
                 className="w-full min-h-[33vh] px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:bg-white dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-0 transition resize-none overflow-auto"
                 required
                 disabled={isPostUpdating || isTestUpdating}
-                maxLength={1000}
+                maxLength={5000}
               />
               <div className="flex justify-between items-center">
                 <span className="text-xs text-gray-500 dark:text-neutral-400">
-                  {body.length}/1000 characters
+                  {body.length}/5000 characters
                 </span>
               </div>
             </label>
