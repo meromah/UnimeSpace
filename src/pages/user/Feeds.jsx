@@ -1,10 +1,7 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Inbox } from "lucide-react";
-import ErrorDisplay from "../../components/ErrorDisplay.jsx";
-import NotFound from "../../components/NotFound.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import useSortBy from "../../hooks/useSortBy.jsx";
-import HomeHeader from "./components/home/HomeHeader.jsx";
 import HomeSortBy from "./components/home/HomeSortBy.jsx";
 import { SORT_BY, SORT_BY_TYPE } from "../../utils/constants.js";
 import useGetHomeData from "../../hooks/useGetHomeData.jsx";
@@ -12,7 +9,6 @@ import { TabFilters } from "../../utils/tabFilters.js";
 import Toast from "../../components/Toast.jsx";
 import InfiniteItemCards from "./components/Virtualized/InfiniteItemCards.jsx";
 import FeedsSkeleton from "./components/Skeleton/FeedsSkeleton.jsx";
-import LoginWarning from "../../components/LoginWarning.jsx";
 import { setHasFetchRequest } from "../../app/homeFeedSlice.js";
 import CreateCTASection from "./components/home/CreateCTASection.jsx";
 import { useGetAnnouncementsQuery } from "../../services/announcementApi.js";
@@ -20,7 +16,6 @@ import Announcements from "./components/Announcements.jsx";
 
 const tabFilters = new TabFilters();
 const firstTab = tabFilters.firstValue();
-const secondTab = tabFilters.secondValue();
 const Feeds = () => {
   const [tab, setTab] = useState(firstTab);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
@@ -90,31 +85,25 @@ const Feeds = () => {
           {/* Content */}
           {isFirstLoading ? (
             <FeedsSkeleton />
-          ) : data.length === 0 ? (
+          ) : data.length !== 0 ? (
             <>
-              <HomeHeader tab={tab} onTabChange={handleTabChange} />
-
-              {tab === firstTab && (
-                <>
-                  <HomeSortBy
-                    SortByTimeComponent={SortByTimeComponent}
-                    SortByTypeComponent={SortByTypeComponent}
-                    labelByTime={labelByTime}
-                    labelByType={labelByType}
-                    className="p-4 md:p-6"
-                  />
-                  <CreateCTASection />
-                  <div className="sm:hidden virtual-item-margin-x" ref={ref}>
-                    <Announcements
-                      announcements={announcementsResult?.data}
-                      isExplorePage={true}
-                      isLoading={isAnnouncementsFetching}
-                      isSuccess={isAnnouncementsSuccess}
-                      className="flex gap-4 overflow-x-auto"
-                    />
-                  </div>
-                </>
-              )}
+              <HomeSortBy
+                SortByTimeComponent={SortByTimeComponent}
+                SortByTypeComponent={SortByTypeComponent}
+                labelByTime={labelByTime}
+                labelByType={labelByType}
+                className="p-4 md:p-6"
+              />
+              <CreateCTASection />
+              <div className="sm:hidden virtual-item-margin-x">
+                <Announcements
+                  announcements={announcementsResult?.data}
+                  isExplorePage={true}
+                  isLoading={isAnnouncementsFetching}
+                  isSuccess={isAnnouncementsSuccess}
+                  className="flex gap-4 overflow-x-auto"
+                />
+              </div>
               <div className="flex flex-col items-center justify-center py-16 px-4">
                 <div className="bg-neutral-100 dark:bg-neutral-800 rounded-full p-6 mb-4">
                   <Inbox className="text-4xl text-neutral-400 dark:text-neutral-500" />
@@ -131,89 +120,41 @@ const Feeds = () => {
             </>
           ) : (
             <>
-              {tab === firstTab ? (
-                <InfiniteItemCards
-                  key={tab}
-                  hasMore={hasMore}
-                  items={data}
-                  likedData={likedData}
-                  tab={tab}
-                  error={error[firstTab]}
-                  layoutVersion={`${tab}-${sortByType}-${sortBy}`}
-                  layoutSchemaVersion={"feeds-itemCards"}
-                  headerElements={[
-                    (ref) => (
-                      <HomeHeader
-                        ref={ref}
-                        tab={tab}
-                        onTabChange={handleTabChange}
+              <InfiniteItemCards
+                key={tab}
+                hasMore={hasMore}
+                items={data}
+                likedData={likedData}
+                tab={tab}
+                error={error[firstTab]}
+                layoutVersion={`${tab}-${sortByType}-${sortBy}`}
+                layoutSchemaVersion={"feeds-itemCards"}
+                headerElements={[
+                  (ref) => (
+                    <HomeSortBy
+                      ref={ref}
+                      SortByTimeComponent={SortByTimeComponent}
+                      SortByTypeComponent={SortByTypeComponent}
+                      labelByTime={labelByTime}
+                      labelByType={labelByType}
+                      className="virtual-item-padding-x"
+                    />
+                  ),
+                  (ref) => <CreateCTASection ref={ref} />,
+                  (ref) => (
+                    <div className="sm:hidden virtual-item-margin-x" ref={ref}>
+                      <Announcements
+                        announcements={announcementsResult?.data}
+                        isExplorePage={true}
+                        isLoading={isAnnouncementsFetching}
+                        isSuccess={isAnnouncementsSuccess}
+                        className="flex gap-4 overflow-x-auto"
                       />
-                    ),
-                    (ref) => (
-                      <HomeSortBy
-                        ref={ref}
-                        SortByTimeComponent={SortByTimeComponent}
-                        SortByTypeComponent={SortByTypeComponent}
-                        labelByTime={labelByTime}
-                        labelByType={labelByType}
-                        className="virtual-item-padding-x"
-                      />
-                    ),
-                    (ref) => <CreateCTASection ref={ref} />,
-                    (ref) => (
-                      <div
-                        className="sm:hidden virtual-item-margin-x"
-                        ref={ref}
-                      >
-                        <Announcements
-                          announcements={announcementsResult?.data}
-                          isExplorePage={true}
-                          isLoading={isAnnouncementsFetching}
-                          isSuccess={isAnnouncementsSuccess}
-                          className="flex gap-4 overflow-x-auto"
-                        />
-                      </div>
-                    ),
-                  ]}
-                  onNearBottom={fetchRequest}
-                />
-              ) : tab === secondTab ? (
-                <InfiniteItemCards
-                  key={tab}
-                  hasMore={hasMore}
-                  items={data}
-                  likedData={likedData}
-                  tab={tab}
-                  error={error[secondTab]}
-                  layoutVersion={`${tab}-${sortByType}-${sortBy}`}
-                  layoutSchemaVersion={"feeds-itemCards"}
-                  headerElements={[
-                    (ref) => (
-                      <HomeHeader
-                        ref={ref}
-                        tab={tab}
-                        onTabChange={handleTabChange}
-                      />
-                    ),
-                    (ref) => (
-                      <div ref={ref}>
-                        {error[secondTab].hasError &&
-                        error[secondTab].status === 401 ? (
-                          <LoginWarning message="You need to log in to see this page." />
-                        ) : null}
-                        {error[secondTab].hasError &&
-                        error[secondTab].status === 404 ? (
-                          <NotFound />
-                        ) : error[secondTab].hasError &&
-                          error[secondTab].status !== 401 ? (
-                          <ErrorDisplay error={error[secondTab]} />
-                        ) : null}
-                      </div>
-                    ),
-                  ]}
-                  onNearBottom={fetchRequest}
-                />
-              ) : null}
+                    </div>
+                  ),
+                ]}
+                onNearBottom={fetchRequest}
+              />
             </>
           )}
         </div>
