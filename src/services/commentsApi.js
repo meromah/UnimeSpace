@@ -118,6 +118,12 @@ const commentsApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
+    toggleTestCommentLikeByCommentId: builder.mutation({
+      query: ({ comment }) => ({
+        url: `/testcomments/${comment}/likes`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -135,5 +141,6 @@ export const {
   useGetUserCommentQuery,
   useGetCommentLikesByCommentIdMutation,
   useToggleCommentLikeByCommentIdMutation,
+  useToggleTestCommentLikeByCommentIdMutation,
   useGetAllMyCommentsQuery,
 } = commentsApi;

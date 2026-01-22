@@ -7,6 +7,7 @@ import { getInitials, extractErrorMessage, getFileUrl } from "../../../utils";
 import CommentMenu from "./CommentMenu";
 import {
   useToggleCommentLikeByCommentIdMutation,
+  useToggleTestCommentLikeByCommentIdMutation,
   useUpdateCommentByBoardPostMutation,
 } from "../../../services/commentsApi";
 
@@ -18,6 +19,7 @@ const CommentCard = ({
   handleReplySubmit,
   community,
   itemId,
+  itemType = "post",
   onEditComment,
   onDeleteComment,
   onReportComment,
@@ -40,6 +42,8 @@ const CommentCard = ({
   const commentLikeCountRef = useRef(null);
   const [toggleCommentLike, { error: toggleCommentLikeError }] =
     useToggleCommentLikeByCommentIdMutation();
+  const [toggleTestCommentLike, { error: toggleTestCommentLikeError }] =
+    useToggleTestCommentLikeByCommentIdMutation();
   const [updateComment, { isLoading: isUpdating, error: updateCommentError }] =
     useUpdateCommentByBoardPostMutation();
   const isReplying = activeReplyId === comment.id;
@@ -50,6 +54,12 @@ const CommentCard = ({
       onError(extractErrorMessage(toggleCommentLikeError));
     }
   }, [toggleCommentLikeError, onError]);
+
+  useEffect(() => {
+    if (toggleTestCommentLikeError && onError) {
+      onError(extractErrorMessage(toggleTestCommentLikeError));
+    }
+  }, [toggleTestCommentLikeError, onError]);
 
   useEffect(() => {
     if (updateCommentError && onError) {
@@ -82,7 +92,8 @@ const CommentCard = ({
       return;
     }
     try {
-      const res = await toggleCommentLike({ comment: comment.id }).unwrap();
+      const toggleLike = itemType === "test" ? toggleTestCommentLike : toggleCommentLike;
+      const res = await toggleLike({ comment: comment.id }).unwrap();
       setIsLiked(res.toggle);
       if (res.toggle) {
         commentLikeCountRef.current.textContent =
@@ -326,6 +337,7 @@ const CommentCard = ({
                     handleReplySubmit={handleReplySubmit}
                     community={community}
                     itemId={itemId}
+                    itemType={itemType}
                     onEditComment={onEditComment}
                     onDeleteComment={onDeleteComment}
                     onReportComment={onReportComment}

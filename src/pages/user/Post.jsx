@@ -149,6 +149,7 @@ const Post = ({ itemType = "post" }) => {
                 handleReplySubmit={handleCommentSubmit}
                 community={community}
                 itemId={itemId}
+                itemType={itemType}
                 onEditComment={handleCommentEdit}
                 onDeleteComment={handleCommentDelete}
                 onReportComment={handleCommentReport}
