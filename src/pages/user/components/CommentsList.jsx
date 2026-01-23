@@ -12,6 +12,7 @@ const CommentsList = ({
   handleReplySubmit,
   community,
   itemId,
+  itemType,
   onEditComment,
   onDeleteComment,
   onReportComment,
@@ -43,6 +44,7 @@ const CommentsList = ({
                 handleReplySubmit={handleReplySubmit}
                 community={community}
                 itemId={itemId}
+                itemType={itemType}
                 onEditComment={onEditComment}
                 onDeleteComment={onDeleteComment}
                 onReportComment={onReportComment}
