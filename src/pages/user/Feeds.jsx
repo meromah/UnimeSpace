@@ -5,7 +5,6 @@ import useSortBy from "../../hooks/useSortBy.jsx";
 import HomeSortBy from "./components/home/HomeSortBy.jsx";
 import { SORT_BY, SORT_BY_TYPE } from "../../utils/constants.js";
 import useGetHomeData from "../../hooks/useGetHomeData.jsx";
-import { TabFilters } from "../../utils/tabFilters.js";
 import Toast from "../../components/Toast.jsx";
 import InfiniteItemCards from "./components/Virtualized/InfiniteItemCards.jsx";
 import FeedsSkeleton from "./components/Skeleton/FeedsSkeleton.jsx";
@@ -14,10 +13,8 @@ import CreateCTASection from "./components/home/CreateCTASection.jsx";
 import { useGetAnnouncementsQuery } from "../../services/announcementApi.js";
 import Announcements from "./components/Announcements.jsx";
 
-const tabFilters = new TabFilters();
-const firstTab = tabFilters.firstValue();
 const Feeds = () => {
-  const [tab, setTab] = useState(firstTab);
+  const [type, setType] = useState("tests");
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const dispatch = useDispatch();
@@ -29,24 +26,15 @@ const Feeds = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   // Custom hook for sorting
   const {
-    sortBy: sortByType,
-    label: labelByType,
-    SortByComponent: SortByTypeComponent,
-    emptyStateMessages: emptyStateMessagesByType,
-    resetSortBy: resetSortByType,
-  } = useSortBy({ isAuthenticated, sortOptionsConfig: SORT_BY_TYPE });
-  const {
     sortBy,
-    label: labelByTime,
-    SortByComponent: SortByTimeComponent,
+    SortByComponent,
     emptyStateMessages: emptyStateMessagesByTime,
     resetSortBy,
   } = useSortBy({ isAuthenticated, sortOptionsConfig: SORT_BY });
   //API call hook to get posts/tests details
   const { data, likedData, error, hasMore } = useGetHomeData({
     sortBy,
-    sortByType,
-    tab,
+    type,
     username,
   });
 
@@ -56,27 +44,19 @@ const Feeds = () => {
     isFetching: isAnnouncementsFetching,
   } = useGetAnnouncementsQuery();
 
-  const handleTabChange = (newTab) => {
-    setTab(newTab);
-  };
-
   useEffect(() => {
     hasFetchRequestRef.current = hasFetchRequest;
   }, [hasFetchRequest]);
-  useEffect(() => {
-    resetSortBy();
-    resetSortByType();
-  }, [tab]);
   useEffect(() => {
     if (isFirstLoading && data && data.length > 0) {
       setIsFirstLoading(false);
     }
   }, [data, isFirstLoading]);
   const fetchRequest = useCallback(() => {
-    if (!hasFetchRequestRef.current[tab]) {
-      dispatch(setHasFetchRequest({ state: true, tab }));
+    if (!hasFetchRequestRef.current[type]) {
+      dispatch(setHasFetchRequest({ state: true, itemType: type }));
     }
-  }, [dispatch]);
+  }, [dispatch, type]);
 
   return (
     <>
@@ -85,14 +65,12 @@ const Feeds = () => {
           {/* Content */}
           {isFirstLoading ? (
             <FeedsSkeleton />
-          ) : data.length !== 0 ? (
+          ) : data.length === 0 ? (
             <>
               <HomeSortBy
-                SortByTimeComponent={SortByTimeComponent}
-                SortByTypeComponent={SortByTypeComponent}
-                labelByTime={labelByTime}
-                labelByType={labelByType}
-                className="p-4 md:p-6"
+                SortByComponent={SortByComponent}
+                type={type}
+                setType={setType}
               />
               <CreateCTASection />
               <div className="sm:hidden virtual-item-margin-x">
@@ -112,32 +90,28 @@ const Feeds = () => {
                   No posts yet. Be a first one to post
                 </h3>
                 <p className="text-neutral-600 dark:text-neutral-300 text-sm text-center max-w-sm">
-                  {tab === "following"
-                    ? "No posts from your boards. Check other filters."
-                    : "Be the first to post something!"}
+                  Be the first to post something!
                 </p>
               </div>
             </>
           ) : (
             <>
               <InfiniteItemCards
-                key={tab}
+                key={type}
                 hasMore={hasMore}
                 items={data}
                 likedData={likedData}
-                tab={tab}
-                error={error[firstTab]}
-                layoutVersion={`${tab}-${sortByType}-${sortBy}`}
+                type={type}
+                error={error}
+                layoutVersion={`${type}-${sortBy}`}
                 layoutSchemaVersion={"feeds-itemCards"}
                 headerElements={[
                   (ref) => (
                     <HomeSortBy
                       ref={ref}
-                      SortByTimeComponent={SortByTimeComponent}
-                      SortByTypeComponent={SortByTypeComponent}
-                      labelByTime={labelByTime}
-                      labelByType={labelByType}
-                      className="virtual-item-padding-x"
+                      SortByComponent={SortByComponent}
+                      type={type}
+                      setType={setType}
                     />
                   ),
                   (ref) => <CreateCTASection ref={ref} />,

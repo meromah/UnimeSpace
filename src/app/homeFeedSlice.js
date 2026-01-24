@@ -1,28 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { mergeSortedBy } from "../utils";
-import { TabFilters } from "../utils/tabFilters";
-const tabFilters = new TabFilters();
-const firstTab = tabFilters.firstValue();
-const secondTab = tabFilters.secondValue();
+
 const initialState = {
-  activeTab: firstTab,
   items: {
-    [firstTab]: [],
-    [secondTab]: [],
+    posts: [],
+    tests: [],
   },
   firstPageItems: {
-    [firstTab]: [],
-    [secondTab]: [],
+    posts: [],
+    tests: [],
   },
   page: {
-    [firstTab]: 1,
-    [secondTab]: 1,
+    posts: 1,
+    tests: 1,
   },
   sortBy: "latest=1",
   itemType: "all",
   hasFetchRequest: {
-    [firstTab]: false,
-    [secondTab]: false,
+    posts: false,
+    tests: false,
   },
 };
 
@@ -34,108 +30,71 @@ const homeFeedSlice = createSlice({
     mergeSorted: (state, action) => {
       const data1 = action.payload?.data1 || [];
       const data2 = action.payload?.data2 || [];
-      const tab = action.payload.tab;
-      const hasTabChanged = tab !== state.activeTab;
-
-      if (tab === firstTab) {
-        const sortBy = action.payload.sortBy;
-        const itemType = action.payload.itemType;
-        const sortedItems = mergeSortedBy(data1, data2, sortBy);
-        if (state.page[tab] === 1 && sortedItems.length > 0) {
-          state.firstPageItems[tab] = sortedItems;
-        }
-        if (
-          sortBy === state.sortBy &&
-          itemType === state.itemType &&
-          state.page[tab] !== 1 &&
-          !hasTabChanged
-        ) {
-          state.items[tab].push(...sortedItems);
-          state.page[tab] = action.payload.page;
-        } else {
-          state.items[tab] = sortedItems;
-          state.page[tab] = 1;
-          state.sortBy = sortBy;
-          state.itemType = itemType;
-        }
+      const itemType = action.payload.itemType;
+      const sortBy = action.payload.sortBy;
+      const sortedItems = mergeSortedBy(data1, data2, sortBy);
+      
+      if (state.page[itemType] === 1 && sortedItems.length > 0) {
+        state.firstPageItems[itemType] = sortedItems;
       }
-      if (tab === secondTab) {
-        const sortedItems = mergeSortedBy(data1, data2, "latest=1");
-        if (state.page[tab] === 1 && sortedItems.length > 0) {
-          state.firstPageItems[tab] = sortedItems;
-        }
-        if (!hasTabChanged) {
-          state.items[tab].push(...sortedItems);
-          state.page[tab] = action.payload.page;
-        }
-        if (hasTabChanged && state.page[tab] === 1) {
-          state.items[tab] = sortedItems;
-        }
+      if (
+        sortBy === state.sortBy &&
+        itemType === state.itemType &&
+        state.page[itemType] !== 1
+      ) {
+        state.items[itemType].push(...sortedItems);
+        state.page[itemType] = action.payload.page;
+      } else {
+        state.items[itemType] = sortedItems;
+        state.page[itemType] = 1;
+        state.sortBy = sortBy;
+        state.itemType = itemType;
       }
-      state.activeTab = tab;
     },
     setItems: (state, action) => {
       const data = action.payload?.data || [];
       const sortBy = action.payload.sortBy;
       const itemType = action.payload.itemType;
-      const tab = action.payload.tab;
-      if (state.page[tab] === 1 && data.length > 0) {
-        state.firstPageItems[tab] = data;
+      if (state.page[itemType] === 1 && data.length > 0) {
+        state.firstPageItems[itemType] = data;
       }
-      if (tab === firstTab) {
-        if (sortBy === state.sortBy && itemType === state.itemType) {
-          state.items[tab].push(...data);
-          state.page[tab] = action.payload.page;
-        } else {
-          state.items[tab] = data;
-          state.page[tab] = 1;
-          state.sortBy = sortBy;
-          state.itemType = itemType;
-        }
-      } else if (tab === secondTab) {
-        if (state.items[tab].length > 0) {
-          state.items[tab].push(...data);
-          state.page[tab] = action.payload.page;
-        } else {
-          state.items[tab] = [...data];
-          state.page[tab] = 1;
-        }
+      if (sortBy === state.sortBy && itemType === state.itemType) {
+        state.items[itemType].push(...data);
+        state.page[itemType] = action.payload.page;
+      } else {
+        state.items[itemType] = data;
+        state.page[itemType] = 1;
+        state.sortBy = sortBy;
+        state.itemType = itemType;
       }
-      state.activeTab = tab;
     },
     nextPage: (state, action) => {
-      const tab = action.payload.tab;
-      state.page[tab] += 1;
-      state.hasFetchRequest[tab] = false;
-      state.activeTab = tab;
+      const itemType = action.payload.itemType;
+      state.page[itemType] += 1;
+      state.hasFetchRequest[itemType] = false;
     },
     setHasFetchRequest: (state, action) => {
-      const tab = action.payload.tab;
-      state.hasFetchRequest[tab] = action.payload.state;
-      state.activeTab = tab;
+      const itemType = action.payload.itemType;
+      state.hasFetchRequest[itemType] = action.payload.state;
     },
     resetTab: (state, action) => {
-      const tab = action.payload.tab;
-      const firstPageItem = state.firstPageItems;
-      state.items[tab] = state.firstPageItems[tab];
-      state.page[tab] = 1;
-      if (tab === firstTab) {
-        state.itemType = action.payload.itemType;
-        state.sortBy = action.payload.sortBy;
-      }
-      state.hasFetchRequest[tab] = false;
-      state.activeTab = tab;
+      const itemType = action.payload.itemType;
+      state.items[itemType] = state.firstPageItems[itemType];
+      state.page[itemType] = 1;
+      state.itemType = action.payload.itemType;
+      state.sortBy = action.payload.sortBy;
+      state.hasFetchRequest[itemType] = false;
     },
     removeItem: (state, action) => {
       const { itemId, itemType } = action.payload;
-      state.items[firstTab] = state.items[firstTab].filter((item) => {
+      state.items.posts = state.items.posts.filter((item) => {
         const iType = Object.prototype.hasOwnProperty.call(item, "board")
           ? "post"
           : "test";
         return !(item.id === itemId && iType === itemType);
       });
 
-      state.items[secondTab] = state.items[secondTab].filter((item) => {
+      state.items.tests = state.items.tests.filter((item) => {
         const iType = Object.prototype.hasOwnProperty.call(item, "board")
           ? "post"
           : "test";

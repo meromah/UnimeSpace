@@ -59,11 +59,11 @@ class HeightStore {
 }
 
 const heightStores = new Map();
-const getHeightStore = (tab) => {
-  if (!heightStores.has(tab)) {
-    heightStores.set(tab, new HeightStore());
+const getHeightStore = (type) => {
+  if (!heightStores.has(type)) {
+    heightStores.set(type, new HeightStore());
   }
-  return heightStores.get(tab);
+  return heightStores.get(type);
 };
 
 /* ---------------- Measurement Component ---------------- */
@@ -173,7 +173,7 @@ export default function InfiniteItemCards({
   items,
   headerElements,
   likedData,
-  tab,
+  type,
   error = {
     hasError: false,
     status: undefined,
@@ -191,8 +191,8 @@ export default function InfiniteItemCards({
   );
 
   const layoutKey = useMemo(
-    () => `${tab}:${layoutSchemaVersion}`,
-    [tab, layoutSchemaVersion]
+    () => `${type}:${layoutSchemaVersion}`,
+    [type, layoutSchemaVersion]
   );
 
   const containerRef = useRef(null);
@@ -455,7 +455,7 @@ export default function InfiniteItemCards({
     checkNearBottom,
     onNearBottom,
     recomputeRange,
-    tab,
+    type,
     items.length,
   ]);
 
