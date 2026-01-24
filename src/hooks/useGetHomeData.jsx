@@ -7,7 +7,6 @@ import {
 } from "../services/postsApi";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  mergeSorted,
   nextPage,
   resetTab,
   setItems,
@@ -94,7 +93,6 @@ const useGetHomeData = ({ sortBy, type }) => {
 
   const isSuccess = useMemo(() => {
     const successMap = {
-      all: isPostsSuccess && isTestsSuccess,
       posts: isPostsSuccess,
       tests: isTestsSuccess,
     };
@@ -143,29 +141,15 @@ const useGetHomeData = ({ sortBy, type }) => {
     const activeData = getActiveData[type];
 
     // Update data
-    if (type === "all") {
-      if (isSuccess && posts?.data && tests?.data) {
-        dispatch(
-          mergeSorted({
-            data1: remainingRef.current.posts ? posts.data : [],
-            data2: remainingRef.current.tests ? tests.data : [],
-            sortBy,
-            itemType: type,
-            page: page[type],
-          })
-        );
-      }
-    } else {
-      if (activeData?.data) {
-        dispatch(
-          setItems({
-            data: activeData.data,
-            sortBy,
-            itemType: type,
-            page: page[type],
-          })
-        );
-      }
+    if (activeData?.data) {
+      dispatch(
+        setItems({
+          data: activeData.data,
+          sortBy,
+          itemType: type,
+          page: page[type],
+        })
+      );
     }
   }, [sortBy, type, isSuccess, posts?.data, tests?.data, page, dispatch]);
 
@@ -196,7 +180,6 @@ const useGetHomeData = ({ sortBy, type }) => {
   //Extract isFetching from API queries
   useEffect(() => {
     const anyFetching =
-      (type === "all" && (isPostsFetching || isTestsFetching)) ||
       (type === "posts" && isPostsFetching) ||
       (type === "tests" && isTestsFetching);
     setIsFetching(Boolean(anyFetching));
@@ -222,9 +205,7 @@ const useGetHomeData = ({ sortBy, type }) => {
   }, [page, type]);
   useEffect(() => {
     const canFetchMore =
-      type === "all"
-        ? hasMore.posts || hasMore.tests
-        : type === "posts"
+      type === "posts"
         ? hasMore.posts
         : hasMore.tests;
 

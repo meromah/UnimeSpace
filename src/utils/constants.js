@@ -50,13 +50,6 @@ export const SORT_BY = [
 
 export const SORT_BY_TYPE = [
   {
-    id: "all",
-    label: "All",
-    requiresAuth: false,
-    emptyStateTitle: "Nothing yet here!",
-    emptyStateMessage: "Be the first to share something!",
-  },
-  {
     id: "posts",
     label: "Posts",
     requiresAuth: false,

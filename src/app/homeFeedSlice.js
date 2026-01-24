@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { mergeSortedBy } from "../utils";
 
 const initialState = {
   items: {
@@ -15,7 +14,7 @@ const initialState = {
     tests: 1,
   },
   sortBy: "latest=1",
-  itemType: "all",
+  itemType: "tests",
   hasFetchRequest: {
     posts: false,
     tests: false,
@@ -27,40 +26,24 @@ const homeFeedSlice = createSlice({
   initialState,
   reducers: {
     resetHomeFeed: () => initialState,
-    mergeSorted: (state, action) => {
-      const data1 = action.payload?.data1 || [];
-      const data2 = action.payload?.data2 || [];
-      const itemType = action.payload.itemType;
-      const sortBy = action.payload.sortBy;
-      const sortedItems = mergeSortedBy(data1, data2, sortBy);
-      
-      if (state.page[itemType] === 1 && sortedItems.length > 0) {
-        state.firstPageItems[itemType] = sortedItems;
-      }
-      if (
-        sortBy === state.sortBy &&
-        itemType === state.itemType &&
-        state.page[itemType] !== 1
-      ) {
-        state.items[itemType].push(...sortedItems);
-        state.page[itemType] = action.payload.page;
-      } else {
-        state.items[itemType] = sortedItems;
-        state.page[itemType] = 1;
-        state.sortBy = sortBy;
-        state.itemType = itemType;
-      }
-    },
     setItems: (state, action) => {
       const data = action.payload?.data || [];
       const sortBy = action.payload.sortBy;
       const itemType = action.payload.itemType;
+      
       if (state.page[itemType] === 1 && data.length > 0) {
         state.firstPageItems[itemType] = data;
       }
+
       if (sortBy === state.sortBy && itemType === state.itemType) {
-        state.items[itemType].push(...data);
-        state.page[itemType] = action.payload.page;
+        // Prevent duplicates when pushing
+        const existingIds = new Set(state.items[itemType].map(item => item.id));
+        const newData = data.filter(item => !existingIds.has(item.id));
+        
+        if (newData.length > 0) {
+          state.items[itemType].push(...newData);
+          state.page[itemType] = action.payload.page;
+        }
       } else {
         state.items[itemType] = data;
         state.page[itemType] = 1;
@@ -106,7 +89,6 @@ const homeFeedSlice = createSlice({
 
 export const {
   resetHomeFeed,
-  mergeSorted,
   setItems,
   nextPage,
   resetTab,
