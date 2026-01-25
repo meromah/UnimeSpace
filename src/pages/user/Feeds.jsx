@@ -14,7 +14,7 @@ import { useGetAnnouncementsQuery } from "../../services/announcementApi.js";
 import Announcements from "./components/Announcements.jsx";
 
 const Feeds = () => {
-  const [type, setType] = useState("tests");
+  const [type, setType] = useState("posts");
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const dispatch = useDispatch();

@@ -39,7 +39,7 @@ const CreateCTASection = ({ ref = null }) => {
         onClick={() => navigate("/create/post")}
         className="flex-1 px-4 py-2 text-sm text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-800 rounded-lg transition-colors cursor-pointer border border-transparent"
       >
-        What is on your mind, {profileData?.username || "User"}?
+        {`What is on your mind${profileData?.username? `, ${profileData?.username}` : ""}?`}
       </div>
 
       {/* Attachment Icon */}
