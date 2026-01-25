@@ -2,6 +2,7 @@ import PostImages from "./PostImages";
 import PostFiles from "./PostFiles";
 import { useNavigate } from "react-router-dom";
 import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
+import { FileQuestion, Clock, Play } from "lucide-react";
 
 const PostContent = ({ item, itemType, images, files }) => {
   const navigate = useNavigate();
@@ -12,19 +13,34 @@ const PostContent = ({ item, itemType, images, files }) => {
   return (
     <section>
       {itemType === "test" ? (
-        <div className="flex flex-col gap-4 pt-2">
-          <MarkdownViewer>{item.data.description}</MarkdownViewer>
-          <div className="group flex justify-between items-center border-l-4 border-blue-500 bg-blue-50 dark:bg-neutral-800 p-4 rounded hover:bg-blue-100 dark:hover:bg-neutral-700 transition-colors duration-200">
-            <div className="flex flex-col gap-2">
-              <p className="font-medium text-neutral-900 dark:text-neutral-100">
-                {item.data.title}
-              </p>
+        <div className="flex flex-col gap-2">
+          <div>
+            <h4 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+              {item.data.title}
+            </h4>
+            <div className="mb-4">
+              <MarkdownViewer>{item.data.description}</MarkdownViewer>
+            </div>
+            <div className="flex flex-wrap gap-3 mb-4 text-sm text-neutral-500 dark:text-neutral-400">
+              {item.data.questions_count !== undefined && (
+                <div className="flex items-center gap-1">
+                  <FileQuestion className="w-4 h-4" />
+                  <span>{item.data.questions_count} questions</span>
+                </div>
+              )}
+              {item.data.duration && (
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  <span>{item.data.duration} min</span>
+                </div>
+              )}
             </div>
             <button
-              className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-900 dark:hover:text-neutral-100 cursor-pointer"
+              className="rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-neutral-100 dark:text-neutral-900 font-medium cursor-pointer dark:hover:bg-neutral-900 dark:hover:text-neutral-100 px-6 py-2 flex items-center justify-center gap-2 w-full sm:w-fit sm:float-end"
               onClick={onStartTest}
             >
-              Start
+              <Play className="w-4 h-4" />
+              Start Test
             </button>
           </div>
         </div>

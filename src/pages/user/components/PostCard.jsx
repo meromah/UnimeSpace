@@ -1,5 +1,12 @@
 import React, { useRef, useState, useMemo } from "react";
-import { MessageCircle, Heart, Share2 } from "lucide-react";
+import {
+  MessageCircle,
+  Heart,
+  Share2,
+  Play,
+  FileQuestion,
+  Clock,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTogglePostLikeMutation } from "../../../services/postsApi";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,10 +57,10 @@ const PostCard = ({
     }
     const validFiles = item.files.filter((file) => file && file.mimetype);
     const imageFiles = validFiles.filter((file) =>
-      file.mimetype.startsWith("image/")
+      file.mimetype.startsWith("image/"),
     );
     const nonImageFiles = validFiles.filter(
-      (file) => !file.mimetype.startsWith("image/")
+      (file) => !file.mimetype.startsWith("image/"),
     );
     return { images: imageFiles, files: nonImageFiles };
   }, [item.files]);
@@ -113,24 +120,19 @@ const PostCard = ({
     preventNavigation(e);
     dispatch(resetSession());
     navigate(
-      `/${communityUrl}${item[communityType].name}/${itemType}s/${item.id}/start`
+      `/${communityUrl}${item[communityType].name}/${itemType}s/${item.id}/start`,
     );
   };
   return (
     <>
       <section
-        className={`block bg-white dark:bg-neutral-900 border-x border-b border-neutral-200 dark:border-neutral-700 p-4 hover:bg-primary-bg dark:hover:bg-neutral-800 transition-colors duration-200 ${
+        className={`block bg-white dark:bg-neutral-900 border-x border-b border-neutral-200 dark:border-neutral-700 ${
           isFirst ? "rounded-t-lg border-t" : isLast ? "rounded-b-lg" : ""
         }`}
         key={`${itemType}-${item.id}-${item.title}`}
-        onClick={() =>
-            navigate(
-              `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`
-            )
-          }
       >
         {/* Header */}
-        <header className="relative flex items-start justify-between mb-3">
+        <header className="relative flex items-start justify-between p-4">
           <div className="flex items-start gap-3">
             {/* Avatar */}
             <button
@@ -162,7 +164,7 @@ const PostCard = ({
                 onClick={(e) =>
                   handleBoardClick(
                     e,
-                    `/${communityUrl}${item[communityType].name}`
+                    `/${communityUrl}${item[communityType].name}`,
                   )
                 }
               >
@@ -204,21 +206,44 @@ const PostCard = ({
 
         {/* Content */}
         {itemType === "test" ? (
-          <div className="group mb-3 flex justify-between items-center gap-4 border-l-4 border-blue-500 bg-blue-50 dark:bg-neutral-800 p-3 rounded hover:bg-blue-100 dark:hover:bg-neutral-700 transition-colors duration-200">
-            <div className="flex-1 overflow-hidden flex flex-col gap-0.5">
-              <p className="font-medium text-neutral-900 dark:text-neutral-100">
+          <div
+            className="flex flex-col gap-2 p-4 hover:bg-primary-bg dark:hover:bg-neutral-800 transition-colors duration-200 cursor-pointer"
+            onClick={() =>
+              navigate(
+                `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`,
+              )
+            }
+          >
+            <div>
+              <h4 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2 line-clamp-2">
                 {item.title}
+              </h4>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm mb-4 line-clamp-3">
+                {item.description}
               </p>
+              <div className="flex flex-wrap gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+                <div className="flex items-center gap-1">
+                  <FileQuestion className="w-4 h-4" />
+                  <span>{item.questions_count} questions</span>
+                </div>
+                {item.duration && (
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    <span>{item.duration} min</span>
+                  </div>
+                )}
+              </div>
             </div>
-            <button
-              className="px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-neutral-100 dark:text-neutral-900 active:scale-95 font-medium whitespace-nowrap cursor-pointer dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
-              onClick={onStartTest}
-            >
-              Start
-            </button>
           </div>
         ) : (
-          <div className="mb-3 flex flex-col gap-2">
+          <div
+            className="flex flex-col gap-2 p-4 hover:bg-primary-bg dark:hover:bg-neutral-800 transition-colors duration-200 cursor-pointer"
+            onClick={() =>
+              navigate(
+                `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`,
+              )
+            }
+          >
             <div>
               <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-3 pb-3 border-b border-neutral-200 dark:border-neutral-700">
                 {item.title}
@@ -229,7 +254,7 @@ const PostCard = ({
                 onReadMore={(e) => {
                   preventNavigation(e);
                   navigate(
-                    `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`
+                    `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`,
                   );
                 }}
               >
@@ -243,47 +268,63 @@ const PostCard = ({
         )}
 
         {/* Actions */}
-        <footer className="flex items-center gap-4 text-neutral-600 dark:text-neutral-200 text-sm">
-          <button
-            className="flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer"
-            title="Comments"
-            aria-label={`${item.comments_count} comments`}
-          >
-            <MessageCircle size={18} /> {item.comments_count}
-          </button>
-
-          <button
-            onClick={onTogglePostLike}
-            className={`${
-              isLoading ? "animate-pulse" : ""
-            } flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer`}
-            aria-label={`${item.likes_count} likes. ${
-              liked ? "Unlike" : "Like"
-            } this item`}
-            title={liked ? "Unlike" : "Like"}
-          >
-            <Heart
-              size={18}
-              className={liked ? "text-red-500 fill-red-500" : ""}
-            />
-            <span
-              ref={postLikesCountRef}
-              className={liked ? "text-red-500" : ""}
+        <footer className="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:gap-0 justify-between p-4">
+          <div className="flex items-center gap-4 text-neutral-600 dark:text-neutral-200 text-sm">
+            <button
+              className="flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer"
+              title="Comments"
+              aria-label={`${item.comments_count} comments`}
+              onClick={() =>
+                navigate(
+                  `/${communityUrl}${item[communityType].name}/${itemType}/${item.id}`,
+                )
+              }
             >
-              {item.likes_count}
-            </span>
-          </button>
+              <MessageCircle size={18} /> {item.comments_count}
+            </button>
 
-          <button
-            className="flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
-            title="Share"
-            onClick={(e) => {
-              preventNavigation(e);
-              setIsShareModalOpen(true);
-            }}
-          >
-            <Share2 size={18} />
-          </button>
+            <button
+              onClick={onTogglePostLike}
+              className={`${
+                isLoading ? "animate-pulse" : ""
+              } flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40 cursor-pointer`}
+              aria-label={`${item.likes_count} likes. ${
+                liked ? "Unlike" : "Like"
+              } this item`}
+              title={liked ? "Unlike" : "Like"}
+            >
+              <Heart
+                size={18}
+                className={liked ? "text-red-500 fill-red-500" : ""}
+              />
+              <span
+                ref={postLikesCountRef}
+                className={liked ? "text-red-500" : ""}
+              >
+                {item.likes_count}
+              </span>
+            </button>
+
+            <button
+              className="flex items-center gap-2 hover:text-neutral-900 dark:hover:text-neutral-100 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400/40"
+              title="Share"
+              onClick={(e) => {
+                preventNavigation(e);
+                setIsShareModalOpen(true);
+              }}
+            >
+              <Share2 size={18} />
+            </button>
+          </div>
+          {itemType === "test" && (
+            <button
+              className="rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-neutral-100 dark:text-neutral-900 font-medium cursor-pointer dark:hover:bg-neutral-900 dark:hover:text-neutral-100 px-6 py-2 flex items-center gap-2 justify-center border border-primary-blue  dark:border-neutral-100"
+              onClick={onStartTest}
+            >
+              <Play className="w-4 h-4" />
+              <span> Start Test</span>
+            </button>
+          )}
         </footer>
       </section>
 
