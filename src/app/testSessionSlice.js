@@ -11,6 +11,7 @@ const initialState = {
 
   submission: {},
   currentIndex: 0,
+  testStyle: "one_by_one", // "one_by_one" or "all_in_one"
   meta: {
     totalQuestions: 0,
     answeredCount: 0,
@@ -53,10 +54,11 @@ const testSessionSlice = createSlice({
       // state.meta.submittedAt = null
       state.status = "ready";
     },
-    startSession: (state) => {
+    startSession: (state, action) => {
       state.meta.startedAt = Date.now();
       state.currentIndex = 0;
-      state.status = "in_progress";
+      state.testStyle = action.payload?.testStyle || "one_by_one";
+      state.status = action.payload?.testStyle === "all_in_one" ? "all_in_one" : "in_progress";
     },
     initializeSubmission: (state, action) => {
       const id = action.payload.question_id;
@@ -130,6 +132,9 @@ const testSessionSlice = createSlice({
       state.status = "completed";
       state.results = { data, score, num_correct_answers };
     },
+    setTestStyle: (state, action) => {
+      state.testStyle = action.payload;
+    },
   },
 });
 
@@ -146,5 +151,6 @@ export const {
   resetSession,
   setOriginalSubmission,
   completeTest,
+  setTestStyle,
 } = testSessionSlice.actions;
 export default testSessionSlice.reducer;

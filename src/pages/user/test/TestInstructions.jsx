@@ -17,6 +17,7 @@ import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
 export const TestInstructions = () => {
   const { descId, testId } = useParams();
   const [error, setError] = useState({ hasError: false, message: null });
+  const [testStyle, setTestStyle] = useState("one_by_one");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((s) => s.auth);
@@ -48,7 +49,7 @@ export const TestInstructions = () => {
     }
     try {
       await startTest({ desc: descId, test: testId }).unwrap();
-      dispatch(startSession());
+      dispatch(startSession({ testStyle }));
     } catch (err) {
       setError({ hasError: true, message: err.data.message });
     }
@@ -159,6 +160,50 @@ export const TestInstructions = () => {
                     {testInfo.data.questions_count}
                   </p>
                 </div>
+              </div>
+            </div>
+            {/* Test Style Selection */}
+            <div className="pt-2">
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
+                Test Style
+              </h3>
+              <div className="flex flex-col gap-3 mb-6">
+                <label className="flex items-center gap-3 p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
+                  <input
+                    type="radio"
+                    name="testStyle"
+                    value="one_by_one"
+                    checked={testStyle === "one_by_one"}
+                    onChange={(e) => setTestStyle(e.target.value)}
+                    className="w-4 h-4 text-primary-blue focus:ring-primary-blue focus:ring-2 border-neutral-300 dark:border-neutral-600"
+                  />
+                  <div className="flex-1">
+                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                      One by One
+                    </div>
+                    <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                      Solve questions one at a time with next and back buttons
+                    </div>
+                  </div>
+                </label>
+                <label className="flex items-center gap-3 p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
+                  <input
+                    type="radio"
+                    name="testStyle"
+                    value="all_in_one"
+                    checked={testStyle === "all_in_one"}
+                    onChange={(e) => setTestStyle(e.target.value)}
+                    className="w-4 h-4 text-primary-blue focus:ring-primary-blue focus:ring-2 border-neutral-300 dark:border-neutral-600"
+                  />
+                  <div className="flex-1">
+                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                      All in One
+                    </div>
+                    <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                      View and solve all questions on a single page
+                    </div>
+                  </div>
+                </label>
               </div>
             </div>
             {/* Start Button */}

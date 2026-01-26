@@ -3,6 +3,7 @@ import { TestInstructions } from "./TestInstructions";
 import { QuestionRunner } from "./QuestionRunner";
 import { ReviewAnswers } from "./ReviewAnswers";
 import { EditAnswer } from "./EditAnswer";
+import { AllInOneTest } from "./AllInOneTest";
 import { useLocation, useNavigate } from "react-router-dom";
 import { TestResultPage } from "./TestResultPage";
 import { useEffect } from "react";
@@ -40,6 +41,9 @@ export const TestPage = () => {
 
     case "in_progress":
       return <QuestionRunner />;
+
+    case "all_in_one":
+      return <AllInOneTest />;
 
     case "review":
       return <ReviewAnswers />;
