@@ -95,17 +95,17 @@ export const TestInstructions = () => {
       <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-neutral-100 dark:bg-neutral-950">
         <div className="w-full max-w-2xl bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 overflow-hidden">
           {/* Header Section */}
-          <div className="bg-gradient-to-br from-indigo-600 via-indigo-600 to-indigo-700 dark:from-indigo-900 dark:to-indigo-950 p-8">
-            <h1 className="text-3xl font-bold text-white mb-2">
+          <div className="bg-gradient-to-br from-primary-blue via-primary-blue to-primary-blue/90 dark:from-neutral-800 dark:via-neutral-800 dark:to-neutral-900 p-8">
+            <h1 className="text-3xl font-bold text-white dark:text-neutral-100 mb-2">
               {testInfo.data.title}
             </h1>
             {/* Author and Community Info */}
-            <div className="flex items-center gap-4 text-sm text-indigo-100">
+            <div className="flex items-center gap-4 text-sm text-white/90 dark:text-neutral-300">
               <div className="flex items-center gap-1.5">
                 <User className="w-4 h-4" />
                 <span>{testInfo.data.author.username}</span>
               </div>
-              <div className="w-1 h-1 rounded-full bg-indigo-300"></div>
+              <div className="w-1 h-1 rounded-full bg-white/60 dark:bg-neutral-400"></div>
               <div className="flex items-center gap-1.5">
                 <Users className="w-4 h-4" />
                 <span>{testInfo.data.desc.name}</span>
@@ -120,18 +120,20 @@ export const TestInstructions = () => {
                 About this test
               </h2>
               {testInfo.data.description !== null ? (
-                <p className="flex flex-col gap-1 text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                  <strong>Description</strong>
-                  <MarkdownViewer>{testInfo.data.description}</MarkdownViewer>
-                </p>
+                <div className="flex flex-col gap-1 text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                  <strong className="text-neutral-900 dark:text-neutral-100">Description</strong>
+                  <div className="text-neutral-700 dark:text-neutral-300">
+                    <MarkdownViewer>{testInfo.data.description}</MarkdownViewer>
+                  </div>
+                </div>
               ) : (
-                <p>No description.</p>
+                <p className="text-neutral-600 dark:text-neutral-400">No description.</p>
               )}
             </div>
             {/* Test Info Grid */}
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center gap-3 p-4 bg-neutral-100 dark:bg-neutral-950/50 rounded-xl border border-neutral-200 dark:border-neutral-800">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
@@ -146,7 +148,7 @@ export const TestInstructions = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3 p-4 bg-neutral-100 dark:bg-neutral-950/50 rounded-xl border border-neutral-200 dark:border-neutral-800">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
