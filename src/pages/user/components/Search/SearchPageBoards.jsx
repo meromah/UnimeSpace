@@ -6,6 +6,7 @@ import { getFileUrl, getInitials } from "../../../../utils";
 import { useSearchBoardsQuery } from "../../../../services/boardsApi";
 import { useSelector } from "react-redux";
 import { useSubscribeToBoardMutation, useUnsubscribeFromBoardMutation } from "../../../../services/boardSubscriptionsApi";
+import { Inbox } from "lucide-react";
 
 const SearchPageBoards = ({ activeTab, onSelectTab, query }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -55,7 +56,7 @@ const SearchPageBoards = ({ activeTab, onSelectTab, query }) => {
     }
   };
   return isFetching ? (
-    <div className="h-screen overflow-auto">
+    <div className="h-screen overflow-auto bg-primary-bg dark:bg-neutral-950">
       <SearchPageHeader onSelect={() => null} activeTab={activeTab} />
       <div className="virtual-item-padding flex flex-col gap-2">
         {Array(5)
@@ -66,10 +67,11 @@ const SearchPageBoards = ({ activeTab, onSelectTab, query }) => {
       </div>
     </div>
   ) : isSuccess ? (
-    <div className="h-screen overflow-y-auto">
+    <div className="h-screen overflow-y-auto bg-primary-bg dark:bg-neutral-950">
       <SearchPageHeader onSelect={onSelectTab} activeTab={activeTab} />
-      <main className="flex flex-col gap-2 virtual-item-padding">
-        {items?.data.map((element, ind) => (
+      {items?.data && items.data.length > 0 ? (
+        <main className="flex flex-col gap-2 virtual-item-padding">
+          {items.data.map((element, ind) => (
           <div
             key={element.id}
             className="flex bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 items-start justify-between gap-3 p-2 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg transition-colors"
@@ -134,8 +136,21 @@ const SearchPageBoards = ({ activeTab, onSelectTab, query }) => {
               </div>
             )}
           </div>
-        ))}
-      </main>
+          ))}
+        </main>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-16 px-4">
+          <div className="bg-neutral-100 dark:bg-neutral-800 rounded-full p-6 mb-4">
+            <Inbox className="text-4xl text-neutral-400 dark:text-neutral-500" />
+          </div>
+          <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-2">
+            No boards found
+          </h3>
+          <p className="text-neutral-600 dark:text-neutral-300 text-sm text-center max-w-sm">
+            Try adjusting your search query
+          </p>
+        </div>
+      )}
     </div>
   ) : null;
 };

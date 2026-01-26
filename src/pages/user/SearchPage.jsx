@@ -13,7 +13,7 @@ const SearchPage = () => {
   if (query === null) return <NotFound />;
 
   return (
-    <div>
+    <div className="min-h-screen bg-primary-bg dark:bg-neutral-950">
       <div>
         {/* Header */}
 
