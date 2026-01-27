@@ -7,7 +7,7 @@ import { CheckCircle, Edit3 } from "lucide-react";
 import { completeTest, jumpToQuestion } from "../../../app/testSessionSlice";
 import { usePostTestSubmitMutation } from "../../../services/testsApi";
 import { useParams } from "react-router-dom";
-import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
+import TestMarkdownViewer from "../../../components/markdownViewer/TestMarkdownViewer";
 
 export const ReviewAnswers = () => {
   const { descId, testId } = useParams();
@@ -96,7 +96,7 @@ export const ReviewAnswers = () => {
                 </div>
                 {/* Question header */}
                 <div className="text-neutral-800 dark:text-neutral-200 m-6">
-                  <MarkdownViewer>{question.body}</MarkdownViewer>
+                  <TestMarkdownViewer>{question.body}</TestMarkdownViewer>
                 </div>
                 {/* Answers */}
                 <div className="pl-11">

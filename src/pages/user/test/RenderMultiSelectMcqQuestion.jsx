@@ -5,7 +5,7 @@ import {
   removeOption,
   setSubmission,
 } from "../../../app/testSessionSlice";
-import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
+import TestMarkdownViewer from "../../../components/markdownViewer/TestMarkdownViewer";
 
 const RenderMultiSelectMcqQuestion = () => {
   const dispatch = useDispatch();
@@ -44,7 +44,7 @@ const RenderMultiSelectMcqQuestion = () => {
   return (
     <div className="space-y-8 dark:bg-neutral-950">
       <div className="space-y-2">
-        <MarkdownViewer>{question.body}</MarkdownViewer>
+        <TestMarkdownViewer>{question.body}</TestMarkdownViewer>
         {/* <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-50 leading-snug">
           {question.body}
         </h2> */}

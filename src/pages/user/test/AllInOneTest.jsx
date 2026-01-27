@@ -8,7 +8,7 @@ import {
   resetSession,
 } from "../../../app/testSessionSlice";
 import { usePostTestSubmitMutation, usePostTestQuitMutation } from "../../../services/testsApi";
-import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
+import TestMarkdownViewer from "../../../components/markdownViewer/TestMarkdownViewer";
 import Toast from "../../../components/Toast";
 import AllInOneMcqQuestion from "./AllInOneMcqQuestion";
 import AllInOneCodeQuestion from "./AllInOneCodeQuestion";
@@ -198,8 +198,8 @@ export const AllInOneTest = () => {
               </div>
 
               {/* Question Body */}
-              <div className="text-neutral-800 dark:text-neutral-200 mb-4">
-                <MarkdownViewer>{question.body}</MarkdownViewer>
+              <div className="mb-4">
+                <TestMarkdownViewer>{question.body}</TestMarkdownViewer>
               </div>
 
               {/* Answers */}

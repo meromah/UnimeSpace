@@ -1,5 +1,5 @@
 import React from "react";
-import MarkdownViewer from "../../../components/markdownViewer/MarkdownViewer";
+import TestMarkdownViewer from "../../../components/markdownViewer/TestMarkdownViewer";
 
 const McqResult = ({ question, questionNum, result, selectedOptions }) => {
   return (
@@ -19,7 +19,7 @@ const McqResult = ({ question, questionNum, result, selectedOptions }) => {
           <span className="pr-4 font-medium text-neutral-600 dark:text-neutral-300">
             {questionNum}.
           </span>
-          <MarkdownViewer>{question.body}</MarkdownViewer>
+          <TestMarkdownViewer>{question.body}</TestMarkdownViewer>
         </div>
         {Array.isArray(result.missed_options) &&
         result.missed_options.length > 0 ? (
