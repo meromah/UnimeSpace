@@ -14,9 +14,10 @@ export default function RelativeTime({ date, className = "" }) {
 
       const diffMins = Math.floor(diffMs / 60000);
       const diffHours = Math.floor(diffMins / 60);
-      const diffDays = 
+      const diffDays = Math.abs(
         Number(now.toLocaleDateString(undefined, { day: "2-digit" })) -
-        Number(target.toLocaleDateString(undefined, { day: "2-digit" }));
+          Number(target.toLocaleDateString(undefined, { day: "2-digit" })),
+      );
       let text;
 
       const timeStr = `${target.getHours().toString().padStart(2, "0")}:${target
