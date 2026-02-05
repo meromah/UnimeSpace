@@ -6,7 +6,7 @@ import {
   usePostTestStartMutation,
 } from "../../../services/testsApi";
 import Loading from "../../../components/Loading";
-import { Clock, FileText, User, Users } from "lucide-react";
+import { Clock, FileText, User, Users, CheckCircle2 } from "lucide-react";
 import { useGetQuestionsForTestQuery } from "../../../services/questionsApi";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeSession, startSession } from "../../../app/testSessionSlice";
@@ -161,6 +161,21 @@ export const TestInstructions = () => {
                   </p>
                 </div>
               </div>
+              {'submissions_count' in testInfo.data && (
+                <div className="flex items-center gap-3 p-4 bg-neutral-100 dark:bg-neutral-950/50 rounded-xl border border-neutral-200 dark:border-neutral-800">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                    <CheckCircle2 className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                      Submissions
+                    </p>
+                    <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                      {testInfo.data.submissions_count ?? 0} {(testInfo.data.submissions_count ?? 0) === 1 ? 'submission' : 'submissions'}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
             {/* Test Style Selection */}
             <div className="pt-2">
