@@ -15,6 +15,8 @@ import Announcements from "./components/Announcements.jsx";
 
 const Feeds = () => {
   const HOME_FEED_TYPE_STORAGE_KEY = "homeFeed.selectedType";
+  const HOME_FEED_SCROLL_KEY = "homeFeed.scrollPosition";
+  
   const readInitialType = () => {
     try {
       const saved = localStorage.getItem(HOME_FEED_TYPE_STORAGE_KEY);
@@ -24,7 +26,20 @@ const Feeds = () => {
     }
   };
 
+  const readInitialScrollPosition = (tabType) => {
+    try {
+      const saved = localStorage.getItem(`${HOME_FEED_SCROLL_KEY}.${tabType}`);
+      const position = saved ? parseFloat(saved) : 0;
+      return position > 0 ? position : 0;
+    } catch {
+      return 0;
+    }
+  };
+
   const [type, setType] = useState(readInitialType);
+  const [initialScrollPosition, setInitialScrollPosition] = useState(() =>
+    readInitialScrollPosition(readInitialType())
+  );
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const dispatch = useDispatch();
@@ -65,6 +80,36 @@ const Feeds = () => {
       // ignore storage errors (private mode, blocked, etc.)
     }
   }, [type]);
+
+  // Save scroll position when it changes (debounced)
+  const scrollSaveTimeoutRef = useRef(null);
+  const handleScrollPositionChange = useCallback((scrollTop) => {
+    if (scrollSaveTimeoutRef.current) {
+      clearTimeout(scrollSaveTimeoutRef.current);
+    }
+    scrollSaveTimeoutRef.current = setTimeout(() => {
+      try {
+        localStorage.setItem(`${HOME_FEED_SCROLL_KEY}.${type}`, scrollTop.toString());
+      } catch {
+        // ignore storage errors
+      }
+    }, 500); // Debounce: save 500ms after scrolling stops
+  }, [type]);
+
+  // Restore scroll position when switching tabs
+  useEffect(() => {
+    const savedPosition = readInitialScrollPosition(type);
+    setInitialScrollPosition(savedPosition);
+  }, [type]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollSaveTimeoutRef.current) {
+        clearTimeout(scrollSaveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (isFirstLoading && data && data.length > 0) {
@@ -124,6 +169,8 @@ const Feeds = () => {
                 error={error}
                 layoutVersion={`${type}-${sortBy}`}
                 layoutSchemaVersion={"feeds-itemCards"}
+                onScrollPositionChange={handleScrollPositionChange}
+                initialScrollPosition={initialScrollPosition}
                 headerElements={[
                   (ref) => (
                     <HomeSortBy
