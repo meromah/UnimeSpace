@@ -231,6 +231,8 @@ const CreateTest = ({ onCancel = undefined }) => {
     setShowQuestionTypeSelector(false);
     if (onCancel) {
       onCancel();
+    } else if (!isPopUp) {
+      navigate("/home");
     }
   };
   const onCreateSuccess = (finalQuestion) => {
