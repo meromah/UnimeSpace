@@ -71,6 +71,30 @@ const BoardPage = () => {
     isLoading: isPostLoading,
     isError: isPostError,
   } = useGetPostsForBoardQuery({ board: boardId, queryParams: sortBy });
+
+  // Simple scroll position tracking
+  const scrollKey = `board.${boardId}.${sortBy}`;
+  const [scrollPosition, setScrollPosition] = useState(() => {
+    try {
+      const saved = localStorage.getItem(scrollKey);
+      return saved ? parseFloat(saved) : 0;
+    } catch {
+      return 0;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(scrollKey);
+      setScrollPosition(saved ? parseFloat(saved) : 0);
+    } catch {}
+  }, [boardId, sortBy]);
+
+  const handleScroll = (top) => {
+    try {
+      localStorage.setItem(scrollKey, top.toString());
+    } catch {}
+  };
   const subscribedIds = useMemo(() => {
     if (!boardData?.subscribed) return new Set();
     return new Set(boardData.subscribed);
@@ -112,6 +136,8 @@ const BoardPage = () => {
         layoutVersion={sortBy}
         tab={"board"}
         key={boardData.data.name}
+        onScrollPositionChange={handleScroll}
+        initialScrollPosition={scrollPosition}
         headerElements={[
           (ref) => (
             <div ref={ref} className="w-full mx-auto px-4 py-8">
