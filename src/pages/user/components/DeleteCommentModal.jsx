@@ -1,5 +1,5 @@
 import React from "react";
-import { useDeleteCommentByBoardPostMutation } from "../../../services/commentsApi";
+import { useDeleteCommentByBoardPostMutation, useDeleteCommentByDescTestMutation } from "../../../services/commentsApi";
 import DeleteModal from "./DeleteModal";
 
 const DeleteCommentModal = ({
