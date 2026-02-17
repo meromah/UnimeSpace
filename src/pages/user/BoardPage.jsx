@@ -17,18 +17,18 @@ import CreatePost from "./components/CreatePost";
 import { SORT_BY } from "../../utils";
 
 // Helper function to extract error message from API error response
-const extractErrorMessage = (error) => {
-  if (!error) return "An unexpected error occurred. Please try again.";
-  if (typeof error === "string") return error;
-  return (
-    error.data?.message ??
-    error.data?.error ??
-    error.message ??
-    error.error ??
-    error.response?.data?.message ??
-    "An unexpected error occurred. Please try again."
-  );
-};
+// const extractErrorMessage = (error) => {
+//   if (!error) return "An unexpected error occurred. Please try again.";
+//   if (typeof error === "string") return error;
+//   return (
+//     error.data?.message ??
+//     error.data?.error ??
+//     error.message ??
+//     error.error ??
+//     error.response?.data?.message ??
+//     "An unexpected error occurred. Please try again."
+//   );
+// };
 
 const BoardPage = () => {
   const { boardId } = useParams();
