@@ -14,7 +14,17 @@ import { useGetAnnouncementsQuery } from "../../services/announcementApi.js";
 import Announcements from "./components/Announcements.jsx";
 
 const Feeds = () => {
-  const [type, setType] = useState("posts");
+  const HOME_FEED_TYPE_STORAGE_KEY = "homeFeed.selectedType";
+  const readInitialType = () => {
+    try {
+      const saved = localStorage.getItem(HOME_FEED_TYPE_STORAGE_KEY);
+      return saved === "posts" || saved === "tests" ? saved : "posts";
+    } catch {
+      return "posts";
+    }
+  };
+
+  const [type, setType] = useState(readInitialType);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const dispatch = useDispatch();
@@ -47,6 +57,15 @@ const Feeds = () => {
   useEffect(() => {
     hasFetchRequestRef.current = hasFetchRequest;
   }, [hasFetchRequest]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(HOME_FEED_TYPE_STORAGE_KEY, type);
+    } catch {
+      // ignore storage errors (private mode, blocked, etc.)
+    }
+  }, [type]);
+
   useEffect(() => {
     if (isFirstLoading && data && data.length > 0) {
       setIsFirstLoading(false);
